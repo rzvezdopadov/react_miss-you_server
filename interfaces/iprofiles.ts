@@ -27,6 +27,38 @@ export interface IProfile {
     alcohol: number,
     discription: string,
     profit: number,
+    interests: [],
     iLikeСharacter: [],
     iDontLikeСharacter: [],
+    vapors: [],
+    likePeople: [],
+    dislikePeople: [],  
+}
+
+interface IFilterUsers {
+    location: string,
+    signZodiac: number,
+    ageStart: number,
+    ageEnd: number,
+    genderVapor: number,
+    religion: number,
+    smoke: number,
+    alcohol: number,
+}
+
+
+export interface IQueryGetProfiles {
+    jwt: string;
+    id: number;
+    startCount: number, 
+    amount: number, 
+    filters: IFilterUsers,
+}
+
+export interface IRegistration {
+    gender: number,
+    genderVapor: number,
+    name: string,
+    email: string,
+    password: string,
 }
