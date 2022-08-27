@@ -7,7 +7,7 @@ export interface IProfile {
     latitude: number,
     longitude: number,
     location: string,
-    likes: number,
+    likes: [],
     age: number,
     birthday: number,
     monthOfBirth: number,
