@@ -157,7 +157,7 @@ async function queryRegistration(req, res) {
             latitude: 0,
             longitude: 0,
             location: "",
-            likes: 0,
+            likes: [],
             age: 0,
             birthday: 0,
             monthOfBirth: 0,
