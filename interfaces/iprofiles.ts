@@ -1,7 +1,4 @@
 export interface IProfile {
-    email:string,
-    password: string,
-    jwt: string,
     id: number,
     name: string,
     latitude: number,
@@ -10,16 +7,16 @@ export interface IProfile {
     likes: [],
     age: number,
     birthday: number,
-    monthOfBirth: number,
-    yearOfBirth: number,
+    monthofbirth: number,
+    yearofbirth: number,
     gender: number,
-    genderVapor: number,
-    photoMain: number,
-    photoLink: [],
-    signZodiac: number,
+    gendervapor: number,
+    photomain: number,
+    photolink: [],
+    signzodiac: number,
     education: number,
-    fieldOfActivity: number,
-    maritalStatus: number,
+    fieldofactivity: number,
+    maritalstatus: number,
     children: number,
     religion: number,
     rise: number,
@@ -28,36 +25,35 @@ export interface IProfile {
     discription: string,
     profit: number,
     interests: [],
-    iLikeСharacter: [],
-    iDontLikeСharacter: [],
+    ilikecharacter: [],
+    idontlikecharacter: [],
     vapors: [],
-    likePeople: [],
-    dislikePeople: [],  
+    likepeople: [],
+    dislikepeople: [],  
 }
 
 interface IFilterUsers {
     location: string,
-    signZodiac: number,
-    ageStart: number,
-    ageEnd: number,
-    genderVapor: number,
+    signzodiac: number,
+    agestart: number,
+    ageend: number,
+    gendervapor: number,
     religion: number,
     smoke: number,
     alcohol: number,
 }
 
-
 export interface IQueryGetProfiles {
     jwt: string;
     id: number;
-    startCount: number, 
+    startcount: number, 
     amount: number, 
     filters: IFilterUsers,
 }
 
 export interface IRegistration {
     gender: number,
-    genderVapor: number,
+    gendervapor: number,
     name: string,
     email: string,
     password: string,
