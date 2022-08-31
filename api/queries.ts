@@ -44,11 +44,11 @@ const fieldProfile = 'id, name, latitude, longitude, location, ' +
 'gender, gendervapor, photomain, photolink, signzodiac, ' +
 'education, fieldofactivity, maritalstatus, children, religion, ' +
 'rise, smoke, alcohol, discription, profit, interests, ' +
-'ilikeCharacter, idontlikeCharacter, vapors, likepeoples, dislikepeoples ';
+'ilikeCharacter, idontlikeCharacter, vapors, likepeoples, dislikepeoples';
 
 export async function getProfileByIdFromDB(id: number) {
     try {
-        let queryStr = 'SELECT ' + fieldProfile + 'FROM users WHERE id = $1';
+        let queryStr = 'SELECT ' + fieldProfile + ' FROM users WHERE id = $1';
         const answerDB = await pool.query(queryStr, [id]);
 
         if (!answerDB.rows[0]) return {}
@@ -61,6 +61,8 @@ export async function getProfileByIdFromDB(id: number) {
     return {};
 }
 
+const fieldProfileShort = 'id, name, age, photomain, photolink, interests';
+
 export async function getProfiles(QueryGetProfiles: IQueryGetProfiles) {
     let countProfiles = 0;
     const startPos = Number(QueryGetProfiles.startcount);
@@ -68,7 +70,7 @@ export async function getProfiles(QueryGetProfiles: IQueryGetProfiles) {
     const { filters } = QueryGetProfiles;
 
     try {
-        let queryStr = 'SELECT ' + fieldProfile + 'FROM users WHERE ' +
+        let queryStr = 'SELECT ' + fieldProfileShort + ' FROM users WHERE ' +
         '(location = $1) AND ';
 
         if (filters.signzodiac === 12) {
@@ -181,4 +183,31 @@ export function createProfile(profile: IProfile) { // Create base Profile in DB
     // userList.push(profile);
 
     return true;
+}
+
+export async function getLikesByIdFromDB(id: number) {
+    try {
+        let queryStr = 'SELECT likes FROM users WHERE id = $1';
+        const answerDB = await pool.query(queryStr, [id]);
+
+        return answerDB.rows[0].likes;
+    } catch (error) {
+        console.log('getProfileByIdFromDB', error);
+    }
+
+    return {};
+}
+
+export async function setLikesByIdFromDB(id: number, arr: [number]) {
+    try {
+        let queryStr = 'UPDATE users SET likes = $1 WHERE id = $2';
+        
+        const answerDB = await pool.query(queryStr, [arr, id]);
+
+        return answerDB.rowCount;
+    } catch (error) {
+        console.log('setLikesByIdFromDB', error);
+    }
+
+    return 0;
 }
