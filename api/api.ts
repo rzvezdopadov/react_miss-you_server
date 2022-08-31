@@ -1,5 +1,5 @@
-import { IProfile, IQueryGetProfiles, IRegistration } from "../interfaces/iprofiles";
-import { createProfile, getIdByEmailFromDB, getJWTFromDB, getPasswordByIdFromDB, getProfileByIdFromDB, getProfiles, setJWTToDB } from "./queries";
+import { IProfile, IQueryGetProfile, IQueryGetProfiles, IRegistration } from "../interfaces/iprofiles";
+import { createProfile, getIdByEmailFromDB, getJWTFromDB, getLikesByIdFromDB, getPasswordByIdFromDB, getProfileByIdFromDB, getProfiles, setJWTToDB, setLikesByIdFromDB } from "./queries";
 
 const express = require('express');
 const router = express.Router();
@@ -241,8 +241,11 @@ async function querySetProfileShort(req, res) {
 
 async function queryGetProfile(req, res) { 
     try {
-        const { jwt, id } = req.body;
+        const QueryGetProfiles:IQueryGetProfile = req.query;
 
+        const jwt = QueryGetProfiles.jwt;
+        const id = QueryGetProfiles.id;
+        
         const decode = await jwtToken.verify(jwt, config.get('jwtSecret'));
 
         if (testOverflowJWT(decode.exp)) {
@@ -265,6 +268,16 @@ async function queryGetProfile(req, res) {
             const profile = getProfileByIdFromDB(idNew);
 
             profile.then((profile) => {
+                if ((id !== 0) && Object.keys(profile).length > 0) {
+                    const posId = profile.likes.indexOf(decode.userId);
+                    
+                    if (posId === -1) {
+                        profile.likes = [];
+                    } else {
+                        profile.likes = [decode.userId];
+                    }
+                } 
+
                 return res.status(200).json(profile);
             }).catch((error) => {
                 console.log(error);
@@ -298,9 +311,9 @@ async function queryGetProfiles(req, res) {
         const token = getJWTFromDB(decode.userId);
         
         token.then((token) => {
-            // if (token !== jwt) {
-            //     return res.status(400).json({ message:"Токен не валидный!" });
-            // }
+            if (token !== jwt) {
+                return res.status(400).json({ message:"Токен не валидный!" });
+            }
 
             // Кошмарный костыль v
             const { filters } = QueryGetProfiles;
@@ -309,10 +322,22 @@ async function queryGetProfiles(req, res) {
             QueryGetProfiles.id = decode.userId;
             // Кошмарный костыль ^
             
-            const profile = getProfiles(QueryGetProfiles);
+            const profiles = getProfiles(QueryGetProfiles);
 
-            profile.then((profile) => {
-                return res.status(200).json(profile);
+            profiles.then((profiles) => {
+                // if (profiles.length > 0) {
+                //     profiles.forEach(profile => {
+                //         const posId = profile.likes.indexOf(decode.userId);
+                    
+                //         if (posId === -1) {
+                //             profile.likes = [];
+                //         } else {
+                //             profile.likes = [decode.userId];
+                //         }
+                //     });
+                // } 
+
+                return res.status(200).json(profiles);
             }).catch((error) => {
                 console.log(error);
 
@@ -330,6 +355,86 @@ async function queryGetProfiles(req, res) {
     }
 }
 
+async function querySetLike(req, res) { 
+    try {
+        const { jwt, id } = req.body;
+
+        const decode = await jwtToken.verify(jwt, config.get('jwtSecret'));
+
+        if (testOverflowJWT(decode.exp)) {
+            return res.status(400).json({ message: "Токен просрочен, повторите вход в систему!"});     
+        }
+
+        const token = getJWTFromDB(decode.userId);
+        
+        token.then((token) => {
+            if (token !== jwt) {
+                return res.status(400).json({ message:"Токен не валидный!" });
+            }
+
+            let idNew = decode.userId;
+
+            if (id !== 0) {
+                idNew = id;
+            } 
+
+            const likes = getLikesByIdFromDB(idNew);
+
+            likes.then((likes) => {
+                if (id === 0) {
+                    return res.status(200).json(likes);
+                }
+
+                const posLike = likes.indexOf(decode.userId);
+                
+
+                const commandDelete = 'delete';
+                const commandAdded = 'added';
+                let command = commandDelete;
+
+                if (posLike === -1) {
+                    likes.push(decode.userId);
+
+                    command = commandAdded;
+                } else {
+                    likes.splice(posLike, 1);
+                }
+
+                const likeCommand = setLikesByIdFromDB(idNew, likes); 
+
+                likeCommand.then((answer) => {
+                    if (answer) {
+                        if (command === commandAdded) {
+                            likes = [decode.userId];
+                        } else {
+                            likes = [];
+                        }
+
+                        return res.status(200).json(likes);
+                    }
+
+                    return res.status(400).json({ message: "Произошла ошибка при лайке!"})
+                }).catch((error) => {
+                    console.log(error);
+
+                    return res.status(400).json({ message: "Произошла ошибка!"})
+                })                
+            }).catch((error) => {
+                console.log(error);
+
+                return res.status(400).json({ message: "Произошла ошибка!"})
+            })
+        }).catch((error) => {
+            console.log(error);
+
+            return res.status(400).json({ message: "При авторизации произошла ошибка TBD!"})
+        })
+    } catch(e) {
+        res.status(500).json({
+            message:"Токен не валидный!"
+        })
+    }
+}
 
 router.post(
     '/api/login',
@@ -362,6 +467,12 @@ router.get(
     '/api/profiles',
     [], 
     queryGetProfiles
+)
+
+router.put(
+    '/api/like',
+    [], 
+    querySetLike
 )
 
 module.exports = router;
