@@ -51,6 +51,11 @@ export interface IQueryGetProfiles {
     filters: IFilterUsers,
 }
 
+export interface IQueryGetProfile {
+    jwt: string;
+    id: number;
+}
+
 export interface IRegistration {
     gender: number,
     gendervapor: number,
