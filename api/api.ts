@@ -259,10 +259,10 @@ async function queryGetProfile(req, res) {
                 return res.status(400).json({ message:"Токен не валидный!" });
             }
 
-            let idNew = decode.userId;
+            let idNew = id;
 
-            if (id !== 0) {
-                idNew = id;
+            if (idNew == 0) {
+                idNew = decode.userId;
             } 
 
             const profile = getProfileByIdFromDB(idNew);
