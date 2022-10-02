@@ -1,6 +1,4 @@
-import { IProfile, IQueryGetProfiles } from "../interfaces/iprofiles";
-import { fakeData } from "./fakedata";
-
+import { IGetProfiles, IProfile, IQueryGetProfiles } from "../interfaces/iprofiles";
 const Pool = require('pg').Pool;
 
 const pool = new Pool({
@@ -11,9 +9,6 @@ const pool = new Pool({
     port: 5432,
 })
 
-/* Fake database */
-const userList = fakeData;
-/* Fake database */
 
 export async function getIdByEmailFromDB(email: string) {
     try {
@@ -40,11 +35,16 @@ export async function getPasswordByIdFromDB(id: number) {
 }
 
 const fieldProfile = 'id, name, latitude, longitude, location, ' +
-'likes, age, birthday, monthofbirth, yearofbirth, ' +
+'likes, age, birthday, monthofbirth, yearofbirth, growth, weight, ' +
 'gender, gendervapor, photomain, photolink, signzodiac, ' +
 'education, fieldofactivity, maritalstatus, children, religion, ' +
 'rise, smoke, alcohol, discription, profit, interests, ' +
-'ilikeCharacter, idontlikeCharacter, vapors, likepeoples, dislikepeoples';
+'ilikeCharacter, idontlikeCharacter';
+
+const fieldFilters = 'location, signzodiac, agestart, ageend, ' +
+'growthstart, growthend, weightstart, weightend, gendervapor, ' +
+'religion, smoke, alcohol, interests'
+;
 
 export async function getProfileByIdFromDB(id: number) {
     try {
@@ -52,6 +52,15 @@ export async function getProfileByIdFromDB(id: number) {
         const answerDB = await pool.query(queryStr, [id]);
 
         if (!answerDB.rows[0]) return {}
+
+        let queryStrFilters = 'SELECT ' + fieldFilters + ' FROM filters WHERE id = $1';
+        const answerDBFilters = await pool.query(queryStrFilters, [id]);
+
+        if (!answerDBFilters.rows[0]) return {}
+
+        console.log(answerDBFilters.rows[0]);
+
+        answerDB.rows[0].filters = answerDBFilters.rows[0];
 
         return answerDB.rows[0];
     } catch (error) {
@@ -63,55 +72,78 @@ export async function getProfileByIdFromDB(id: number) {
 
 const fieldProfileShort = 'id, name, age, photomain, photolink, interests';
 
-export async function getProfiles(QueryGetProfiles: IQueryGetProfiles) {
+export async function getProfiles(QueryGetProfiles: IGetProfiles) {
     let countProfiles = 0;
     const startPos = Number(QueryGetProfiles.startcount);
     const endPos = startPos + Number(QueryGetProfiles.amount);
-    const { filters } = QueryGetProfiles;
+    const { filters, users } = QueryGetProfiles;
 
     try {
-        let queryStr = 'SELECT ' + fieldProfileShort + ' FROM users WHERE ' +
-        '(location = $1) AND ';
+        let answerDB = { rows: [] };
 
-        if (filters.signzodiac === 12) {
-            queryStr += '(signzodiac <> $2) AND ';
-        } else {
-            queryStr += '(signzodiac = $2) AND ';
+        let queryStr = 'SELECT ' + fieldProfileShort + ' FROM users WHERE ';
+
+        if (filters) {
+            queryStr += '(location = $1) AND ';
+
+            if (filters.signzodiac === 12) {
+                queryStr += '(signzodiac <> $2) AND ';
+            } else {
+                queryStr += '(signzodiac = $2) AND ';
+            }
+
+            queryStr += '(age >= $3) AND (age <= $4) AND ';
+            queryStr += '(growth >= $5) AND (growth <= $6) AND ';
+            queryStr += '(weight >= $7) AND (weight <= $8) AND ';
+
+            queryStr += '(gendervapor = $9) AND ';
+
+            if (filters.religion === 0) {
+                queryStr += '((religion <> $10) OR (religion = 0)) AND ';
+            } else {
+                queryStr += '(religion = $10) AND ';
+            }
+
+            if (filters.smoke === 0) {
+                queryStr += '((smoke <> $11) OR (smoke = 0)) AND ';
+            } else {
+                queryStr += '(smoke = $11) AND ';
+            }
+
+            if (filters.alcohol === 0) {
+                queryStr += '((alcohol <> $12) OR (alcohol = 0)) AND ';
+            } else {
+                queryStr += '(alcohol = $12) AND ';
+            }
+
+            queryStr += '(id <> $13)';
+
+            console.log(filters.gendervapor);
+            
+            answerDB = await pool.query(queryStr, [
+                filters.location, 
+                filters.signzodiac,
+                filters.agestart, filters.ageend,
+                filters.growthstart, filters.growthend,
+                filters.weightstart, filters.weightend,
+                filters.gendervapor,
+                filters.religion,
+                filters.smoke,
+                filters.alcohol,
+                QueryGetProfiles.id
+            ]);
+        } else if (users) {
+            if (users.length === 0) {
+                '(id = 0) OR'
+            } else {
+                users.forEach((value) => {
+                    queryStr += '(id = ' + value + ') OR ';
+                })
+            }
+
+            queryStr = queryStr.slice(0, -3);
+            answerDB = await pool.query(queryStr);
         }
-
-        queryStr += '(age >= $3) AND (age <= $4) AND ';
-        queryStr += '(gendervapor = $5) AND ';
-
-        if (filters.religion === 0) {
-            queryStr += '((religion <> $6) OR (religion = 0)) AND ';
-        } else {
-            queryStr += '(religion = $6) AND ';
-        }
-
-        if (filters.smoke === 0) {
-            queryStr += '((smoke <> $7) OR (smoke = 0)) AND ';
-        } else {
-            queryStr += '(smoke = $7) AND ';
-        }
-
-        if (filters.alcohol === 0) {
-            queryStr += '((alcohol <> $8) OR (alcohol = 0)) AND ';
-        } else {
-            queryStr += '(alcohol = $8) AND ';
-        }
-
-        queryStr += '(id <> $9)';
-        
-        const answerDB = await pool.query(queryStr, [
-            filters.location, 
-            filters.signzodiac,
-            filters.agestart, filters.ageend,
-            filters.gendervapor, 
-            filters.religion,
-            filters.smoke,
-            filters.alcohol,
-            QueryGetProfiles.id
-        ]);
 
         return answerDB.rows;
     } catch (error) {
@@ -122,26 +154,26 @@ export async function getProfiles(QueryGetProfiles: IQueryGetProfiles) {
 }
 
 export function setProfile(profile: IProfile) {
-    for (let i = 0; i < userList.length; i++) {
-        if (userList[i].id === profile.id) {
-            for (let key in profile) {
-                userList[i][key] = profile[key];
-            }
+    // for (let i = 0; i < userList.length; i++) {
+    //     if (userList[i].id === profile.id) {
+    //         for (let key in profile) {
+    //             userList[i][key] = profile[key];
+    //         }
 
-            return true;
-        }
-    }
+    //         return true;
+    //     }
+    // }
 
     return false;
 }
 
 export function setProfileShort(profile: IProfile) {
-    for (let i = 0; i < userList.length; i++) {
-        if (userList[i].id === profile.id) {
+    // for (let i = 0; i < userList.length; i++) {
+    //     if (userList[i].id === profile.id) {
 
-            return true;
-        }
-    }
+    //         return true;
+    //     }
+    // }
 
     return false;
 }
