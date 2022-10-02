@@ -3,6 +3,8 @@ CREATE TABLE users (
     password VARCHAR(255),
     jwt VARCHAR(255),
     id serial PRIMARY KEY,
+    ipaddress VARCHAR(50),
+    timecode INT,
     name VARCHAR(50),
     latitude INT,
     longitude INT,
@@ -12,6 +14,8 @@ CREATE TABLE users (
     birthday INT,
     monthofbirth INT,
     yearofbirth INT,
+    growth INT,
+    weight INT,
     gender INT,
     gendervapor INT,
     photomain INT,
@@ -30,7 +34,22 @@ CREATE TABLE users (
     interests TEXT[],
     ilikecharacter INT[],
     idontlikecharacter INT[],
-    vapors INT[],
-    likepeoples INT[],
-    dislikepeoples INT[]
+    cash INT
+);
+
+CREATE TABLE filters (
+    id serial PRIMARY KEY,
+    location VARCHAR(255),
+    agestart INT,
+    ageend INT,
+    growthstart INT,
+    growthend INT,
+    weightstart INT,
+    weightend INT,
+    signzodiac INT,
+    gendervapor INT,
+    religion INT,
+    smoke INT,
+    alcohol INT,
+    interests TEXT[]
 );
