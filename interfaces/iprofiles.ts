@@ -9,6 +9,8 @@ export interface IProfile {
     birthday: number,
     monthofbirth: number,
     yearofbirth: number,
+    growth: number,
+    weight:number,   
     gender: number,
     gendervapor: number,
     photomain: number,
@@ -27,9 +29,6 @@ export interface IProfile {
     interests: [],
     ilikecharacter: [],
     idontlikecharacter: [],
-    vapors: [],
-    likepeople: [],
-    dislikepeople: [],  
 }
 
 interface IFilterUsers {
@@ -37,10 +36,15 @@ interface IFilterUsers {
     signzodiac: number,
     agestart: number,
     ageend: number,
+    growthstart: number,
+    growthend: number,
+    weightstart: number,
+    weightend: number,
     gendervapor: number,
     religion: number,
     smoke: number,
     alcohol: number,
+    interests: [],
 }
 
 export interface IQueryGetProfiles {
@@ -49,6 +53,16 @@ export interface IQueryGetProfiles {
     startcount: number, 
     amount: number, 
     filters: IFilterUsers,
+    users: string
+}
+
+export interface IGetProfiles {
+    jwt: string;
+    id: number;
+    startcount: number, 
+    amount: number, 
+    filters: IFilterUsers,
+    users: []
 }
 
 export interface IQueryGetProfile {
