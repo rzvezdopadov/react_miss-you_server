@@ -1,4 +1,4 @@
-import { IProfile, IQueryGetProfile, IQueryGetProfiles, IRegistration } from "../interfaces/iprofiles";
+import { IGetProfiles, IProfile, IQueryGetProfile, IQueryGetProfiles, IRegistration } from "../interfaces/iprofiles";
 import { createProfile, getIdByEmailFromDB, getJWTFromDB, getLikesByIdFromDB, getPasswordByIdFromDB, getProfileByIdFromDB, getProfiles, setJWTToDB, setLikesByIdFromDB } from "./queries";
 
 const express = require('express');
@@ -52,6 +52,8 @@ async function queryRegistration(req, res) {
             birthday: 0,
             monthofbirth: 0,
             yearofbirth: 0,
+            growth: 0,
+            weight: 0,
             gender: reg.gender,
             gendervapor: reg.gendervapor,
             photomain: 0,
@@ -70,9 +72,6 @@ async function queryRegistration(req, res) {
             interests: [],
             ilikecharacter: [],
             idontlikecharacter: [],
-            vapors: [],
-            likepeople: [],
-            dislikepeople: [],
         };
 
         createProfile(profile);
@@ -152,7 +151,7 @@ async function querySetProfile(req, res) {
     try {
         const { 
             jwt, name, latitude, longitude, location, 
-            birthday, monthOfBirth, yearOfBirth, 
+            birthday, monthOfBirth, yearOfBirth, growth, weight,
             gender, genderVapor, photoMain, education,
             fieldOfActivity, maritalStatus, children,
             religion, rise, smoke, alcohol, discription,
@@ -268,8 +267,8 @@ async function queryGetProfile(req, res) {
             const profile = getProfileByIdFromDB(idNew);
 
             profile.then((profile) => {
-                if ((id !== 0) && Object.keys(profile).length > 0) {
-                    const posId = profile.likes.indexOf(decode.userId);
+                if ((id != 0) && Object.keys(profile).length > 0) {
+                    const posId = profile.likes.indexOf(decode.userId);                
                     
                     if (posId === -1) {
                         profile.likes = [];
@@ -315,28 +314,32 @@ async function queryGetProfiles(req, res) {
                 return res.status(400).json({ message:"Токен не валидный!" });
             }
 
-            // Кошмарный костыль v
-            const { filters } = QueryGetProfiles;
-            const filtersParse = JSON.parse(filters as any);
-            QueryGetProfiles.filters = filtersParse;
-            QueryGetProfiles.id = decode.userId;
-            // Кошмарный костыль ^
+            const getProfilesVal:IGetProfiles = {
+                jwt: jwt,
+                id: QueryGetProfiles.id,
+                startcount: QueryGetProfiles.startcount,
+                amount: QueryGetProfiles.amount,
+                filters: QueryGetProfiles.filters,
+                users: []
+            };
+
+            const { filters, users } = QueryGetProfiles;
             
-            const profiles = getProfiles(QueryGetProfiles);
+            if (filters) {
+                const filtersParse = JSON.parse(filters as any);
+                getProfilesVal.filters = filtersParse;
+            }
+
+            if (users) {
+                const usersParse: any = users.split(',');
+                getProfilesVal.users = usersParse;
+            }
+            
+            getProfilesVal.id = decode.userId;
+            
+            const profiles = getProfiles(getProfilesVal);
 
             profiles.then((profiles) => {
-                // if (profiles.length > 0) {
-                //     profiles.forEach(profile => {
-                //         const posId = profile.likes.indexOf(decode.userId);
-                    
-                //         if (posId === -1) {
-                //             profile.likes = [];
-                //         } else {
-                //             profile.likes = [decode.userId];
-                //         }
-                //     });
-                // } 
-
                 return res.status(200).json(profiles);
             }).catch((error) => {
                 console.log(error);
