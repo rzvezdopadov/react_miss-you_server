@@ -21,7 +21,6 @@ export interface IProfile {
     maritalstatus: number,
     children: number,
     religion: number,
-    rise: number,
     smoke: number,
     alcohol: number,
     discription: string,

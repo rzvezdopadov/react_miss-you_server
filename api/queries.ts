@@ -38,7 +38,7 @@ const fieldProfile = 'id, name, latitude, longitude, location, ' +
 'likes, age, birthday, monthofbirth, yearofbirth, growth, weight, ' +
 'gender, gendervapor, photomain, photolink, signzodiac, ' +
 'education, fieldofactivity, maritalstatus, children, religion, ' +
-'rise, smoke, alcohol, discription, profit, interests, ' +
+'smoke, alcohol, discription, profit, interests, ' +
 'ilikeCharacter, idontlikeCharacter';
 
 const fieldFilters = 'location, signzodiac, agestart, ageend, ' +

@@ -26,7 +26,6 @@ CREATE TABLE users (
     maritalstatus INT,
     children INT,
     religion INT,
-    rise INT,
     smoke INT,
     alcohol INT,
     discription VARCHAR(255),

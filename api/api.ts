@@ -64,7 +64,6 @@ async function queryRegistration(req, res) {
             maritalstatus: 0,
             children: 0,
             religion: 0,
-            rise: 0,
             smoke: 0,
             alcohol: 0,
             discription: "",
@@ -154,7 +153,7 @@ async function querySetProfile(req, res) {
             birthday, monthOfBirth, yearOfBirth, growth, weight,
             gender, genderVapor, photoMain, education,
             fieldOfActivity, maritalStatus, children,
-            religion, rise, smoke, alcohol, discription,
+            religion, smoke, alcohol, discription,
             profit
         } = req.body;
 
