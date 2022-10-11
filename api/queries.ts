@@ -58,8 +58,6 @@ export async function getProfileByIdFromDB(id: number) {
 
         if (!answerDBFilters.rows[0]) return {}
 
-        console.log(answerDBFilters.rows[0]);
-
         answerDB.rows[0].filters = answerDBFilters.rows[0];
 
         return answerDB.rows[0];
@@ -117,8 +115,6 @@ export async function getProfiles(QueryGetProfiles: IGetProfiles) {
             }
 
             queryStr += '(id <> $13)';
-
-            console.log(filters.gendervapor);
             
             answerDB = await pool.query(queryStr, [
                 filters.location, 
@@ -134,7 +130,7 @@ export async function getProfiles(QueryGetProfiles: IGetProfiles) {
             ]);
         } else if (users) {
             if (users.length === 0) {
-                '(id = 0) OR'
+                return [];
             } else {
                 users.forEach((value) => {
                     queryStr += '(id = ' + value + ') OR ';
