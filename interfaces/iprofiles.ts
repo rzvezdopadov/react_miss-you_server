@@ -28,6 +28,7 @@ export interface IProfile {
     interests: [],
     ilikecharacter: [],
     idontlikecharacter: [],
+    filters: IFilterUsers,
 }
 
 interface IFilterUsers {
@@ -67,6 +68,11 @@ export interface IGetProfiles {
 export interface IQueryGetProfile {
     jwt: string;
     id: number;
+}
+
+export interface IQuerySetProfile {
+    jwt: string;
+    profile: IProfile;
 }
 
 export interface IRegistration {
