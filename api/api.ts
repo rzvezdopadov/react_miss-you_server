@@ -1,5 +1,5 @@
 import { IGetProfiles, IProfile, IQueryGetProfile, IQueryGetProfiles, IRegistration } from "../interfaces/iprofiles";
-import { createProfile, getIdByEmailFromDB, getJWTFromDB, getLikesByIdFromDB, getPasswordByIdFromDB, getProfileByIdFromDB, getProfiles, setJWTToDB, setLikesByIdFromDB } from "./queries";
+import { createProfile, getIdByEmailFromDB, getJWTFromDB, getLikesByIdFromDB, getPasswordByIdFromDB, getProfileByIdFromDB, getProfiles, setJWTToDB, setLikesByIdFromDB, setProfileByIdToDB, setTimecodeToDB } from "./queries";
 
 const express = require('express');
 const router = express.Router();
@@ -12,6 +12,23 @@ function testOverflowJWT(jwtExp: number = 0) {
     if (Math.round(Date.now()/1000) > jwtExp) return true;
     
     return false;
+}
+
+function getSignZodiac(birthday, monthofbirth) {
+    if (!birthday && !monthofbirth) return 12
+
+    if (((birthday > 20) && (monthofbirth === 3)) || ((birthday < 21) && (monthofbirth === 4))) return 0
+    if (((birthday > 20) && (monthofbirth === 4)) || ((birthday < 22) && (monthofbirth === 5))) return 1
+    if (((birthday > 21) && (monthofbirth === 5)) || ((birthday < 22) && (monthofbirth === 6))) return 2
+    if (((birthday > 21) && (monthofbirth === 6)) || ((birthday < 23) && (monthofbirth === 7))) return 3 
+    if (((birthday > 22) && (monthofbirth === 7)) || ((birthday < 22) && (monthofbirth === 8))) return 4 
+    if (((birthday > 21) && (monthofbirth === 8)) || ((birthday < 24) && (monthofbirth === 9))) return 5 
+    if (((birthday > 23) && (monthofbirth === 9)) || ((birthday < 24) && (monthofbirth === 10))) return 6 
+    if (((birthday > 23) && (monthofbirth === 10)) || ((birthday < 23) && (monthofbirth === 11))) return 7 
+    if (((birthday > 22) && (monthofbirth === 11)) || ((birthday < 23) && (monthofbirth === 12))) return 8 
+    if (((birthday > 22) && (monthofbirth === 12)) || ((birthday < 21) && (monthofbirth === 1))) return 9 
+    if (((birthday > 20) && (monthofbirth === 1)) || ((birthday < 20) && (monthofbirth === 2))) return 10 
+    if (((birthday > 19) && (monthofbirth === 2)) || ((birthday < 21) && (monthofbirth === 3))) return 11
 }
 
 const date = Math.round(Date.now()/1000);
@@ -71,6 +88,7 @@ async function queryRegistration(req, res) {
             interests: [],
             ilikecharacter: [],
             idontlikecharacter: [],
+            filters: undefined
         };
 
         createProfile(profile);
@@ -149,54 +167,42 @@ async function queryLogin(req, res) {
 async function querySetProfile(req, res) {
     try {
         const { 
-            jwt, name, latitude, longitude, location, 
-            birthday, monthOfBirth, yearOfBirth, growth, weight,
-            gender, genderVapor, photoMain, education,
-            fieldOfActivity, maritalStatus, children,
-            religion, smoke, alcohol, discription,
-            profit
+            jwt, profile
         } = req.body;
 
-        // const decode = await jwtToken.verify(jwt, config.get('jwtSecret'));
+        profile as IProfile;
 
-        // if (getJWT(jwt) !== decode.userId) {
-        //     return res.status(400).json({ message:"Токен не валидный!" });
-        // }
-            
-        // let profile:IProfile;
+        const decode = await jwtToken.verify(jwt, config.get('jwtSecret'));
 
-        // profile = getProfileFromDB(decode.userId);
+        if (jwt && profile && testOverflowJWT(decode.exp)) {
+            return res.status(400).json({ message: "Токен просрочен, повторите вход в систему!"});     
+        }
 
-        // profile.name = name;
-        // profile.latitude = latitude;
-        // profile.longitude = longitude;
-        // profile.location = location;
-        // profile.birthday = birthday;
-        // profile.monthOfBirth = monthOfBirth;
-        // profile.yearOfBirth = yearOfBirth;
-        // profile.gender = gender;
-        // profile.genderVapor = genderVapor;
-        // profile.photoMain = photoMain;
-        // profile.education = education;
-        // profile.fieldOfActivity = fieldOfActivity;
-        // profile.maritalStatus = maritalStatus;
-        // profile.children = children;
-        // profile.religion = religion;
-        // profile.rise = rise;
-        // profile.smoke = smoke;
-        // profile.alcohol = alcohol;
-        // profile.discription = discription;
-        // profile.profit = profit;
-            
-        // if (!setProfile(profile)) {
-        //     return res.status(500).json({ message:"Профиль не изменен, возникли проблемы!" });
-        // }
+        const token = getJWTFromDB(decode.userId);
+        
+        token.then((token) => {
+            if (token !== jwt) {
+                return res.status(400).json({ message:"Токен не валидный!" });
+            }
 
-        // profile.jwt = '';
-        // profile.email = '';
-        // profile.password = '';
-       
-        return res.status(200).json([]);
+            setTimecodeToDB(decode.userId);
+
+            profile.signzodiac = getSignZodiac(profile.birthday, profile.monthofbirth);
+
+            const newProfile = setProfileByIdToDB(decode.userId, profile);
+
+            newProfile.then((profile) => {
+                return res.status(200).json(profile);
+            }).catch((error) => {
+                console.log(error);
+
+                return res.status(400).json({ message: "Произошла ошибка!"})
+            })
+        }).catch((error) => {
+            console.log(error);
+
+            return res.status(400).json({ message: "При авторизации произошла ошибка TBD!"})
+        })
     } catch(e) {
         res.status(500).json({
             message:"Токен не валидный!"
@@ -257,6 +263,8 @@ async function queryGetProfile(req, res) {
                 return res.status(400).json({ message:"Токен не валидный!" });
             }
 
+            setTimecodeToDB(decode.userId);
+
             let idNew = id;
 
             if (idNew == 0) {
@@ -312,6 +320,8 @@ async function queryGetProfiles(req, res) {
             if (token !== jwt) {
                 return res.status(400).json({ message:"Токен не валидный!" });
             }
+
+            setTimecodeToDB(decode.userId);
 
             const getProfilesVal:IGetProfiles = {
                 jwt: jwt,
@@ -373,6 +383,8 @@ async function querySetLike(req, res) {
             if (token !== jwt) {
                 return res.status(400).json({ message:"Токен не валидный!" });
             }
+            
+            setTimecodeToDB(decode.userId);
 
             let idNew = decode.userId;
 
