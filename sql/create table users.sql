@@ -52,3 +52,19 @@ CREATE TABLE filters (
     alcohol INT,
     interests TEXT[]
 );
+
+CREATE TABLE bots (
+    id serial PRIMARY KEY,
+    type VARCHAR(255),
+    discription VARCHAR(255),
+    nmodel VARCHAR(255),
+);
+
+CREATE TABLE messages (
+    id serial PRIMARY KEY,
+    id1 INT,
+    id2 INT,
+    timecode INT,
+    dck VARCHAR(255),
+    messages TEXT[]
+);
