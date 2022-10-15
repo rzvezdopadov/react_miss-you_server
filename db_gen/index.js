@@ -146,7 +146,7 @@ function genPos(count) {
 
 const arrPerson = []; 
 
-const personId = 50;
+const personId = 500;
 
 for (let i=1; i<personId+1; i++) {
     const person = JSON.parse(JSON.stringify(Person));   
@@ -156,17 +156,21 @@ for (let i=1; i<personId+1; i++) {
     
     if (person.gender === 1) { 
         if (!genPos(2)) {
-            person.genderVapor = 1; 
+            person.genderVapor = 0; 
         } else {
             person.genderVapor = 2; 
         }
     } else { 
         if (!genPos(2)) {
-            person.genderVapor = 0;
+            person.genderVapor = 1;
         } else {
             person.genderVapor = 2; 
         }
     }
+    
+    const date = new Date();
+    const timecode = date.getTime();
+    person.timecode = timecode - genPos(10000000); 
     
     if (person.gender === 0) {
         person.name =  namesMan[genPos(namesMan.length)] + ' ' + surnames[genPos(surnames.length)];  
@@ -188,6 +192,7 @@ for (let i=1; i<personId+1; i++) {
     }  
     
     person.age =  18 + genPos(20);
+    
     person.birthday =  1 + genPos(27);
     person.monthOfBirth = 1 + genPos(11);
     person.yearOfBirth =  1980 + genPos(20);
@@ -229,8 +234,8 @@ for (let i=1; i<personId+1; i++) {
     person.maritalStatus =  genPos(4);
     person.children =  genPos(4);
     person.religion =  genPos(4);
-    person.rise =  genPos(4);
-    person.alcohol =  genPos(4);
+    person.alcohol =  genPos(2);
+    person.smoke = genPos(2);
     person.discription = hello[genPos(hello.length)] + ', меня зовут ' + person.name;
     person.profit =  genPos(4);
 
@@ -301,7 +306,7 @@ const arrPersonQuery = arrPerson.map((item)=>{
 	str += 'email, password, jwt, id, ipaddress, timecode, name, latitude, longitude, location, ';
     str += 'likes, age, birthday, monthofbirth, yearofbirth, growth, weight, gender, ';
     str += 'gendervapor, photomain, photolink, signzodiac, education, ';
-    str += 'fieldofactivity, maritalstatus, children, religion, rise, ';
+    str += 'fieldofactivity, maritalstatus, children, religion, ';
     str += 'smoke, alcohol, discription, profit, interests, ilikecharacter, ';
     str += 'idontlikecharacter, cash) VALUES (';
     str += "'" + item.email + "', ";
@@ -331,7 +336,6 @@ const arrPersonQuery = arrPerson.map((item)=>{
     str += item.maritalStatus + ", ";
     str += item.children + ", ";
     str += item.religion + ", ";
-    str += item.rise + ", ";
     str += item.smoke + ", ";
     str += item.alcohol + ", ";
     str += "'" + item.discription + "', ";
