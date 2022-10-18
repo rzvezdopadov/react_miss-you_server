@@ -82,3 +82,19 @@ export interface IRegistration {
     email: string,
     password: string,
 }
+
+export interface IMessage {
+    timecode: number,
+    id1del: boolean,
+    id2del: boolean,
+    message: string
+}
+
+export interface IDialog {
+    id: number,
+    id1: number,
+    id2: number,
+    timecode: number,
+    dck: string,
+    messages: [IMessage]
+}
