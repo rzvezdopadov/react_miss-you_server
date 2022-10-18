@@ -4,7 +4,7 @@ CREATE TABLE users (
     jwt VARCHAR(255),
     id serial PRIMARY KEY,
     ipaddress VARCHAR(50),
-    timecode INT,
+    timecode BIGINT,
     name VARCHAR(50),
     latitude INT,
     longitude INT,
@@ -64,7 +64,7 @@ CREATE TABLE messages (
     id serial PRIMARY KEY,
     id1 INT,
     id2 INT,
-    timecode INT,
+    timecode BIGINT,
     dck VARCHAR(255),
     messages TEXT[]
 );
