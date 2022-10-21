@@ -4,7 +4,7 @@ export interface IProfile {
     latitude: number,
     longitude: number,
     location: string,
-    likes: [],
+    likes: Array<number>,
     age: number,
     birthday: number,
     monthofbirth: number,
@@ -14,7 +14,7 @@ export interface IProfile {
     gender: number,
     gendervapor: number,
     photomain: number,
-    photolink: [],
+    photolink: Array<string>,
     signzodiac: number,
     education: number,
     fieldofactivity: number,
@@ -25,9 +25,9 @@ export interface IProfile {
     alcohol: number,
     discription: string,
     profit: number,
-    interests: [],
-    ilikecharacter: [],
-    idontlikecharacter: [],
+    interests: Array<string>,
+    ilikecharacter: Array<number>,
+    idontlikecharacter: Array<number>,
     filters: IFilterUsers,
 }
 
@@ -44,35 +44,35 @@ interface IFilterUsers {
     religion: number,
     smoke: number,
     alcohol: number,
-    interests: [],
+    interests: Array<string>,
 }
 
 export interface IQueryGetProfiles {
-    jwt: string;
-    id: number;
+    jwt: string,
+    id: number,
     startcount: number, 
     amount: number, 
     filters: IFilterUsers,
-    users: string
+    users: string,
 }
 
 export interface IGetProfiles {
-    jwt: string;
-    id: number;
+    jwt: string,
+    id: number,
     startcount: number, 
     amount: number, 
     filters: IFilterUsers,
-    users: []
+    users: Array<number>
 }
 
 export interface IQueryGetProfile {
-    jwt: string;
-    id: number;
+    jwt: string,
+    id: number,
 }
 
 export interface IQuerySetProfile {
-    jwt: string;
-    profile: IProfile;
+    jwt: string,
+    profile: IProfile,
 }
 
 export interface IRegistration {
@@ -87,7 +87,7 @@ export interface IMessage {
     timecode: number,
     id1del: boolean,
     id2del: boolean,
-    message: string
+    message: string,
 }
 
 export interface IDialog {
@@ -96,5 +96,5 @@ export interface IDialog {
     id2: number,
     timecode: number,
     dck: string,
-    messages: [IMessage]
+    messages: Array<IMessage>,
 }
