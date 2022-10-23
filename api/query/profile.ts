@@ -1,38 +1,5 @@
-import { IDialog, IGetProfiles, IProfile, IQueryGetProfiles } from "../interfaces/iprofiles";
-const Pool = require('pg').Pool;
-
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'miss-you',
-    password: '123456789',
-    port: 5432,
-})
-
-
-export async function getIdByEmailFromDB(email: string) {
-    try {
-        const answerDB = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-
-        return answerDB.rows[0].id;
-    } catch (error) {
-        console.log(error);
-    }
-   
-    return -1;
-}
-
-export async function getPasswordByIdFromDB(id: number) {
-    try {
-        const answerDB = await pool.query('SELECT password FROM users WHERE id = $1', [id]);
-
-        return answerDB.rows[0].password;
-    } catch (error) {
-        console.log(error);
-    }
-   
-    return '';
-}
+import { IGetProfiles, IProfile } from "../../interfaces/iprofiles";
+import { poolDB } from "./config";
 
 const fieldProfile = 'id, timecode, name, latitude, longitude, location, ' +
 'likes, age, birthday, monthofbirth, yearofbirth, growth, weight, ' +
@@ -49,12 +16,12 @@ const fieldFilters = 'location, signzodiac, agestart, ageend, ' +
 export async function getProfileByIdFromDB(id: number) {
     try {
         let queryStr = 'SELECT ' + fieldProfile + ' FROM users WHERE id = $1';
-        const answerDB = await pool.query(queryStr, [id]);
+        const answerDB = await poolDB.query(queryStr, [id]);
 
         if (!answerDB.rows[0]) return {}
 
         let queryStrFilters = 'SELECT ' + fieldFilters + ' FROM filters WHERE id = $1';
-        const answerDBFilters = await pool.query(queryStrFilters, [id]);
+        const answerDBFilters = await poolDB.query(queryStrFilters, [id]);
 
         if (!answerDBFilters.rows[0]) return {}
 
@@ -124,7 +91,7 @@ export async function getProfiles(QueryGetProfiles: IGetProfiles) {
                 gendervapor = 0;
             }
             
-            answerDB = await pool.query(queryStr, [
+            answerDB = await poolDB.query(queryStr, [
                 filters.location, 
                 filters.signzodiac,
                 filters.agestart, filters.ageend,
@@ -146,7 +113,7 @@ export async function getProfiles(QueryGetProfiles: IGetProfiles) {
             }
 
             queryStr = queryStr.slice(0, -3);
-            answerDB = await pool.query(queryStr);
+            answerDB = await poolDB.query(queryStr);
         }
 
         return answerDB.rows;
@@ -174,7 +141,7 @@ export async function setProfileByIdToDB(id: number, profile: IProfile) {
         queryStrProfile += 'ilikecharacter = $23, idontlikecharacter = $24 ';
         queryStrProfile += 'WHERE id = $1';
 
-        const answerDBProfile = await pool.query(queryStrProfile, [id,
+        const answerDBProfile = await poolDB.query(queryStrProfile, [id,
             profile.name, profile.location, profile.age,
             profile.birthday, profile.monthofbirth, profile.yearofbirth,  
             profile.growth, profile.weight,
@@ -202,7 +169,7 @@ export async function setProfileByIdToDB(id: number, profile: IProfile) {
         queryStrFilters += 'interests = $14 ';
         queryStrFilters += 'WHERE id = $1';
 
-        const answerDBFilters = await pool.query(queryStrFilters, [id, 
+        const answerDBFilters = await poolDB.query(queryStrFilters, [id, 
             profile.filters.location, 
             profile.filters.agestart, profile.filters.ageend,
             profile.filters.growthstart, profile.filters.growthend,
@@ -239,152 +206,4 @@ export function setProfileShort(profile: IProfile) {
     // }
 
     return false;
-}
-
-
-export async function setJWTToDB(id: number, jwt: string) { // Set JWT in DB
-    try {
-        const answerDB = await pool.query("UPDATE users SET jwt = $1 WHERE id = $2", [jwt, id]);
-
-        return answerDB.rowCount;
-    } catch (error) {
-        console.log('setProfileByIdToDB:', error);
-    }
-   
-    return 0;
-}
-
-export async function setTimecodeToDB(id: number) { // Set Time code in DB
-    const date = new Date();
-    const timecode = date.getTime();
-
-    try {
-        const answerDB = await pool.query("UPDATE users SET timecode = $2 WHERE id = $1", [id, timecode]);
-
-        return answerDB.rowCount;
-    } catch (error) {
-        console.log('setTimecodeToDB:', error);
-    }
-   
-    return timecode;
-}
-
-export async function getJWTFromDB(id: number) { // Get JWT in DB
-    try {
-        const answerDB = await pool.query('SELECT jwt FROM users WHERE id = $1', [id]);
-
-        return answerDB.rows[0].jwt;
-    } catch (error) {
-        console.log('getJWTFromDB:', error);
-    }
-   
-    return '';
-}
-
-export function createProfile(profile: IProfile) { // Create base Profile in DB
-    // let id = 0;
-
-    // for (let i = 0; i < userList.length; i++) {
-    //     id = Math.max(id, userList[i].id);
-    // }
-
-    // profile.id = id + 1;
-
-    // userList.push(profile);
-
-    return true;
-}
-
-export async function getLikesByIdFromDB(id: number) {
-    try {
-        let queryStr = 'SELECT likes FROM users WHERE id = $1';
-        const answerDB = await pool.query(queryStr, [id]);
-
-        return answerDB.rows[0].likes;
-    } catch (error) {
-        console.log('getProfileByIdFromDB', error);
-    }
-
-    return {};
-}
-
-export async function setLikesByIdFromDB(id: number, arr: [number]) {
-    try {
-        let queryStr = 'UPDATE users SET likes = $1 WHERE id = $2';
-        
-        const answerDB = await pool.query(queryStr, [arr, id]);
-
-        return answerDB.rowCount;
-    } catch (error) {
-        console.log('setLikesByIdFromDB', error);
-    }
-
-    return 0;
-}
-
-export async function getDialogByIdFromDB(id1: number, id2: number, idDialog: number = 0) {
-    try {
-        let answerDB = { rows: [] };
-
-        let queryStr = 'SELECT id, id1, id2, timecode, dck, messages FROM messages WHERE ';
-
-        if (idDialog) {
-            queryStr += 'id = $1';
-
-            answerDB = await pool.query(queryStr, [idDialog]);
-        } else {
-            queryStr += '(id1 = $1 AND id2 = $2) OR (id1 = $2 AND id2 = $1)';
-
-            answerDB = await pool.query(queryStr, [id1, id2]);
-        }
-
-        return answerDB.rows[0];
-    } catch (error) {
-        console.log('getDialogByIdFromDB', error);
-    }
-
-    return [];
-}
-
-export async function setDialogByIdToDB(idDialog: number, dialog: IDialog) {
-    const date = new Date();
-    const timecode = date.getTime();
-
-    let answerDB = { rows: [] };
-
-    try {
-        if (dialog.messages.length === 1) {
-            const queryStr = 'INSERT INTO messages (id1, id2, timecode, dck, messages) VALUES ($1, $2, $3, $4, ARRAY [$5])';
-
-            answerDB = await pool.query(queryStr, [dialog.id1, dialog.id2, timecode, dialog.dck, dialog.messages]);
-
-            return answerDB.rows[0];
-        } else {
-            const queryStr = 'UPDATE users SET timecode = $2, messages = $3 WHERE id = $1';
-
-            answerDB = await pool.query(queryStr, [idDialog, timecode, dialog.messages]);
-
-            return answerDB.rows[0];
-        }
-    } catch (error) {
-        console.log('setDialogByIdToDB', error);
-    }
-
-    return []
-}
-
-export async function getDialogsByIdFromDB(idUser: number) {
-    try {
-        let answerDB = { rows: [] };
-
-        let queryStr = 'SELECT id, id1, id2, messages FROM messages WHERE id1 = $1 OR id2 = $1';
-        
-        answerDB = await pool.query(queryStr, idUser);
-
-        return answerDB.rows[0];
-    } catch (error) {
-        console.log('getDialogsByIdFromDB', error);
-    }
-
-    return [];
 }
