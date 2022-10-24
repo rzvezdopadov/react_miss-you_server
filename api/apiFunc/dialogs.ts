@@ -7,7 +7,9 @@ const jwtToken = require('jsonwebtoken');
 
 export async function querySetMessage(req, res) { 
     try {
-        const { jwt, id1, id2, message } = req.body;
+        const { id1, id2, message } = req.body;
+
+        const { jwt } = req.cookies;
 
         const decode = await jwtToken.verify(jwt, config.get('jwtSecret'));
 
@@ -59,7 +61,7 @@ export async function queryGetDialog(req, res) {
 
 export async function queryGetDialogs(req, res) { 
     try {
-        const { jwt } = req.query;
+        const { jwt } = req.cookies;
 
         const decode = await jwtToken.verify(jwt, config.get('jwtSecret'));
 

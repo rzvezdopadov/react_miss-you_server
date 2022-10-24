@@ -7,7 +7,9 @@ const jwtToken = require('jsonwebtoken');
 
 export async function querySetLike(req, res) { 
     try {
-        const { jwt, id } = req.body;
+        const { id } = req.body;
+
+        const { jwt } = req.cookies;
 
         const decode = await jwtToken.verify(jwt, config.get('jwtSecret'));
 

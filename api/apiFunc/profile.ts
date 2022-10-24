@@ -8,9 +8,9 @@ const jwtToken = require('jsonwebtoken');
 
 export async function querySetProfile(req, res) {
     try {
-        const { 
-            jwt, profile
-        } = req.body;
+        const { profile } = req.body;
+
+        const { jwt } = req.cookies;
 
         profile as IProfile;
 
@@ -54,7 +54,9 @@ export async function querySetProfile(req, res) {
 
 export async function querySetProfileShort(req, res) { 
     try {
-        const { jwt, email, password } = req.body;
+        const { email, password } = req.body;
+
+        const { jwt } = req.cookies;
 
         // const decode = await jwtToken.verify(jwt, config.get('jwtSecret'));
 
@@ -89,7 +91,7 @@ export async function queryGetProfile(req, res) {
     try {
         const QueryGetProfiles:IQueryGetProfile = req.query;
 
-        const jwt = QueryGetProfiles.jwt;
+        const { jwt } = req.cookies;
         const id = QueryGetProfiles.id;
         
         const decode = await jwtToken.verify(jwt, config.get('jwtSecret'));
@@ -148,7 +150,7 @@ export async function queryGetProfiles(req, res) {
     try {
         const QueryGetProfiles:IQueryGetProfiles = req.query;
 
-        const jwt = QueryGetProfiles.jwt;
+        const { jwt } = req.cookies;
 
         const decode = await jwtToken.verify(jwt, config.get('jwtSecret'));
 
