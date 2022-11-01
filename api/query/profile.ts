@@ -124,6 +124,34 @@ export async function getProfiles(QueryGetProfiles: IGetProfiles) {
     return [];
 }
 
+export async function getProfilesForDialogs(users: Array<number>) {
+    try {
+        let answerDB = { rows: [] };
+
+        let queryStr = 'SELECT id, name, age, photomain, photolink FROM users WHERE ';
+
+         if (users) {
+            if (users.length === 0) {
+                return [];
+            } else {
+                users.forEach((value) => {
+                    queryStr += '(id = ' + value + ') OR ';
+                })
+            }
+
+            queryStr = queryStr.slice(0, -3);
+
+            answerDB = await poolDB.query(queryStr);
+        }
+            
+        return answerDB.rows;
+    } catch (error) {
+        console.log('getProfilesForDialogs', error);
+    }
+
+    return [];
+}
+
 export async function setProfileByIdToDB(id: number, profile: IProfile) {
     try {
         let queryStrProfile = 'UPDATE users SET ';
@@ -191,7 +219,6 @@ export async function setProfileByIdToDB(id: number, profile: IProfile) {
         newProfile = await getProfileByIdFromDB(id);
     } catch (error) {
         console.log('setProfileByIdToDB get:', error);
-        
     }
 
     return newProfile;
