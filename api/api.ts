@@ -47,19 +47,19 @@ router.put(
 )
 
 router.put(
-    '/api/setmessage',
+    '/api/message',
     [], 
     querySetMessage
 )
 
 router.get(
-    '/api/getdialog',
+    '/api/dialog',
     [], 
     queryGetDialog
 )
 
 router.get(
-    '/api/getdialogs',
+    '/api/dialogs',
     [], 
     queryGetDialogs
 )
