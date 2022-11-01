@@ -84,13 +84,14 @@ export interface IRegistration {
 }
 
 export interface IMessage {
+    idUser: number
     timecode: number,
     id1del: boolean,
     id2del: boolean,
     message: string,
 }
 
-export interface IDialog {
+export interface IDialogBase {
     id: number,
     id1: number,
     id2: number,
@@ -98,3 +99,25 @@ export interface IDialog {
     dck: string,
     messages: Array<IMessage>,
 }
+
+
+export interface IDialogOutput {
+    timecode: number,
+    idUser: number,
+    name: string,
+    age: number,
+    photomain: number,
+    photolink: Array<string>,
+    messages: Array<IMessage>,
+}
+
+export interface IProfileForDialog {
+    id: number, 
+    name: string, 
+    age: number, 
+    photomain: number, 
+    photolink: Array<string>,
+}
+
+
+
