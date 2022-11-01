@@ -20,3 +20,9 @@ export function getSignZodiac(birthday, monthofbirth) {
     if (((birthday > 20) && (monthofbirth === 1)) || ((birthday < 20) && (monthofbirth === 2))) return 10 
     if (((birthday > 19) && (monthofbirth === 2)) || ((birthday < 21) && (monthofbirth === 3))) return 11
 }
+
+export function getTimecodeNow() {
+    const dateNow = new Date();
+    const timecodeNow = dateNow.getTime();
+    return timecodeNow;
+}
