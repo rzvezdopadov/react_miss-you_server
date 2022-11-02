@@ -118,6 +118,3 @@ export interface IProfileForDialog {
     photomain: number, 
     photolink: Array<string>,
 }
-
-
-
