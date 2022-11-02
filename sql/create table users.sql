@@ -66,5 +66,5 @@ CREATE TABLE messages (
     id2 INT,
     timecode BIGINT,
     dck VARCHAR(255),
-    messages TEXT[]
+    messages JSON[]
 );
