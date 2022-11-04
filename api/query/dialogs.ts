@@ -40,9 +40,9 @@ export async function setDialogByIdToDB(dialog: IDialogBase) {
 
             return answerDB.rows[0];
         } else {
-            const queryStr = 'UPDATE dialogs SET timecode = $2, messages = $3::json[] WHERE id = $1';
+            const queryStr = 'UPDATE dialogs SET messages = $2::json[] WHERE id = $1';
 
-            answerDB = await poolDB.query(queryStr, [dialog.id, timecode, dialog.messages]);
+            answerDB = await poolDB.query(queryStr, [dialog.id, dialog.messages]);
 
             return answerDB.rows[0];
         }
