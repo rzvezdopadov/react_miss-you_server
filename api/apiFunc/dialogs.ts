@@ -225,6 +225,8 @@ export async function queryGetDialogs(req, res) {
                         newDialogs.push(newDialog);
                     })
 
+                    newDialogs.sort((a, b) => b.messages[b.messages.length-1].timecode - a.messages[a.messages.length-1].timecode);
+
                     return res.status(200).json(newDialogs); 
                 }).catch((error) => {
                     console.log(error);
