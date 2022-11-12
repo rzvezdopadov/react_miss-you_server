@@ -32,6 +32,7 @@ const Person = {
     interests: [],
     iLikeСharacter: [],
     iDontLikeСharacter: [],
+    raiting: 100,
     cash: 0,
     filters: {
         location: 'Ryazan',
@@ -146,7 +147,7 @@ function genPos(count) {
 
 const arrPerson = []; 
 
-const personId = 500;
+const personId = 2000;
 
 for (let i=1; i<personId+1; i++) {
     const person = JSON.parse(JSON.stringify(Person));   
@@ -179,7 +180,7 @@ for (let i=1; i<personId+1; i++) {
     }
 
     function genUnical(arr) {
-        const value = genPos(1000);
+        const value = genPos(personId);
         if (arr.includes(value)) {
             genUnical(arr);
         } else {
@@ -187,7 +188,7 @@ for (let i=1; i<personId+1; i++) {
         }
     }
     
-    for (let i=0; i < 50; i++) {
+    for (let i=0; i < Math.floor(personId/10); i++) {
         genUnical(person.likes);
     }  
     
@@ -241,6 +242,8 @@ for (let i=1; i<personId+1; i++) {
 
     for (let j=0; j<genPos(10); j++) { person.iLikeСharacter.push(genPos(30)) }
     for (let j=0; j<genPos(10); j++) { person.iDontLikeСharacter.push(genPos(30)) }
+    person.raiting =  genPos(10000);
+    person.cash =  genPos(2000);
 
     person.filters.agestart = 18 + genPos(8);
     person.filters.agestart = person.filters.agestart + genPos(8);
@@ -308,7 +311,7 @@ const arrPersonQuery = arrPerson.map((item)=>{
     str += 'gendervapor, photomain, photolink, signzodiac, education, ';
     str += 'fieldofactivity, maritalstatus, children, religion, ';
     str += 'smoke, alcohol, discription, profit, interests, ilikecharacter, ';
-    str += 'idontlikecharacter, cash) VALUES (';
+    str += 'idontlikecharacter, raiting, cash) VALUES (';
     str += "'" + item.email + "', ";
     str += "'" + item.password + "', ";
     str += "'" + item.jwt + "', ";
@@ -343,6 +346,7 @@ const arrPersonQuery = arrPerson.map((item)=>{
     str = arrQueryStr(str, item.interests);
     str = arrQueryInt(str, item.iLikeСharacter); 
     str = arrQueryInt(str, item.iDontLikeСharacter);
+    str += item.raiting + ", ";
     str += item.cash + ", ";
     str = str.slice(0, -2);
     str += ');';
@@ -374,14 +378,16 @@ const arrPersonQueryFilter = arrPerson.map((item)=>{
     return str;
 });
 
-const app = document.getElementById('app');
+const appUsers = document.getElementById('appUsers');
+const appFilters = document.getElementById('appFilters');
 
-arrPersonQuery.forEach((value) => {
-    app.innerHTML += '<div><span>' + value + '</span></div>'
+
+arrPersonQuery.forEach((value, i) => {
+    appUsers.innerHTML += '<div><span>' + value + '</span></div>'
 })
 
-arrPersonQueryFilter.forEach((value) => {
-    app.innerHTML += '<div><span>' + value + '</span></div>'
+arrPersonQueryFilter.forEach((value, i) => {
+    appFilters.innerHTML += '<div><span>' + value + '</span></div>'
 })
 
 
