@@ -33,6 +33,7 @@ CREATE TABLE users (
     interests TEXT[],
     ilikecharacter INT[],
     idontlikecharacter INT[],
+    raiting INT
     cash INT
 );
 
