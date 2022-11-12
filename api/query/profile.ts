@@ -116,7 +116,13 @@ export async function getProfiles(QueryGetProfiles: IGetProfiles) {
             answerDB = await poolDB.query(queryStr);
         }
 
-        return answerDB.rows;
+        let profiles = answerDB.rows;
+
+        if (profiles.length > 1) {
+            profiles = profiles.sort((a, b)=>  (b.raiting - a.raiting));
+        }
+
+        return profiles;
     } catch (error) {
         console.log('getProfiles', error);
     }

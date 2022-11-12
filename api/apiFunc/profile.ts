@@ -193,10 +193,6 @@ export async function queryGetProfiles(req, res) {
             const profiles = getProfiles(getProfilesVal);
 
             profiles.then((profiles) => {
-                if (profiles.length > 1) {
-                    profiles = profiles.sort((a, b)=>  (b.raiting - a.raiting));
-                }
-
                 return res.status(200).json(profiles);
             }).catch((error) => {
                 console.log(error);
