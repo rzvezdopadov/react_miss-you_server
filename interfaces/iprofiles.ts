@@ -28,6 +28,7 @@ export interface IProfile {
     interests: Array<string>,
     ilikecharacter: Array<number>,
     idontlikecharacter: Array<number>,
+    raiting: number,
     filters: IFilterUsers,
 }
 

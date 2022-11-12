@@ -61,6 +61,7 @@ export async function queryRegistration(req, res) {
             interests: [],
             ilikecharacter: [],
             idontlikecharacter: [],
+            raiting: 0,
             filters: undefined
         };
 

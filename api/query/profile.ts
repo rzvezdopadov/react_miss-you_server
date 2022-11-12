@@ -6,7 +6,7 @@ const fieldProfile = 'id, timecode, name, latitude, longitude, location, ' +
 'gender, gendervapor, photomain, photolink, signzodiac, ' +
 'education, fieldofactivity, maritalstatus, children, religion, ' +
 'smoke, alcohol, discription, profit, interests, ' +
-'ilikeCharacter, idontlikeCharacter';
+'ilikeCharacter, idontlikeCharacter, raiting';
 
 const fieldFilters = 'location, signzodiac, agestart, ageend, ' +
 'growthstart, growthend, weightstart, weightend, gendervapor, ' +
@@ -35,7 +35,7 @@ export async function getProfileByIdFromDB(id: number) {
     return {};
 }
 
-const fieldProfileShort = 'id, timecode, name, age, gender, photomain, photolink, interests';
+const fieldProfileShort = 'id, timecode, name, age, gender, photomain, photolink, interests, raiting';
 
 export async function getProfiles(QueryGetProfiles: IGetProfiles) {
     let countProfiles = 0;
