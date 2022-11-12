@@ -38,7 +38,6 @@ export async function getProfileByIdFromDB(id: number) {
 const fieldProfileShort = 'id, timecode, name, age, gender, photomain, photolink, interests, raiting';
 
 export async function getProfiles(QueryGetProfiles: IGetProfiles) {
-    let countProfiles = 0;
     const startPos = Number(QueryGetProfiles.startcount);
     const endPos = startPos + Number(QueryGetProfiles.amount);
     const { filters, users } = QueryGetProfiles;
@@ -119,7 +118,13 @@ export async function getProfiles(QueryGetProfiles: IGetProfiles) {
         let profiles = answerDB.rows;
 
         if (profiles.length > 1) {
-            profiles = profiles.sort((a, b)=>  (b.raiting - a.raiting));
+            let newProfiles = profiles.sort((a, b)=>  (b.raiting - a.raiting));
+
+            if (startPos - endPos) {
+                newProfiles = newProfiles.slice(startPos, endPos);
+            }
+
+            profiles = newProfiles;
         }
 
         return profiles;
