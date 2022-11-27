@@ -1,57 +1,45 @@
 import express from "express";
-const config = require('config');
-const cookieParser = require('cookie-parser');
+import { socketHandler } from "./api/sockets";
+const config = require("config");
+const cookieParser = require("cookie-parser");
+
+console.log("-------------------------------------------------------");
 
 const app = express();
 
 app.use(cookieParser());
-app.use(express.urlencoded({extended: false}));
-app.use(express.json())
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-app.use('/', require('./api/api'));
+app.use("/", require("./api/api"));
 
-const PORT = config.get('port') || 5000;
-const socketPORT = config.get('socketPort') || 8000; 
+const PORT = config.get("port") || 5000;
+const socketPORT = config.get("socketPort") || 8000;
 
-const http = require('http').Server(app);
-const socketIO = require('socket.io')(http);
+const http = require("http").Server(app);
+const socketIO = require("socket.io")(http);
 
-socketIO.on('connection', function(socket) {
-    console.log('user connected');
-    
-    socket.on('disconnect', function () {
-        console.log('A user disconnected');
-    });
-})
+socketIO.on("connection", (socket) => socketHandler(socketIO, socket));
 
-socketIO.on('message', function(socket) {
-    console.log('user message');
-    
-    socket.on('disconnect', function () {
-        console.log('A user disconnected');
-    });
-})
-
-socketIO.on('like', function(socket) {
-    console.log('user like');
-    
-    socket.on('disconnect', function () {
-        console.log('A user disconnected');
-    });
-})
-
-http.listen(socketPORT, function() {
-    console.log(`Socket started on port: "${socketPORT}"`);
- });
+async function startSocket() {
+	try {
+		http.listen(socketPORT, () => {
+			console.log(`Socket started on port: "${socketPORT}"`);
+		});
+	} catch (e) {
+		console.log("Socket error with:", e.message);
+	}
+}
 
 async function startServer() {
-    try {
-        app.listen(PORT, () => {
-            console.log(`Web started on port: "${PORT}"`);
-        })
-    } catch (e) {
-        console.log("Server error with:",e.message);
-    }
+	try {
+		app.listen(PORT, () => {
+			console.log(`Web started on port: "${PORT}"`);
+		});
+	} catch (e) {
+		console.log("Web error with:", e.message);
+	}
 }
 
 startServer();
+startSocket();
