@@ -3,8 +3,8 @@ import { getTimecodeNow } from "../utils/datetime";
 
 interface IStatVisit {
 	key: string;
-	timecodeopen: number;
-	timecodeclosed: number;
+	tco: number;
+	tcc: number;
 }
 
 interface IStatisticsVisit {
@@ -28,8 +28,8 @@ export async function setVisitByIdToDB(
 
 			const statVisit: IStatVisit = {
 				key: key,
-				timecodeopen: timecode,
-				timecodeclosed: 0,
+				tco: timecode,
+				tcc: 0,
 			};
 
 			statistics.visit.push(statVisit);
@@ -50,7 +50,7 @@ export async function setVisitByIdToDB(
 
 			if (visitPos === -1) return 0;
 
-			statistics.visit[visitPos].timecodeclosed = timecode;
+			statistics.visit[visitPos].tcc = timecode;
 
 			const answerDB = await poolDB.query(queryStr, [
 				statistics.visit,
