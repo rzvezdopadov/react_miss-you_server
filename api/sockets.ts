@@ -3,6 +3,7 @@ import { testToken } from "../utils/token";
 import { setTimecodeToDB } from "../query/auth";
 import { setLikesById } from "../utils/likes";
 import { setDialog } from "../utils/dialogs";
+import { getVisitByIdFromDB, setVisitByIdToDB } from "../query/statistics";
 
 interface ISocketUser {
 	userId: number;
@@ -63,7 +64,11 @@ export const socketHandler = (socketIO, socket) => {
 				(value) => value.socketId === socketId
 			);
 
-			if (socketPos === -1) arrOfSockets.push(socketUser);
+			if (socketPos !== -1) return;
+
+			arrOfSockets.push(socketUser);
+
+			setVisitByIdToDB(socketId, tokenDecode.userId, "open");
 		} catch (error) {
 			console.log("get_jwt error", error);
 		}
@@ -122,6 +127,8 @@ export const socketHandler = (socketIO, socket) => {
 		);
 
 		if (userIndex === -1) return;
+
+		setVisitByIdToDB(socketId, arrOfSockets[userIndex].userId, "closed");
 
 		arrOfSockets.splice(userIndex, 1);
 	});
