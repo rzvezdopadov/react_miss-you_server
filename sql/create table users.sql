@@ -33,8 +33,9 @@ CREATE TABLE users (
     interests TEXT[],
     ilikecharacter INT[],
     idontlikecharacter INT[],
-    raiting INT
-    cash INT
+    raiting INT,
+    cash INT,
+    acctype VARCHAR(50)
 );
 
 CREATE TABLE filters (
@@ -68,4 +69,9 @@ CREATE TABLE messages (
     timecode BIGINT,
     dck VARCHAR(255),
     messages JSON[]
+);
+
+CREATE TABLE users_statistics (
+    id serial PRIMARY KEY,
+    visit JSON[]
 );
