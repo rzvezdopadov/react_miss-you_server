@@ -3,7 +3,7 @@ import { testToken } from "../utils/token";
 import { setTimecodeToDB } from "../query/auth";
 import { setLikesById } from "../utils/likes";
 import { setDialog } from "../utils/dialogs";
-import { getVisitByIdFromDB, setVisitByIdToDB } from "../query/statistics";
+import { setVisitByIdToDB } from "../query/statistics";
 
 interface ISocketUser {
 	userId: number;
