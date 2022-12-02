@@ -64,7 +64,7 @@ export const setDialog = async (
 
 		return newDialog;
 	} catch (error) {
-		console.log("error", error);
+		console.log("setDialog", error);
 		return newDialog;
 	}
 };
@@ -99,7 +99,7 @@ export const getDialog = async (
 
 		return newDialog;
 	} catch (error) {
-		console.log("error", error);
+		console.log("getDialog", error);
 		return newDialog;
 	}
 };
@@ -154,7 +154,7 @@ export const getDialogs = async (
 		}
 		return newDialogs;
 	} catch (error) {
-		console.log("error", error);
+		console.log("getDialogs", error);
 		return [];
 	}
 };
