@@ -127,3 +127,8 @@ export interface IQuerySendMessage {
 export interface IQueryLike {
 	id: number;
 }
+
+export interface IPhotos {
+	photolink: Array<string>;
+	photomain: number;
+}
