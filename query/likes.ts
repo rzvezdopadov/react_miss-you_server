@@ -12,7 +12,7 @@ export async function getLikesByIdFromDB(id: number): Promise<Array<number>> {
 	}
 }
 
-export async function setLikesByIdFromDB(
+export async function setLikesByIdToDB(
 	id: number,
 	arr: Array<number>
 ): Promise<number> {

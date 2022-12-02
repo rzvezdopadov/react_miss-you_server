@@ -1,4 +1,4 @@
-import { getLikesByIdFromDB, setLikesByIdFromDB } from "../query/likes";
+import { getLikesByIdFromDB, setLikesByIdToDB } from "../query/likes";
 
 export const setLikesById = async (ourId: number, userId: number) => {
 	try {
@@ -22,7 +22,7 @@ export const setLikesById = async (ourId: number, userId: number) => {
 			likes.splice(posLike, 1);
 		}
 
-		const likeCommand = await setLikesByIdFromDB(userId, likes);
+		const likeCommand = await setLikesByIdToDB(userId, likes);
 
 		if (likeCommand) {
 			if (command === commandAdded) {
