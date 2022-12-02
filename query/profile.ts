@@ -13,32 +13,34 @@ const fieldFilters =
 	"location, signzodiac, agestart, ageend, " +
 	"growthstart, growthend, weightstart, weightend, gendervapor, " +
 	"religion, smoke, alcohol, interests";
-export async function getProfileByIdFromDB(id: number) {
+export async function getProfileByIdFromDB(id: number): Promise<IProfile> {
 	try {
 		let queryStr = "SELECT " + fieldProfile + " FROM users WHERE id = $1";
 		const answerDB = await poolDB.query(queryStr, [id]);
 
-		if (!answerDB.rows[0]) return {};
+		if (!answerDB.rows[0]) return undefined;
 
 		let queryStrFilters =
 			"SELECT " + fieldFilters + " FROM filters WHERE id = $1";
 		const answerDBFilters = await poolDB.query(queryStrFilters, [id]);
 
-		if (!answerDBFilters.rows[0]) return {};
+		if (!answerDBFilters.rows[0]) return undefined;
 
 		answerDB.rows[0].filters = answerDBFilters.rows[0];
 
 		return answerDB.rows[0];
 	} catch (error) {
 		console.log("getProfileByIdFromDB", error);
-		return {};
+		return undefined;
 	}
 }
 
 const fieldProfileShort =
 	"id, timecode, name, age, gender, photomain, photolink, interests, raiting";
 
-export async function getProfiles(QueryGetProfiles: IGetProfiles) {
+export async function getProfiles(
+	QueryGetProfiles: IGetProfiles
+): Promise<IProfile[]> {
 	const startPos = Number(QueryGetProfiles.startcount);
 	const endPos = startPos + Number(QueryGetProfiles.amount);
 	const { filters, users } = QueryGetProfiles;
@@ -166,7 +168,10 @@ export async function getProfilesForDialogs(users: Array<number>) {
 	}
 }
 
-export async function setProfileByIdToDB(id: number, profile: IProfile) {
+export async function setProfileByIdToDB(
+	id: number,
+	profile: IProfile
+): Promise<IProfile> {
 	try {
 		let queryStrProfile = "UPDATE users SET ";
 
@@ -245,15 +250,13 @@ export async function setProfileByIdToDB(id: number, profile: IProfile) {
 		console.log("setProfileByIdToDB:", error);
 	}
 
-	let newProfile = {};
-
 	try {
-		newProfile = await getProfileByIdFromDB(id);
+		const newProfile = await getProfileByIdFromDB(id);
+		return newProfile;
 	} catch (error) {
 		console.log("setProfileByIdToDB get:", error);
+		return undefined;
 	}
-
-	return newProfile;
 }
 
 export function setProfileShort(profile: IProfile) {
