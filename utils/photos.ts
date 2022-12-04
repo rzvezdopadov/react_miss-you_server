@@ -13,8 +13,6 @@ export const deletePhoto = async (
 	try {
 		photos = await getPhotosByIdFromDB(ourId);
 
-		console.log("photoPos", photoPos);
-
 		if (photoPos < photos.photolink.length) {
 			if (photoPos < photos.photolink.length) {
 				photos.photomain = 0;
@@ -29,6 +27,32 @@ export const deletePhoto = async (
 		return photos;
 	} catch (error) {
 		console.log("deletePhoto", error);
+		return photos;
+	}
+};
+
+export const checkPhoto = async (
+	ourId: number,
+	photoPos: number
+): Promise<IPhotos> => {
+	let photos: IPhotos = {
+		photolink: [],
+		photomain: 0,
+	};
+
+	try {
+		photos = await getPhotosByIdFromDB(ourId);
+
+		if (photoPos < photos.photolink.length) {
+			photos.photomain = photoPos;
+		}
+
+		await setPhotosByIdToDB(ourId, photos);
+		photos = await getPhotosByIdFromDB(ourId);
+
+		return photos;
+	} catch (error) {
+		console.log("checkPhoto", error);
 		return photos;
 	}
 };
