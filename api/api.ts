@@ -1,7 +1,12 @@
 import { queryLogin } from "./auth";
 import { queryGetDialog, queryGetDialogs, querySetMessage } from "./dialogs";
 import { querySetLike } from "./likes";
-import { queryCheckPhoto, queryDeletePhoto, queryLoadPhoto } from "./photos";
+import {
+	queryCheckPhoto,
+	queryDeletePhoto,
+	queryGetPhoto,
+	queryLoadPhoto,
+} from "./photos";
 import {
 	queryGetProfile,
 	queryGetProfiles,
@@ -43,5 +48,7 @@ router.post("/api/photo", [], queryLoadPhoto);
 router.delete("/api/photo", [], queryDeletePhoto);
 
 router.put("/api/photo", [], queryCheckPhoto);
+
+router.get("/api/photo/*.jpg", [], queryGetPhoto);
 
 module.exports = router;
