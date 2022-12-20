@@ -1,5 +1,6 @@
 import express from "express";
 import { socketHandler } from "./api/sockets";
+import fileupload from "express-fileupload";
 const config = require("config");
 const cookieParser = require("cookie-parser");
 
@@ -8,6 +9,15 @@ console.log("-------------------------------------------------------");
 const app = express();
 
 app.use(cookieParser());
+app.use(
+	fileupload({
+		createParentPath: true,
+		limits: {
+			fileSize: 100000,
+		},
+		abortOnLimit: true,
+	})
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
