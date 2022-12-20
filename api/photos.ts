@@ -1,6 +1,9 @@
-import { getPhotosByIdFromDB, setPhotosByIdToDB } from "../query/photos";
-import { checkPhoto, deletePhoto } from "../utils/photos";
-import { getRandomString } from "../utils/string";
+import {
+	addPhoto,
+	checkPhoto,
+	deletePhoto,
+	getWayPhoto,
+} from "../utils/photos";
 import { testToken } from "../utils/token";
 
 export async function queryLoadPhoto(req, res) {
@@ -22,13 +25,7 @@ export async function queryLoadPhoto(req, res) {
 				message: "Изображение не распознано!",
 			});
 
-		const strRand = getRandomString(30);
-
-		image.mv(__dirname + "/photos/" + strRand + ".jpg");
-
-		const photos = await getPhotosByIdFromDB(jwtDecode.userId);
-		photos.photolink.push("api/photo/" + strRand + ".jpg");
-		await setPhotosByIdToDB(jwtDecode.userId, photos);
+		const photos = await addPhoto(jwtDecode.userId, image);
 
 		return res.status(200).json(photos);
 	} catch (e) {
@@ -90,7 +87,6 @@ export async function queryCheckPhoto(req, res) {
 
 export async function queryGetPhoto(req, res) {
 	try {
-		console.log("queryGetPhoto");
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
 
@@ -104,9 +100,7 @@ export async function queryGetPhoto(req, res) {
 		let { url } = req;
 		const nameFile = url.substring(url.length - 34);
 
-		console.log(nameFile);
-
-		return res.sendFile(__dirname + "/photos/" + nameFile);
+		return res.sendFile(getWayPhoto(nameFile));
 	} catch (e) {
 		res.status(500).json({
 			message: "Ошибка QTDB!",
