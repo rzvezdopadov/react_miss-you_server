@@ -16,10 +16,6 @@ export const deletePhoto = async (
 		photos = await getPhotosByIdFromDB(ourId);
 
 		if (photoPos < photos.photolink.length) {
-			if (photoPos < photos.photolink.length - 1) {
-				photos.photomain = 0;
-			}
-
 			const link = photos.photolink[photoPos];
 			const nameFile = link.substring(link.length - 34);
 
@@ -28,6 +24,10 @@ export const deletePhoto = async (
 			});
 
 			photos.photolink.splice(photoPos, 1);
+
+			if (photos.photomain > photos.photolink.length - 1) {
+				photos.photomain = photos.photolink.length - 1;
+			}
 		}
 
 		await setPhotosByIdToDB(ourId, photos);
@@ -73,15 +73,15 @@ export const addPhoto = async (ourId: number, image: any): Promise<IPhotos> => {
 	};
 
 	try {
-		const strRand = getRandomString(30);
-
-		image.mv(__dirname + "/photos/" + strRand + ".jpg");
-
 		photos = await getPhotosByIdFromDB(ourId);
 
 		if (photos.photolink.length < 10) {
+			const strRand = getRandomString(30);
+
 			photos.photolink.push("api/photo/" + strRand + ".jpg");
 			await setPhotosByIdToDB(ourId, photos);
+
+			image.mv(__dirname + "/photos/" + strRand + ".jpg");
 		}
 
 		return photos;
