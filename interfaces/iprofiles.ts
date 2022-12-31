@@ -39,8 +39,7 @@ interface IFilterUsers {
 	ageend: number;
 	growthstart: number;
 	growthend: number;
-	weightstart: number;
-	weightend: number;
+	weight: number;
 	gendervapor: number;
 	religion: number;
 	smoke: number;

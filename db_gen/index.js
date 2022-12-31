@@ -40,8 +40,7 @@ const Person = {
         ageend: 50,
         growthstart: 120,
         growthend: 180,
-        weightstart: 50,
-        weightend: 70,
+        weight: 0,
         signzodiac: 0,
         gendervapor: 0,
         religion: 0,
@@ -198,7 +197,7 @@ for (let i=1; i<personId+1; i++) {
     person.monthOfBirth = 1 + genPos(11);
     person.yearOfBirth =  1980 + genPos(20);
     person.growth = 120 + genPos(80);
-    person.weight = 50 + genPos(30);
+    person.weight = genPos(5);
 
     for (let j=0; j<2; j++) {
         let linkPhoto;
@@ -249,8 +248,7 @@ for (let i=1; i<personId+1; i++) {
     person.filters.agestart = person.filters.agestart + genPos(8);
     person.filters.growthstart = 120 + genPos(10);
     person.filters.growthend = person.filters.growthstart + genPos(50);
-    person.filters.weightstart = 40 + genPos(10);
-    person.filters.weightend = person.filters.weightstart + genPos(50);
+    person.filters.weight = genPos(5);
     person.filters.signzodiac = 1 + genPos(10);
     person.filters.gendervapor = person.genderVapor;
     person.filters.religion = genPos(4);
@@ -356,7 +354,7 @@ const arrPersonQuery = arrPerson.map((item)=>{
 const arrPersonQueryFilter = arrPerson.map((item)=>{
     str = '';
     str += 'INSERT INTO public.filters(';
-	str += 'id, location, agestart, ageend, growthstart, growthend, weightstart, weightend, ';
+	str += 'id, location, agestart, ageend, growthstart, growthend, weight, ';
     str += 'signzodiac, gendervapor, religion, smoke, alcohol, interests';
     str += ') VALUES (';
     str += item.id + ", ";
@@ -365,8 +363,7 @@ const arrPersonQueryFilter = arrPerson.map((item)=>{
     str += item.filters.ageend + ", ";
     str += item.filters.growthstart + ", ";
     str += item.filters.growthend + ", ";
-    str += item.filters.weightstart + ", ";
-    str += item.filters.weightend + ", ";
+    str += item.filters.weight + ", ";
     str += item.filters.signzodiac + ", ";
     str += item.filters.gendervapor + ", ";
     str += item.filters.religion + ", ";

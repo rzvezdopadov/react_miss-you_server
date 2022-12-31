@@ -11,7 +11,7 @@ const fieldProfile =
 
 const fieldFilters =
 	"location, signzodiac, agestart, ageend, " +
-	"growthstart, growthend, weightstart, weightend, gendervapor, " +
+	"growthstart, growthend, weight, gendervapor, " +
 	"religion, smoke, alcohol, interests";
 export async function getProfileByIdFromDB(id: number): Promise<IProfile> {
 	try {
@@ -61,29 +61,34 @@ export async function getProfiles(
 
 			queryStr += "(age >= $3) AND (age <= $4) AND ";
 			queryStr += "(growth >= $5) AND (growth <= $6) AND ";
-			queryStr += "(weight >= $7) AND (weight <= $8) AND ";
 
-			queryStr += "(gendervapor = $9) AND ";
+			if (filters.weight === 0) {
+				queryStr += "((weight <> $7) OR (weight = 0)) AND ";
+			} else {
+				queryStr += "(weight = $7) AND ";
+			}
+
+			queryStr += "(gendervapor = $8) AND ";
 
 			if (filters.religion === 0) {
-				queryStr += "((religion <> $10) OR (religion = 0)) AND ";
+				queryStr += "((religion <> $9) OR (religion = 0)) AND ";
 			} else {
-				queryStr += "(religion = $10) AND ";
+				queryStr += "(religion = $9) AND ";
 			}
 
 			if (filters.smoke === 0) {
-				queryStr += "((smoke <> $11) OR (smoke = 0)) AND ";
+				queryStr += "((smoke <> $10) OR (smoke = 0)) AND ";
 			} else {
-				queryStr += "(smoke = $11) AND ";
+				queryStr += "(smoke = $10) AND ";
 			}
 
 			if (filters.alcohol === 0) {
-				queryStr += "((alcohol <> $12) OR (alcohol = 0)) AND ";
+				queryStr += "((alcohol <> $11) OR (alcohol = 0)) AND ";
 			} else {
-				queryStr += "(alcohol = $12) AND ";
+				queryStr += "(alcohol = $11) AND ";
 			}
 
-			queryStr += "(id <> $13)";
+			queryStr += "(id <> $12)";
 
 			let gendervapor = filters.gendervapor;
 
@@ -100,8 +105,7 @@ export async function getProfiles(
 				filters.ageend,
 				filters.growthstart,
 				filters.growthend,
-				filters.weightstart,
-				filters.weightend,
+				filters.weight,
 				gendervapor,
 				filters.religion,
 				filters.smoke,
@@ -221,13 +225,13 @@ export async function setProfileByIdToDB(
 		queryStrFilters += "location = $2, ";
 		queryStrFilters += "agestart = $3, ageend = $4, ";
 		queryStrFilters += "growthstart = $5, growthend = $6, ";
-		queryStrFilters += "weightstart = $7, weightend = $8, ";
-		queryStrFilters += "signzodiac = $9, ";
-		queryStrFilters += "gendervapor = $10, ";
-		queryStrFilters += "religion = $11, ";
-		queryStrFilters += "smoke = $12, ";
-		queryStrFilters += "alcohol = $13, ";
-		queryStrFilters += "interests = $14 ";
+		queryStrFilters += "weight = $7, ";
+		queryStrFilters += "signzodiac = $8, ";
+		queryStrFilters += "gendervapor = $9, ";
+		queryStrFilters += "religion = $10, ";
+		queryStrFilters += "smoke = $11, ";
+		queryStrFilters += "alcohol = $12, ";
+		queryStrFilters += "interests = $13 ";
 		queryStrFilters += "WHERE id = $1";
 
 		const answerDBFilters = await poolDB.query(queryStrFilters, [
@@ -237,8 +241,7 @@ export async function setProfileByIdToDB(
 			profile.filters.ageend,
 			profile.filters.growthstart,
 			profile.filters.growthend,
-			profile.filters.weightstart,
-			profile.filters.weightend,
+			profile.filters.weight,
 			profile.filters.signzodiac,
 			profile.filters.gendervapor,
 			profile.filters.religion,
