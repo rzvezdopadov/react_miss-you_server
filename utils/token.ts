@@ -4,7 +4,7 @@ const config = require("config");
 const jwtToken = require("jsonwebtoken");
 
 interface IdecodeJWT {
-	userId: number;
+	userId: string;
 	iat: number;
 	exp: number;
 }
@@ -35,6 +35,9 @@ export const testToken = async (jwt: string) => {
 		if (token !== jwt) {
 			return false;
 		}
+
+		decode.userId = String(decode.userId);
+
 		return decode;
 	} catch (error) {
 		return false;
