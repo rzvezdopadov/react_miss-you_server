@@ -1,15 +1,16 @@
 CREATE TABLE users (
- 	email VARCHAR(255),
-    password VARCHAR(255),
-    jwt VARCHAR(255),
+ 	email TEXT,
+    password TEXT,
+    jwt TEXT,
     id serial PRIMARY KEY,
-    ipaddress VARCHAR(50),
+    userid TEXT,
+    ipaddress TEXT,
     timecode BIGINT,
-    name VARCHAR(50),
+    name TEXT,
     latitude INT,
     longitude INT,
-    location VARCHAR(255),
-    likes INT[],
+    location TEXT,
+    likes TEXT[],
     age INT,
     birthday INT,
     monthofbirth INT,
@@ -28,14 +29,16 @@ CREATE TABLE users (
     religion INT,
     smoke INT,
     alcohol INT,
-    discription VARCHAR(255),
+    discription TEXT,
     profit INT,
     interests TEXT[],
+    filters JSON,
     ilikecharacter INT[],
     idontlikecharacter INT[],
     raiting INT,
     cash INT,
-    acctype VARCHAR(50)
+    acctype TEXT,
+    visit JSON[]
 );
 
 CREATE TABLE filters (
@@ -61,12 +64,12 @@ CREATE TABLE bots (
     nmodel VARCHAR(255),
 );
 
-CREATE TABLE messages (
+CREATE TABLE dialogs (
     id serial PRIMARY KEY,
-    id1 INT,
-    id2 INT,
+    userid1 TEXT,
+    userid2 TEXT,
     timecode BIGINT,
-    dck VARCHAR(255),
+    dck TEXT,
     messages JSON[]
 );
 
