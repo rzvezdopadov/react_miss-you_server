@@ -2,13 +2,13 @@ const Person = {
     email: '1@gmail.com',
     password: '$2a$13$Wzt2dof.s0RbuojuKcsKc.TqKvpcShQo4tKGm.7VaC6LbBJDsS6ey', // 123456789
     jwt: '',
-    id: 1,
+    userid: 1,
     ipaddress: '0.0.0.0',
     timecode: 0,
     name: 'Eva',
     latitude: 0,
     longitude: 0,
-    location: 'Ryazan',
+    location: 'Россия, Рязанская область, г.Рязань',
     likes: [],
     age: 22,
     birthday: 5,
@@ -35,7 +35,7 @@ const Person = {
     raiting: 100,
     cash: 0,
     filters: {
-        location: 'Ryazan',
+        location: 'Россия, Рязанская область, г.Рязань',
         agestart: 18,
         ageend: 50,
         growthstart: 120,
@@ -146,12 +146,12 @@ function genPos(count) {
 
 const arrPerson = []; 
 
-const personId = 2000;
+const personId = 500;
 
 for (let i=1; i<personId+1; i++) {
     const person = JSON.parse(JSON.stringify(Person));   
     person.email =  '' + i + '@gmail.com';
-    person.id =  i;
+    person.userid =  i;
     person.gender = genPos(2); 
     
     if (person.gender === 1) { 
@@ -183,7 +183,7 @@ for (let i=1; i<personId+1; i++) {
         if (arr.includes(value)) {
             genUnical(arr);
         } else {
-            arr.push(value);
+            arr.push(String(value));
         }
     }
     
@@ -304,23 +304,23 @@ function arrQueryStr(str, arr) {
 const arrPersonQuery = arrPerson.map((item)=>{
     str = '';
     str += 'INSERT INTO public.users(';
-	str += 'email, password, jwt, id, ipaddress, timecode, name, latitude, longitude, location, ';
+	str += 'email, password, jwt, userid, ipaddress, timecode, name, latitude, longitude, location, ';
     str += 'likes, age, birthday, monthofbirth, yearofbirth, growth, weight, gender, ';
     str += 'gendervapor, photomain, photolink, signzodiac, education, ';
     str += 'fieldofactivity, maritalstatus, children, religion, ';
-    str += 'smoke, alcohol, discription, profit, interests, ilikecharacter, ';
-    str += 'idontlikecharacter, raiting, cash) VALUES (';
+    str += 'smoke, alcohol, discription, profit, interests, filters, ilikecharacter, ';
+    str += 'idontlikecharacter, raiting, cash, acctype, visit) VALUES (';
     str += "'" + item.email + "', ";
     str += "'" + item.password + "', ";
     str += "'" + item.jwt + "', ";
-    str += item.id + ", ";
+    str += item.userid + ", ";
     str += "'" + item.ipaddress + "', ";
     str += item.timecode + ", ";
     str += "'" + item.name + "', ";
     str += item.latitude + ", ";
     str += item.longitude + ", ";
     str += "'" + item.location + "', ";
-    str = arrQueryInt(str, item.likes);    
+    str = arrQueryStr(str, item.likes);    
     str += item.age + ", ";
     str += item.birthday + ", ";
     str += item.monthOfBirth + ", ";
@@ -342,52 +342,24 @@ const arrPersonQuery = arrPerson.map((item)=>{
     str += "'" + item.discription + "', ";
     str += item.profit + ", ";
     str = arrQueryStr(str, item.interests);
+    str += "'" + JSON.stringify(item.filters) + "', ";
     str = arrQueryInt(str, item.iLikeСharacter); 
     str = arrQueryInt(str, item.iDontLikeСharacter);
     str += item.raiting + ", ";
     str += item.cash + ", ";
-    str = str.slice(0, -2);
-    str += ');';
-    return str;
-});
+    str += 'user' + ", ";
+    str += "'" + JSON.stringify({}) + "', ";
+   
 
-const arrPersonQueryFilter = arrPerson.map((item)=>{
-    str = '';
-    str += 'INSERT INTO public.filters(';
-	str += 'id, location, agestart, ageend, growthstart, growthend, weight, ';
-    str += 'signzodiac, gendervapor, religion, smoke, alcohol, interests';
-    str += ') VALUES (';
-    str += item.id + ", ";
-    str += "'" + item.filters.location + "', ";
-    str += item.filters.agestart + ", ";
-    str += item.filters.ageend + ", ";
-    str += item.filters.growthstart + ", ";
-    str += item.filters.growthend + ", ";
-    str += item.filters.weight + ", ";
-    str += item.filters.signzodiac + ", ";
-    str += item.filters.gendervapor + ", ";
-    str += item.filters.religion + ", ";
-    str += item.filters.smoke + ", ";
-    str += item.filters.alcohol + ", ";
-    str = arrQueryStr(str, item.filters.interests);
     str = str.slice(0, -2);
     str += ');';
     return str;
 });
 
 const appUsers = document.getElementById('appUsers');
-const appFilters = document.getElementById('appFilters');
-
 
 arrPersonQuery.forEach((value, i) => {
     appUsers.innerHTML += '<div><span>' + value + '</span></div>'
 })
-
-arrPersonQueryFilter.forEach((value, i) => {
-    appFilters.innerHTML += '<div><span>' + value + '</span></div>'
-})
-
-
-
 
 // console.log(arrPersonQuery);
