@@ -9,6 +9,7 @@ import { testToken } from "../utils/token";
 import {
 	getProfileByIdFromDB,
 	getProfiles,
+	getProfilesForLikes,
 	setProfileByIdToDB,
 } from "../query/profile";
 
@@ -55,7 +56,7 @@ export async function querySetProfileShort(req, res) {
 export async function queryGetProfile(req, res) {
 	try {
 		const QueryGetProfiles: IQueryGetProfile = req.query;
-		const id = Number(QueryGetProfiles.id);
+		const userid = String(QueryGetProfiles.userid);
 
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
@@ -67,15 +68,15 @@ export async function queryGetProfile(req, res) {
 				message: "Токен не валидный!",
 			});
 
-		let idNew = id;
+		let userIdNew = userid;
 
-		if (idNew == 0) {
-			idNew = jwtDecode.userId;
+		if (userIdNew === "0") {
+			userIdNew = jwtDecode.userId;
 		}
 
-		const profile = await getProfileByIdFromDB(idNew);
+		const profile = await getProfileByIdFromDB(userIdNew);
 
-		if (id != 0) {
+		if (userid !== "0") {
 			const posId = profile.likes.indexOf(jwtDecode.userId);
 
 			if (posId === -1) {
@@ -108,8 +109,7 @@ export async function queryGetProfiles(req, res) {
 			});
 
 		const getProfilesVal: IGetProfiles = {
-			jwt: jwt,
-			id: QueryGetProfiles.id,
+			userid: QueryGetProfiles.userid,
 			startcount: QueryGetProfiles.startcount,
 			amount: QueryGetProfiles.amount,
 			filters: QueryGetProfiles.filters,
@@ -124,13 +124,47 @@ export async function queryGetProfiles(req, res) {
 		}
 
 		if (users) {
-			const usersParse: any = users.split(",");
+			const usersParse = JSON.parse(users);
 			getProfilesVal.users = usersParse;
 		}
 
-		getProfilesVal.id = jwtDecode.userId;
+		getProfilesVal.userid = jwtDecode.userId;
 
 		const profiles = await getProfiles(getProfilesVal);
+
+		return res.status(200).json(profiles);
+	} catch (e) {
+		res.status(500).json({
+			message: "Токен не валидный!",
+		});
+	}
+}
+
+export async function queryGetProfilesForLikes(req, res) {
+	try {
+		const QueryGetProfiles: IQueryGetProfiles = req.query;
+
+		let { jwt } = req.cookies;
+		jwt = String(jwt);
+
+		const jwtDecode = await testToken(jwt);
+
+		if (!jwtDecode)
+			return res.status(400).json({
+				message: "Токен не валидный!",
+			});
+
+		const getProfilesVal: IGetProfiles = {
+			userid: QueryGetProfiles.userid,
+			startcount: QueryGetProfiles.startcount,
+			amount: QueryGetProfiles.amount,
+			filters: QueryGetProfiles.filters,
+			users: [],
+		};
+
+		getProfilesVal.userid = jwtDecode.userId;
+
+		const profiles = await getProfilesForLikes(getProfilesVal);
 
 		return res.status(200).json(profiles);
 	} catch (e) {

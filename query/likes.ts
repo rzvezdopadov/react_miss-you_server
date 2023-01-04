@@ -1,9 +1,11 @@
 import { poolDB } from "./config";
 
-export async function getLikesByIdFromDB(id: number): Promise<Array<number>> {
+export async function getLikesByIdFromDB(
+	userId: string
+): Promise<Array<string>> {
 	try {
-		let queryStr = "SELECT likes FROM users WHERE id = $1";
-		const answerDB = await poolDB.query(queryStr, [id]);
+		let queryStr = "SELECT likes FROM users WHERE userid = $1";
+		const answerDB = await poolDB.query(queryStr, [userId]);
 
 		return answerDB.rows[0].likes;
 	} catch (error) {
@@ -13,13 +15,13 @@ export async function getLikesByIdFromDB(id: number): Promise<Array<number>> {
 }
 
 export async function setLikesByIdToDB(
-	id: number,
-	arr: Array<number>
+	userId: string,
+	arr: Array<string>
 ): Promise<number> {
 	try {
-		let queryStr = "UPDATE users SET likes = $1 WHERE id = $2";
+		let queryStr = "UPDATE users SET likes = $1 WHERE userid = $2";
 
-		const answerDB = await poolDB.query(queryStr, [arr, id]);
+		const answerDB = await poolDB.query(queryStr, [arr, userId]);
 
 		return answerDB.rowCount;
 	} catch (error) {

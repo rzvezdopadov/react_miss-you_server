@@ -26,7 +26,7 @@ export async function queryRegistration(req, res) {
 
 		const candidate = getIdByEmailFromDB(reg.email);
 
-		if ((await candidate) !== -1) {
+		if ((await candidate) !== "") {
 			return res
 				.status(400)
 				.json({ message: "Такой пользователь уже существует!" });
@@ -39,7 +39,7 @@ export async function queryRegistration(req, res) {
 		const hashedPassword = await bcrypt.hash(reg.password, 13);
 
 		const profile: IProfile = {
-			id: 0,
+			userid: "",
 			name: reg.name,
 			latitude: 0,
 			longitude: 0,
@@ -98,15 +98,15 @@ export async function queryLogin(req, res) {
 		email = String(email);
 		password = String(password);
 
-		const userId = await getIdByEmailFromDB(email);
+		const ourId = await getIdByEmailFromDB(email);
 
-		if (userId === -1) {
+		if (ourId === "") {
 			return res
 				.status(400)
 				.json({ message: "Такой пользователь не существует!" });
 		}
 
-		const pass = await getPasswordByIdFromDB(userId);
+		const pass = await getPasswordByIdFromDB(ourId);
 
 		const isMatch = await bcrypt.compare(password, pass);
 
@@ -117,12 +117,12 @@ export async function queryLogin(req, res) {
 		}
 
 		const token = await jwtToken.sign(
-			{ userId: userId },
+			{ userId: ourId },
 			config.get("jwtSecret"),
 			{ expiresIn: "7d" }
 		);
 
-		const answerSetJWT = await setJWTToDB(userId, token);
+		const answerSetJWT = await setJWTToDB(ourId, token);
 
 		if (answerSetJWT) {
 			return res.status(200).json({

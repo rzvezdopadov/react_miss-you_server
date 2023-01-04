@@ -1,10 +1,10 @@
 export interface IProfile {
-	id: number;
+	userid: string;
 	name: string;
 	latitude: number;
 	longitude: number;
 	location: string;
-	likes: Array<number>;
+	likes: Array<string>;
 	age: number;
 	birthday: number;
 	monthofbirth: number;
@@ -48,8 +48,7 @@ interface IFilterUsers {
 }
 
 export interface IQueryGetProfiles {
-	jwt: string;
-	id: number;
+	userid: string;
 	startcount: number;
 	amount: number;
 	filters: IFilterUsers;
@@ -57,21 +56,18 @@ export interface IQueryGetProfiles {
 }
 
 export interface IGetProfiles {
-	jwt: string;
-	id: number;
+	userid: string;
 	startcount: number;
 	amount: number;
 	filters: IFilterUsers;
-	users: Array<number>;
+	users: Array<string>;
 }
 
 export interface IQueryGetProfile {
-	jwt: string;
-	id: number;
+	userid: string;
 }
 
 export interface IQuerySetProfile {
-	jwt: string;
 	profile: IProfile;
 }
 
@@ -84,17 +80,16 @@ export interface IRegistration {
 }
 
 export interface IMessage {
-	userId: number;
+	userid: string;
 	timecode: number;
-	id1del: boolean;
-	id2del: boolean;
+	userid1del: boolean;
+	userid2del: boolean;
 	message: string;
 }
 
 export interface IDialogBase {
-	id: number;
-	id1: number;
-	id2: number;
+	userid1: string;
+	userid2: string;
 	timecode: number;
 	dck: string;
 	messages: Array<IMessage>;
@@ -102,7 +97,7 @@ export interface IDialogBase {
 
 export interface IDialogOutput {
 	timecode: number;
-	userId: number;
+	userid: string;
 	name: string;
 	age: number;
 	photomain: number;
@@ -111,7 +106,7 @@ export interface IDialogOutput {
 }
 
 export interface IProfileForDialog {
-	id: number;
+	userid: string;
 	name: string;
 	age: number;
 	photomain: number;
@@ -119,12 +114,12 @@ export interface IProfileForDialog {
 }
 
 export interface IQuerySendMessage {
-	id: number;
+	userid: string;
 	message: string;
 }
 
 export interface IQueryLike {
-	id: number;
+	userid: string;
 }
 
 export interface IPhotos {

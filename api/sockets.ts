@@ -6,31 +6,31 @@ import { setDialog } from "../utils/dialogs";
 import { setVisitByIdToDB } from "../query/statistics";
 
 interface ISocketUser {
-	userId: number;
-	socketId: string;
+	userid: string;
+	socketid: string;
 }
 
 const arrOfSockets: Array<ISocketUser> = [];
 
 const getUserIdFromSocketTable = (socketId) => {
 	for (let i = 0; i < arrOfSockets.length; i++) {
-		if (arrOfSockets[i].socketId === socketId) {
-			return arrOfSockets[i].userId;
+		if (arrOfSockets[i].socketid === socketId) {
+			return arrOfSockets[i].userid;
 		}
 	}
 
-	return 0;
+	return "";
 };
 
 const sendToAllSocketsById = (
 	socketIO,
-	id: number,
+	userid: string,
 	nameCommand: string,
 	payload: object
 ) => {
 	arrOfSockets.forEach((value) => {
-		if (value.userId === id)
-			socketIO.to(value.socketId).emit(nameCommand, payload);
+		if (value.userid === userid)
+			socketIO.to(value.socketid).emit(nameCommand, payload);
 	});
 };
 
@@ -56,12 +56,12 @@ export const socketHandler = (socketIO, socket) => {
 			if (!tokenDecode) return;
 
 			const socketUser: ISocketUser = {
-				userId: tokenDecode.userId,
-				socketId: socketId,
+				userid: tokenDecode.userId,
+				socketid: socketId,
 			};
 
 			const socketPos = arrOfSockets.findIndex(
-				(value) => value.socketId === socketId
+				(value) => value.socketid === socketId
 			);
 
 			if (socketPos !== -1) return;
@@ -78,9 +78,13 @@ export const socketHandler = (socketIO, socket) => {
 		try {
 			const ourId = getUserIdFromSocketTable(socketId);
 
-			if (!(ourId && socket.id)) return;
+			if (!(ourId && socket.userid)) return;
 
-			const dialog = await setDialog(ourId, socket.id, socket.message);
+			const dialog = await setDialog(
+				ourId,
+				socket.userid,
+				socket.message
+			);
 
 			socketIO.to(socketId).emit("dialog", dialog);
 
@@ -90,7 +94,7 @@ export const socketHandler = (socketIO, socket) => {
 				message: dialog.messages[dialog.messages.length - 1],
 			};
 
-			sendToAllSocketsById(socketIO, socket.id, "message", data);
+			sendToAllSocketsById(socketIO, socket.userid, "message", data);
 		} catch (error) {
 			console.log("message error", error);
 		}
@@ -100,7 +104,7 @@ export const socketHandler = (socketIO, socket) => {
 		try {
 			const ourId = getUserIdFromSocketTable(socketId);
 
-			const likes = await setLikesById(ourId, socket.id);
+			const likes = await setLikesById(ourId, socket.userid);
 
 			socketIO.to(socketId).emit("set_like", likes);
 
@@ -111,7 +115,7 @@ export const socketHandler = (socketIO, socket) => {
 
 			if (likes.length) data.command = "add";
 
-			sendToAllSocketsById(socketIO, socket.id, "get_like", data);
+			sendToAllSocketsById(socketIO, socket.userid, "get_like", data);
 		} catch (error) {
 			console.log("set_like error", error);
 		}
@@ -123,12 +127,12 @@ export const socketHandler = (socketIO, socket) => {
 
 	socket.on("disconnect", function () {
 		const userIndex = arrOfSockets.findIndex(
-			(socketUser) => socketUser.socketId === socketId
+			(socketUser) => socketUser.socketid === socketId
 		);
 
 		if (userIndex === -1) return;
 
-		setVisitByIdToDB(socketId, arrOfSockets[userIndex].userId, "closed");
+		setVisitByIdToDB(socketId, arrOfSockets[userIndex].userid, "closed");
 
 		arrOfSockets.splice(userIndex, 1);
 	});

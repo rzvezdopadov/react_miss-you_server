@@ -1,9 +1,10 @@
 import { IPhotos } from "../interfaces/iprofiles";
 import { poolDB } from "./config";
 
-export async function getPhotosByIdFromDB(ourId: number): Promise<IPhotos> {
+export async function getPhotosByIdFromDB(ourId: string): Promise<IPhotos> {
 	try {
-		let queryStr = "SELECT photolink, photomain FROM users WHERE id = $1";
+		let queryStr =
+			"SELECT photolink, photomain FROM users WHERE userid = $1";
 		const answerDB = await poolDB.query(queryStr, [ourId]);
 
 		return answerDB.rows[0];
@@ -17,12 +18,12 @@ export async function getPhotosByIdFromDB(ourId: number): Promise<IPhotos> {
 }
 
 export async function setPhotosByIdToDB(
-	ourId: number,
+	ourId: string,
 	photos: IPhotos
 ): Promise<number> {
 	try {
 		let queryStr =
-			"UPDATE users SET photolink = $2, photomain = $3 WHERE id = $1";
+			"UPDATE users SET photolink = $2, photomain = $3 WHERE userid = $1";
 
 		const answerDB = await poolDB.query(queryStr, [
 			ourId,

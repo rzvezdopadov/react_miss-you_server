@@ -8,13 +8,13 @@ interface IStatVisit {
 }
 
 interface IStatisticsVisit {
-	id: number;
+	userid: string;
 	visit: Array<IStatVisit>;
 }
 
 export async function setVisitByIdToDB(
 	key: string,
-	userId: number,
+	userId: string,
 	type: "open" | "closed"
 ): Promise<number> {
 	const timecode = getTimecodeNow();
@@ -23,8 +23,7 @@ export async function setVisitByIdToDB(
 		const statistics = await getVisitByIdFromDB(userId);
 
 		if (type === "open") {
-			const queryStr =
-				"UPDATE users_statistics SET visit = $1 WHERE id = $2";
+			const queryStr = "UPDATE users SET visit = $1 WHERE id = $2";
 
 			const statVisit: IStatVisit = {
 				key: key,
@@ -41,8 +40,7 @@ export async function setVisitByIdToDB(
 
 			return answerDB.rowCount;
 		} else if (type === "closed") {
-			const queryStr =
-				"UPDATE users_statistics SET visit = $1 WHERE id = $2";
+			const queryStr = "UPDATE users SET visit = $1 WHERE id = $2";
 
 			const visitPos = statistics.visit.findIndex(
 				(value) => value.key === key
@@ -65,19 +63,19 @@ export async function setVisitByIdToDB(
 }
 
 export async function getVisitByIdFromDB(
-	userId: number
+	userId: string
 ): Promise<IStatisticsVisit> {
 	try {
 		let answerDB = { rows: [] };
 
 		let queryStr =
-			"SELECT id, visit::json[] FROM users_statistics WHERE id = $1";
+			"SELECT userid, visit::json[] FROM users WHERE userid = $1";
 
 		answerDB = await poolDB.query(queryStr, [userId]);
 
 		return answerDB.rows[0];
 	} catch (error) {
 		console.log("getVisitByIdFromDB", error);
-		return { id: userId, visit: [] };
+		return { userid: userId, visit: [] };
 	}
 }

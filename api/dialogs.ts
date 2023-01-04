@@ -1,13 +1,10 @@
-import { IDialogOutput } from "../interfaces/iprofiles";
 import { testToken } from "../utils/token";
-import { getDialogsByIdFromDB } from "../query/dialogs";
-import { getProfilesForDialogs } from "../query/profile";
 import { getDialog, getDialogs, setDialog } from "../utils/dialogs";
 
 export async function querySetMessage(req, res) {
 	try {
-		let { id, message } = req.body;
-		const userId = Number(id);
+		let { userid, message } = req.body;
+		const userId = String(userid);
 		message = String(message);
 
 		let { jwt } = req.cookies;
@@ -46,8 +43,8 @@ export async function queryGetDialog(req, res) {
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
 
-		let { id } = req.query;
-		id = Number(id);
+		let { userid } = req.query;
+		const userId = String(userid);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -56,15 +53,15 @@ export async function queryGetDialog(req, res) {
 				message: "Токен не валидный!",
 			});
 
-		if (!id) {
+		if (!userId) {
 			return res
 				.status(400)
 				.json({ message: "Нужно выбрать пользователя!" });
 		}
 
-		const dialog = await getDialog(jwtDecode.userId, id);
+		const dialog = await getDialog(jwtDecode.userId, userId);
 
-		if (dialog.userId) {
+		if (dialog.userid) {
 			return res.status(200).json(dialog);
 		} else {
 			return res.status(400).json({

@@ -10,6 +10,7 @@ import {
 import {
 	queryGetProfile,
 	queryGetProfiles,
+	queryGetProfilesForLikes,
 	querySetProfile,
 	querySetProfileShort,
 } from "./profile";
@@ -30,6 +31,8 @@ router.post(
 router.put("/api/profile", [], querySetProfile);
 
 router.put("/api/profileshort", [], querySetProfileShort);
+
+router.get("/api/profilesforlikes", [], queryGetProfilesForLikes);
 
 router.get("/api/profile", [], queryGetProfile);
 

@@ -1,10 +1,10 @@
 import { getLikesByIdFromDB, setLikesByIdToDB } from "../query/likes";
 
-export const setLikesById = async (ourId: number, userId: number) => {
+export const setLikesById = async (ourId: string, userId: string) => {
 	try {
 		let likes = await getLikesByIdFromDB(userId);
 
-		if (userId === 0) {
+		if (userId === "") {
 			return likes;
 		}
 

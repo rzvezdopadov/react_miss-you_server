@@ -8,13 +8,13 @@ import { getProfileByIdFromDB, getProfilesForDialogs } from "../query/profile";
 import { getTimecodeNow } from "./datetime";
 
 export const setDialog = async (
-	ourId: number,
-	userId: number,
+	ourId: string,
+	userId: string,
 	message: string
 ): Promise<IDialogOutput> => {
 	const newDialog: IDialogOutput = {
 		timecode: 0,
-		userId: 0,
+		userid: "",
 		name: "",
 		age: 0,
 		photomain: 0,
@@ -26,10 +26,10 @@ export const setDialog = async (
 		let dialog = await getDialogByIdFromDB(ourId, userId);
 
 		const newMessageObj: IMessage = {
-			userId: ourId,
+			userid: ourId,
 			timecode: getTimecodeNow(),
-			id1del: false,
-			id2del: false,
+			userid1del: false,
+			userid2del: false,
 			message: message,
 		};
 
@@ -37,9 +37,8 @@ export const setDialog = async (
 			dialog.messages.push(newMessageObj);
 		} else {
 			const newDialogBase: IDialogBase = {
-				id: 0,
-				id1: ourId,
-				id2: userId,
+				userid1: ourId,
+				userid2: userId,
 				timecode: 0,
 				dck: "",
 				messages: [],
@@ -55,7 +54,7 @@ export const setDialog = async (
 		const updatesDialog = await getDialogByIdFromDB(ourId, userId);
 
 		newDialog.timecode = updatesDialog.timecode;
-		newDialog.userId = userId;
+		newDialog.userid = userId;
 		newDialog.name = profileUser.name;
 		newDialog.age = profileUser.age;
 		newDialog.photomain = profileUser.photomain;
@@ -70,12 +69,12 @@ export const setDialog = async (
 };
 
 export const getDialog = async (
-	ourId: number,
-	userId: number
+	ourId: string,
+	userId: string
 ): Promise<IDialogOutput> => {
 	const newDialog: IDialogOutput = {
 		timecode: 0,
-		userId: 0,
+		userid: "",
 		name: "",
 		age: 0,
 		photomain: 0,
@@ -89,7 +88,7 @@ export const getDialog = async (
 
 		const newDialog: IDialogOutput = {
 			timecode: (dialog && dialog.timecode) || 0,
-			userId: userId,
+			userid: userId,
 			name: profile.name,
 			age: profile.age,
 			photomain: profile.photomain,
@@ -105,7 +104,7 @@ export const getDialog = async (
 };
 
 export const getDialogs = async (
-	ourId: number
+	ourId: string
 ): Promise<Array<IDialogOutput>> => {
 	try {
 		const dialogs = await getDialogsByIdFromDB(ourId);
@@ -113,19 +112,19 @@ export const getDialogs = async (
 		if (!dialogs.length) return [];
 
 		const idUsers = dialogs.map((dialog) =>
-			dialog.id1 === ourId ? dialog.id2 : dialog.id1
+			dialog.userid1 === ourId ? dialog.userid2 : dialog.userid1
 		);
 
 		const users = await getProfilesForDialogs(idUsers);
 
 		dialogs.sort((a, b) => {
-			const id1 = a.id1 === ourId ? a.id2 : a.id1;
-			const id2 = b.id1 === ourId ? b.id2 : b.id1;
+			const id1 = a.userid1 === ourId ? a.userid2 : a.userid1;
+			const id2 = b.userid1 === ourId ? b.userid2 : b.userid1;
 
-			return id1 - id2;
+			return Number(id1 > id2);
 		});
 
-		users.sort((a, b) => a.id - b.id);
+		users.sort((a, b) => Number(a.userid > b.userid));
 
 		let newDialogs: Array<IDialogOutput> = [];
 
@@ -133,7 +132,7 @@ export const getDialogs = async (
 			dialogs.forEach((value, index) => {
 				const newDialog: IDialogOutput = {
 					timecode: dialogs[index].timecode,
-					userId: users[index].id,
+					userid: users[index].userid,
 					name: users[index].name,
 					age: users[index].age,
 					photomain: users[index].photomain,

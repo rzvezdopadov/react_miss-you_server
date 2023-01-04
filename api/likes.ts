@@ -3,8 +3,8 @@ import { setLikesById } from "../utils/likes";
 
 export async function querySetLike(req, res) {
 	try {
-		let { id } = req.body;
-		id = Number(id);
+		let { userid } = req.body;
+		userid = String(userid);
 
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
@@ -16,7 +16,7 @@ export async function querySetLike(req, res) {
 				message: "Токен не валидный!",
 			});
 
-		const likes = await setLikesById(jwtDecode.userId, id);
+		const likes = await setLikesById(jwtDecode.userId, userid);
 
 		return res.status(200).json(likes);
 	} catch (e) {

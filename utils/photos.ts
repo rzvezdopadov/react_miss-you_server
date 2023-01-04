@@ -4,7 +4,7 @@ import { getRandomString } from "./string";
 const fs = require("fs");
 
 export const deletePhoto = async (
-	ourId: number,
+	ourId: string,
 	photoPos: number
 ): Promise<IPhotos> => {
 	let photos: IPhotos = {
@@ -41,7 +41,7 @@ export const deletePhoto = async (
 };
 
 export const checkPhoto = async (
-	ourId: number,
+	ourId: string,
 	photoPos: number
 ): Promise<IPhotos> => {
 	let photos: IPhotos = {
@@ -66,7 +66,7 @@ export const checkPhoto = async (
 	}
 };
 
-export const addPhoto = async (ourId: number, image: any): Promise<IPhotos> => {
+export const addPhoto = async (ourId: string, image: any): Promise<IPhotos> => {
 	let photos: IPhotos = {
 		photolink: [],
 		photomain: 0,
