@@ -1,4 +1,4 @@
-import { IProfile } from "../interfaces/iprofiles";
+import { IProfileRegistration } from "../interfaces/iprofiles";
 import { poolDB } from "./config";
 
 export async function getIdByEmailFromDB(email: string): Promise<string> {
@@ -7,8 +7,8 @@ export async function getIdByEmailFromDB(email: string): Promise<string> {
 			"SELECT userid FROM users WHERE email = $1",
 			[email]
 		);
-
-		return answerDB.rows[0].userid;
+		if (answerDB.rows[0]) return answerDB.rows[0].userid;
+		return "";
 	} catch (error) {
 		console.log(error);
 		return "";
@@ -79,17 +79,43 @@ export async function getJWTFromDB(ourId: string): Promise<String> {
 	}
 }
 
-export function createProfile(profile: IProfile) {
-	// Create base Profile in DB
-	// let id = 0;
+export async function createProfile(
+	profile: IProfileRegistration
+): Promise<boolean> {
+	let answerDB = { rows: [] };
 
-	// for (let i = 0; i < userList.length; i++) {
-	//     id = Math.max(id, userList[i].id);
-	// }
+	try {
+		const queryStr =
+			"INSERT INTO users (" +
+			"email, password, jwt, userid, ipaddress, timecode, " +
+			"name, latitude, longitude, location, likes, " +
+			"birthday, monthofbirth, yearofbirth, growth, weight, " +
+			"gender, gendervapor, photomain, photolink, signzodiac, " +
+			"education, fieldofactivity, maritalstatus, children, " +
+			"religion, smoke, alcohol, discription, profit, interests, " +
+			"filters, ilikecharacter, idontlikecharacter, " +
+			"raiting, cash, acctype, visit" +
+			") VALUES (" +
+			`'${profile.email}', '${profile.password}', '', '${profile.userid}', '0.0.0.0', ${profile.timecode}, ` +
+			`'${profile.name}', 0, 0, '${profile.location}', ARRAY [] :: TEXT [], ` +
+			`${profile.birthday}, ${profile.monthofbirth}, ${profile.yearofbirth}, ${profile.growth}, ${profile.weight}, ` +
+			`${profile.gender}, ${profile.gendervapor}, ${profile.photomain}, ARRAY [] :: TEXT [], ${profile.signzodiac}, ` +
+			`${profile.education}, ${profile.fieldofactivity}, ${profile.maritalstatus}, ${profile.children}, ` +
+			`${profile.religion}, ${profile.smoke}, ${profile.alcohol}, '${profile.discription}', ${profile.profit}, ARRAY [] :: TEXT [], ` +
+			`'${JSON.stringify(
+				profile.filters
+			)}' :: JSON, ARRAY [] :: INTEGER [], ARRAY [] :: INTEGER [], ` +
+			`${profile.raiting}, ${profile.cash}, '${profile.acctype}', ARRAY [] :: JSON []` +
+			")";
 
-	// profile.id = id + 1;
+		console.log(queryStr);
 
-	// userList.push(profile);
+		answerDB = await poolDB.query(queryStr);
+		console.log(answerDB);
 
-	return true;
+		return answerDB.rows[0];
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
 }
