@@ -70,10 +70,9 @@ export async function getDialogsByIdFromDB(
 	try {
 		let answerDB = { rows: [] };
 
-		let queryStr =
-			"SELECT userid1, userid2, timecode, messages::json[] FROM dialogs WHERE (userid1 = $1) OR (userid2 = $1)";
+		let queryStr = `SELECT userid1, userid2, timecode, messages::json[] FROM dialogs WHERE (userid1 = '${ourId}' :: TEXT) OR (userid2 = '${ourId}' :: TEXT)`;
 
-		answerDB = await poolDB.query(queryStr, [ourId]);
+		answerDB = await poolDB.query(queryStr);
 
 		return answerDB.rows;
 	} catch (error) {
