@@ -1,4 +1,4 @@
-import { queryLogin } from "./auth";
+import { queryLogin, queryRegistration } from "./auth";
 import { queryGetDialog, queryGetDialogs, querySetMessage } from "./dialogs";
 import { querySetLike } from "./likes";
 import {
@@ -18,6 +18,15 @@ import {
 const express = require("express");
 const router = express.Router();
 const { check } = require("express-validator");
+
+router.post(
+	"/api/registration",
+	[
+		check("email", "Некоректный email").isEmail(),
+		check("password", "Некоректный пароль").isLength({ min: 8, max: 30 }),
+	],
+	queryRegistration
+);
 
 router.post(
 	"/api/login",
