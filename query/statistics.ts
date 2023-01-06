@@ -1,16 +1,6 @@
 import { poolDB } from "./config";
 import { getTimecodeNow } from "../utils/datetime";
-
-interface IStatVisit {
-	key: string;
-	tco: number;
-	tcc: number;
-}
-
-interface IStatisticsVisit {
-	userid: string;
-	visit: Array<IStatVisit>;
-}
+import { IStatVisit, IStatisticsVisit } from "../interfaces/iprofiles";
 
 export async function setVisitByIdToDB(
 	key: string,
@@ -23,7 +13,7 @@ export async function setVisitByIdToDB(
 		const statistics = await getVisitByIdFromDB(userId);
 
 		if (type === "open") {
-			const queryStr = "UPDATE users SET visit = $1 WHERE id = $2";
+			const queryStr = "UPDATE users SET visit = $1 WHERE userid = $2";
 
 			const statVisit: IStatVisit = {
 				key: key,
@@ -40,7 +30,7 @@ export async function setVisitByIdToDB(
 
 			return answerDB.rowCount;
 		} else if (type === "closed") {
-			const queryStr = "UPDATE users SET visit = $1 WHERE id = $2";
+			const queryStr = "UPDATE users SET visit = $1 WHERE userid = $2";
 
 			const visitPos = statistics.visit.findIndex(
 				(value) => value.key === key

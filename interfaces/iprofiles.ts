@@ -1,3 +1,43 @@
+export interface IProfileRegistration {
+	email: string;
+	password: string;
+	jwt: string;
+	userid: string;
+	timecode: Number;
+	name: string;
+	latitude: number;
+	longitude: number;
+	location: string;
+	likes: Array<string>;
+	birthday: number;
+	monthofbirth: number;
+	yearofbirth: number;
+	growth: number;
+	weight: number;
+	gender: number;
+	gendervapor: number;
+	photomain: number;
+	photolink: Array<string>;
+	signzodiac: number;
+	education: number;
+	fieldofactivity: number;
+	maritalstatus: number;
+	children: number;
+	religion: number;
+	smoke: number;
+	alcohol: number;
+	discription: string;
+	profit: number;
+	interests: Array<string>;
+	ilikecharacter: Array<number>;
+	idontlikecharacter: Array<number>;
+	raiting: number;
+	cash: number;
+	acctype: string;
+	filters: IFilterUsers;
+	visit: Array<IStatVisit>;
+}
+
 export interface IProfile {
 	userid: string;
 	name: string;
@@ -5,7 +45,6 @@ export interface IProfile {
 	longitude: number;
 	location: string;
 	likes: Array<string>;
-	age: number;
 	birthday: number;
 	monthofbirth: number;
 	yearofbirth: number;
@@ -72,9 +111,14 @@ export interface IQuerySetProfile {
 }
 
 export interface IRegistration {
+	name: string;
+	location: string;
+	birthday: number;
+	monthofbirth: number;
+	yearofbirth: number;
 	gender: number;
 	gendervapor: number;
-	name: string;
+	growth: number;
 	email: string;
 	password: string;
 }
@@ -99,7 +143,9 @@ export interface IDialogOutput {
 	timecode: number;
 	userid: string;
 	name: string;
-	age: number;
+	birthday: number;
+	monthofbirth: number;
+	yearofbirth: number;
 	photomain: number;
 	photolink: Array<string>;
 	messages: Array<IMessage>;
@@ -108,7 +154,9 @@ export interface IDialogOutput {
 export interface IProfileForDialog {
 	userid: string;
 	name: string;
-	age: number;
+	birthday: number;
+	monthofbirth: number;
+	yearofbirth: number;
 	photomain: number;
 	photolink: Array<string>;
 }
@@ -125,4 +173,15 @@ export interface IQueryLike {
 export interface IPhotos {
 	photolink: Array<string>;
 	photomain: number;
+}
+
+export interface IStatVisit {
+	key: string;
+	tco: number;
+	tcc: number;
+}
+
+export interface IStatisticsVisit {
+	userid: string;
+	visit: Array<IStatVisit>;
 }
