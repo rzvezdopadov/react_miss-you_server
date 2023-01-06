@@ -1,4 +1,7 @@
-export function getSignZodiac(birthday, monthofbirth) {
+export function getSignZodiac(birthday: number, monthofbirth: number) {
+	birthday = Number(birthday);
+	monthofbirth = Number(monthofbirth);
+
 	if (!birthday && !monthofbirth) return 12;
 
 	if (
