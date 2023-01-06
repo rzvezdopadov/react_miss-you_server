@@ -10,7 +10,6 @@ const Person = {
     longitude: 0,
     location: 'Россия, Рязанская область, г.Рязань',
     likes: [],
-    age: 22,
     birthday: 5,
     monthOfBirth: 5,
     yearOfBirth: 2000,
@@ -190,9 +189,7 @@ for (let i=1; i<personId+1; i++) {
     for (let i=0; i < Math.floor(personId/10); i++) {
         genUnical(person.likes);
     }  
-    
-    person.age =  18 + genPos(20);
-    
+        
     person.birthday =  1 + genPos(27);
     person.monthOfBirth = 1 + genPos(11);
     person.yearOfBirth =  1980 + genPos(20);
@@ -305,7 +302,7 @@ const arrPersonQuery = arrPerson.map((item)=>{
     str = '';
     str += 'INSERT INTO public.users(';
 	str += 'email, password, jwt, userid, ipaddress, timecode, name, latitude, longitude, location, ';
-    str += 'likes, age, birthday, monthofbirth, yearofbirth, growth, weight, gender, ';
+    str += 'likes, birthday, monthofbirth, yearofbirth, growth, weight, gender, ';
     str += 'gendervapor, photomain, photolink, signzodiac, education, ';
     str += 'fieldofactivity, maritalstatus, children, religion, ';
     str += 'smoke, alcohol, discription, profit, interests, filters, ilikecharacter, ';
@@ -320,8 +317,7 @@ const arrPersonQuery = arrPerson.map((item)=>{
     str += item.latitude + ", ";
     str += item.longitude + ", ";
     str += "'" + item.location + "', ";
-    str = arrQueryStr(str, item.likes);    
-    str += item.age + ", ";
+    str = arrQueryStr(str, item.likes); 
     str += item.birthday + ", ";
     str += item.monthOfBirth + ", ";
     str += item.yearOfBirth + ", ";

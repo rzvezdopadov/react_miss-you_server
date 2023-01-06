@@ -11,7 +11,6 @@ CREATE TABLE users (
     longitude INT,
     location TEXT,
     likes TEXT[],
-    age INT,
     birthday INT,
     monthofbirth INT,
     yearofbirth INT,
