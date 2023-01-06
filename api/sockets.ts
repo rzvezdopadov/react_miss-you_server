@@ -90,7 +90,7 @@ export const socketHandler = (socketIO, socket) => {
 
 			const data = {
 				command: "add",
-				userId: ourId,
+				userid: ourId,
 				message: dialog.messages[dialog.messages.length - 1],
 			};
 
