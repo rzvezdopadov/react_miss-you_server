@@ -3,12 +3,13 @@ import {
 	IProfile,
 	IProfileForDialog,
 } from "../interfaces/iprofiles";
+import { getYearFromAge } from "../utils/datetime";
 import { lazyloadingusercount } from "../utils/globalconst";
 import { poolDB } from "./config";
 
 const fieldProfile =
 	"userid, timecode, name, latitude, longitude, location, " +
-	"likes, age, birthday, monthofbirth, yearofbirth, growth, weight, " +
+	"likes, birthday, monthofbirth, yearofbirth, growth, weight, " +
 	"gender, gendervapor, photomain, photolink, signzodiac, " +
 	"education, fieldofactivity, maritalstatus, children, religion, " +
 	"smoke, alcohol, discription, profit, interests, filters," +
@@ -33,7 +34,7 @@ export async function getProfileByIdFromDB(userid: string): Promise<IProfile> {
 }
 
 const fieldProfileShort =
-	"userid, timecode, name, age, gender, photomain, photolink, interests, raiting";
+	"userid, timecode, name, birthday, monthofbirth, yearofbirth, gender, photomain, photolink, interests, raiting";
 
 export async function getProfiles(
 	QueryGetProfiles: IGetProfiles
@@ -56,7 +57,7 @@ export async function getProfiles(
 				queryStr += "(signzodiac = $2) AND ";
 			}
 
-			queryStr += "(age >= $3) AND (age <= $4) AND ";
+			queryStr += "(yearofbirth >= $3) AND (yearofbirth <= $4) AND ";
 			queryStr += "(growth >= $5) AND (growth <= $6) AND ";
 
 			if (filters.weight === 0) {
@@ -98,8 +99,8 @@ export async function getProfiles(
 			answerDB = await poolDB.query(queryStr, [
 				filters.location,
 				filters.signzodiac,
-				filters.agestart,
-				filters.ageend,
+				getYearFromAge(filters.ageend),
+				getYearFromAge(filters.agestart),
 				filters.growthstart,
 				filters.growthend,
 				filters.weight,
@@ -151,7 +152,7 @@ export async function getProfilesForLikes(
 	try {
 		let answerDB = { rows: [] };
 
-		let queryStr = `SELECT likes FROM users WHERE userid = ${QueryGetProfiles.userid} :: TEXT`;
+		let queryStr = `SELECT likes FROM users WHERE userid = '${QueryGetProfiles.userid}'`;
 
 		answerDB = await poolDB.query(queryStr);
 
@@ -201,14 +202,14 @@ export async function getProfilesForDialogs(
 		let answerDB = { rows: [] };
 
 		let queryStr =
-			"SELECT userid, name, age, photomain, photolink FROM users WHERE ";
+			"SELECT userid, name, birthday, monthofbirth, yearofbirth, photomain, photolink FROM users WHERE ";
 
 		if (users) {
 			if (users.length === 0) {
 				return [];
 			} else {
 				users.forEach((value) => {
-					queryStr += "(userid = " + value + " :: TEXT) OR ";
+					queryStr += `(userid = '${value}' :: TEXT) OR `;
 				});
 			}
 
@@ -231,26 +232,25 @@ export async function setProfileByIdToDB(
 	try {
 		let queryStrProfile = "UPDATE users SET ";
 
-		queryStrProfile += "name = $2, location = $3, age = $4, ";
+		queryStrProfile += "name = $2, location = $3, ";
 		queryStrProfile +=
-			"birthday = $5, monthofbirth = $6, yearofbirth = $7, ";
-		queryStrProfile += "growth = $8, weight = $9, ";
-		queryStrProfile += "gender = $10, gendervapor = $11, ";
-		queryStrProfile += "signzodiac = $12, education = $13, ";
-		queryStrProfile += "fieldofactivity = $14, maritalstatus = $15, ";
-		queryStrProfile += "children = $16, religion = $17, ";
-		queryStrProfile += "smoke = $18, alcohol = $19, ";
-		queryStrProfile += "discription = $20, profit = $21, ";
-		queryStrProfile += "interests = $22, ";
-		queryStrProfile += "filters = $23, ";
-		queryStrProfile += "ilikecharacter = $24, idontlikecharacter = $25 ";
+			"birthday = $4, monthofbirth = $5, yearofbirth = $6, ";
+		queryStrProfile += "growth = $7, weight = $8, ";
+		queryStrProfile += "gender = $9, gendervapor = $10, ";
+		queryStrProfile += "signzodiac = $11, education = $12, ";
+		queryStrProfile += "fieldofactivity = $13, maritalstatus = $14, ";
+		queryStrProfile += "children = $15, religion = $16, ";
+		queryStrProfile += "smoke = $17, alcohol = $18, ";
+		queryStrProfile += "discription = $19, profit = $20, ";
+		queryStrProfile += "interests = $21, ";
+		queryStrProfile += "filters = $22, ";
+		queryStrProfile += "ilikecharacter = $23, idontlikecharacter = $24 ";
 		queryStrProfile += "WHERE userid = $1";
 
 		const answerDBProfile = await poolDB.query(queryStrProfile, [
 			ourId,
 			profile.name,
 			profile.location,
-			profile.age,
 			profile.birthday,
 			profile.monthofbirth,
 			profile.yearofbirth,

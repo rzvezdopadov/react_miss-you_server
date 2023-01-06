@@ -16,7 +16,9 @@ export const setDialog = async (
 		timecode: 0,
 		userid: "",
 		name: "",
-		age: 0,
+		birthday: 0,
+		monthofbirth: 0,
+		yearofbirth: 0,
 		photomain: 0,
 		photolink: [],
 		messages: [],
@@ -56,7 +58,9 @@ export const setDialog = async (
 		newDialog.timecode = updatesDialog.timecode;
 		newDialog.userid = userId;
 		newDialog.name = profileUser.name;
-		newDialog.age = profileUser.age;
+		newDialog.birthday = profileUser.birthday;
+		newDialog.monthofbirth = profileUser.monthofbirth;
+		newDialog.yearofbirth = profileUser.yearofbirth;
 		newDialog.photomain = profileUser.photomain;
 		newDialog.photolink = profileUser.photolink;
 		newDialog.messages = updatesDialog.messages;
@@ -76,7 +80,9 @@ export const getDialog = async (
 		timecode: 0,
 		userid: "",
 		name: "",
-		age: 0,
+		birthday: 0,
+		monthofbirth: 0,
+		yearofbirth: 0,
 		photomain: 0,
 		photolink: [],
 		messages: [],
@@ -90,7 +96,9 @@ export const getDialog = async (
 			timecode: (dialog && dialog.timecode) || 0,
 			userid: userId,
 			name: profile.name,
-			age: profile.age,
+			birthday: profile.birthday,
+			monthofbirth: profile.monthofbirth,
+			yearofbirth: profile.yearofbirth,
 			photomain: profile.photomain,
 			photolink: profile.photolink,
 			messages: (dialog && dialog.messages) || [],
@@ -134,7 +142,9 @@ export const getDialogs = async (
 					timecode: dialogs[index].timecode,
 					userid: users[index].userid,
 					name: users[index].name,
-					age: users[index].age,
+					birthday: users[index].birthday,
+					monthofbirth: users[index].monthofbirth,
+					yearofbirth: users[index].yearofbirth,
 					photomain: users[index].photomain,
 					photolink: users[index].photolink,
 					messages: dialogs[index].messages,
