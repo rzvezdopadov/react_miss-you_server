@@ -1,11 +1,25 @@
 import { validationResult } from "express-validator";
-import { IProfile, IRegistration } from "../interfaces/iprofiles";
+import {
+	IProfile,
+	IProfileRegistration,
+	IRegistration,
+} from "../interfaces/iprofiles";
 import {
 	createProfile,
 	getIdByEmailFromDB,
 	getPasswordByIdFromDB,
 	setJWTToDB,
 } from "../query/auth";
+import {
+	arr_age,
+	arr_gender,
+	arr_genderVapor,
+	arr_growth,
+	arr_location,
+} from "../arrdata/profiles";
+import { getSignZodiac } from "../utils/profile";
+import { getTimecodeNow } from "../utils/datetime";
+import { getRandomString } from "../utils/string";
 
 const bcrypt = require("bcryptjs");
 const config = require("config");
@@ -22,40 +36,76 @@ export async function queryRegistration(req, res) {
 			});
 		}
 
-		const reg: IRegistration = req.body;
+		const registration: IRegistration = req.body;
 
-		const candidate = getIdByEmailFromDB(reg.email);
+		const candidate = await getIdByEmailFromDB(registration.email);
 
-		if ((await candidate) !== "") {
+		console.log(candidate);
+
+		if (candidate !== "") {
 			return res
 				.status(400)
 				.json({ message: "Такой пользователь уже существует!" });
 		}
-
-		if (!reg.name) {
+		if (
+			registration.gender < 0 ||
+			registration.gender > arr_gender.length
+		) {
+			return res
+				.status(400)
+				.json({ message: "Неверно задано поле 'Кто я?'!" });
+		}
+		if (
+			registration.gendervapor < 0 ||
+			registration.gendervapor > arr_genderVapor.length
+		) {
+			return res
+				.status(400)
+				.json({ message: "Неверно задано поле 'Кого ищу?'!" });
+		}
+		if (!arr_location.includes(registration.location)) {
+			return res
+				.status(400)
+				.json({ message: "Неверно задано поле 'Локация'!" });
+		}
+		if (
+			registration.growth < arr_growth[0] ||
+			registration.growth > arr_growth[arr_growth.length - 1]
+		) {
+			return res
+				.status(400)
+				.json({ message: "Неверно задано поле 'Рост'!" });
+		}
+		if (!registration.name) {
 			return res.status(400).json({ message: "Не указанно имя!" });
 		}
 
-		const hashedPassword = await bcrypt.hash(reg.password, 13);
+		const hashedPassword = await bcrypt.hash(registration.password, 13);
 
-		const profile: IProfile = {
-			userid: "",
-			name: reg.name,
+		const profile: IProfileRegistration = {
+			email: registration.email,
+			password: hashedPassword,
+			jwt: "",
+			userid: getRandomString(8),
+			timecode: getTimecodeNow(),
+			name: registration.name,
 			latitude: 0,
 			longitude: 0,
-			location: "",
+			location: registration.location,
 			likes: [],
-			age: 0,
-			birthday: 0,
-			monthofbirth: 0,
-			yearofbirth: 0,
-			growth: 0,
+			birthday: registration.birthday,
+			monthofbirth: registration.monthofbirth,
+			yearofbirth: registration.yearofbirth,
+			growth: registration.growth,
 			weight: 0,
-			gender: reg.gender,
-			gendervapor: reg.gendervapor,
+			gender: registration.gender,
+			gendervapor: registration.gendervapor,
 			photomain: 0,
 			photolink: [],
-			signzodiac: 0,
+			signzodiac: getSignZodiac(
+				registration.birthday,
+				registration.monthofbirth
+			),
 			education: 0,
 			fieldofactivity: 0,
 			maritalstatus: 0,
@@ -69,12 +119,33 @@ export async function queryRegistration(req, res) {
 			ilikecharacter: [],
 			idontlikecharacter: [],
 			raiting: 0,
-			filters: undefined,
+			cash: 100,
+			filters: {
+				location: registration.location,
+				signzodiac: 12,
+				agestart: arr_age[0],
+				ageend: arr_age[arr_age.length - 1],
+				growthstart: arr_growth[0],
+				growthend: arr_growth[arr_growth.length - 1],
+				weight: 0,
+				gendervapor: registration.gendervapor,
+				religion: 0,
+				smoke: 0,
+				alcohol: 0,
+				interests: [],
+			},
+			acctype: "user",
+			visit: [],
 		};
 
-		createProfile(profile);
+		const isReg = await createProfile(profile);
 
-		res.status(201).json({ message: "Пользователь успешно создан!" });
+		if (isReg)
+			return res
+				.status(201)
+				.json({ message: "Пользователь успешно создан!" });
+
+		res.status(400).json({ message: "Возникла ошибка при регистрации!" });
 	} catch (e) {
 		res.status(500).json({
 			message: "Что-то пошло не так при регистрации!",
