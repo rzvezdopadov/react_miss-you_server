@@ -1,5 +1,6 @@
 import { validationResult } from "express-validator";
 import {
+	ILogin,
 	IProfile,
 	IProfileRegistration,
 	IRegistration,
@@ -20,6 +21,7 @@ import {
 import { getSignZodiac } from "../utils/profile";
 import { getTimecodeNow } from "../utils/datetime";
 import { getRandomString } from "../utils/string";
+import { isHaveCaptcha } from "./captcha";
 
 const bcrypt = require("bcryptjs");
 const config = require("config");
@@ -39,8 +41,6 @@ export async function queryRegistration(req, res) {
 		const registration: IRegistration = req.body;
 
 		const candidate = await getIdByEmailFromDB(registration.email);
-
-		console.log(candidate);
 
 		if (candidate !== "") {
 			return res
@@ -78,6 +78,12 @@ export async function queryRegistration(req, res) {
 		}
 		if (!registration.name) {
 			return res.status(400).json({ message: "Не указанно имя!" });
+		}
+
+		if (!isHaveCaptcha(registration.captcha)) {
+			return res.status(400).json({
+				message: "Код с картинки неверный или просрочен!",
+			});
 		}
 
 		const hashedPassword = await bcrypt.hash(registration.password, 13);
@@ -160,16 +166,22 @@ export async function queryLogin(req, res) {
 
 		if (!errors.isEmpty()) {
 			return res.status(400).json({
-				errors: errors.array(),
 				message: "Некорректные данные при входе в систему!",
 			});
 		}
 
-		let { email, password } = req.body;
-		email = String(email);
-		password = String(password);
+		let params: ILogin = req.body;
+		params.email = String(params.email);
+		params.password = String(params.password);
+		params.captcha = String(params.captcha);
 
-		const ourId = await getIdByEmailFromDB(email);
+		if (!isHaveCaptcha(params.captcha)) {
+			return res.status(400).json({
+				message: "Код с картинки неверный или просрочен!",
+			});
+		}
+
+		const ourId = await getIdByEmailFromDB(params.email);
 
 		if (ourId === "") {
 			return res
@@ -179,7 +191,7 @@ export async function queryLogin(req, res) {
 
 		const pass = await getPasswordByIdFromDB(ourId);
 
-		const isMatch = await bcrypt.compare(password, pass);
+		const isMatch = await bcrypt.compare(params.password, pass);
 
 		if (!isMatch) {
 			return res.status(400).json({

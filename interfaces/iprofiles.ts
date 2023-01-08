@@ -121,6 +121,13 @@ export interface IRegistration {
 	growth: number;
 	email: string;
 	password: string;
+	captcha: string;
+}
+
+export interface ILogin {
+	email: string;
+	password: string;
+	captcha: string;
 }
 
 export interface IMessage {

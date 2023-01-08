@@ -1,4 +1,5 @@
 import { queryLogin, queryRegistration } from "./auth";
+import { queryGetCaptcha } from "./captcha";
 import { queryGetDialog, queryGetDialogs, querySetMessage } from "./dialogs";
 import { querySetLike } from "./likes";
 import {
@@ -62,5 +63,7 @@ router.delete("/api/photo", [], queryDeletePhoto);
 router.put("/api/photo", [], queryCheckPhoto);
 
 router.get("/api/photo/*.jpg", [], queryGetPhoto);
+
+router.get("/api/captcha/*", [], queryGetCaptcha);
 
 module.exports = router;
