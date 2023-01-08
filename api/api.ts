@@ -15,6 +15,7 @@ import {
 	querySetProfile,
 	querySetProfileShort,
 } from "./profile";
+import { queryGetSticker } from "./stikers";
 
 const express = require("express");
 const router = express.Router();
@@ -65,5 +66,7 @@ router.put("/api/photo", [], queryCheckPhoto);
 router.get("/api/photo/*.jpg", [], queryGetPhoto);
 
 router.get("/api/captcha/*", [], queryGetCaptcha);
+
+router.get("/api/sticker/*.png", [], queryGetSticker);
 
 module.exports = router;
