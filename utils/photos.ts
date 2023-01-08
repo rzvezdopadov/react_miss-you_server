@@ -19,9 +19,12 @@ export const deletePhoto = async (
 			const link = photos.photolink[photoPos];
 			const nameFile = link.substring(link.length - 34);
 
-			await fs.unlink(__dirname + "/photos/" + nameFile, function (err) {
-				if (err) console.log(err);
-			});
+			await fs.unlink(
+				process.cwd() + "/photos/" + nameFile,
+				function (err) {
+					if (err) console.log(err);
+				}
+			);
 
 			photos.photolink.splice(photoPos, 1);
 
@@ -81,7 +84,7 @@ export const addPhoto = async (ourId: string, image: any): Promise<IPhotos> => {
 			photos.photolink.push("api/photo/" + strRand + ".jpg");
 			await setPhotosByIdToDB(ourId, photos);
 
-			image.mv(__dirname + "/photos/" + strRand + ".jpg");
+			image.mv(process.cwd() + "/photos/" + strRand + ".jpg");
 		}
 
 		return photos;
@@ -92,5 +95,5 @@ export const addPhoto = async (ourId: string, image: any): Promise<IPhotos> => {
 };
 
 export const getWayPhoto = (nameFile: string): string => {
-	return __dirname + "/photos/" + nameFile;
+	return process.cwd() + "/photos/" + nameFile + ".jpg";
 };
