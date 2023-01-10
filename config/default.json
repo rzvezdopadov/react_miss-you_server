@@ -1,5 +1,6 @@
 {
     "jwtSecret": "missrada956eva",
+    "saltpass": 13,
     "port": 5000,
     "socketPort": 8000
 }
