@@ -29,6 +29,24 @@ export async function getPasswordByIdFromDB(ourId: string): Promise<string> {
 	}
 }
 
+export async function setPasswordByIdToDB(
+	ourId: string,
+	hashedPassword: string
+): Promise<string> {
+	// Set hashed password in DB
+	try {
+		const answerDB = await poolDB.query(
+			"UPDATE users SET password = $1 WHERE userid = $2",
+			[hashedPassword, ourId]
+		);
+
+		return answerDB.rowCount;
+	} catch (error) {
+		console.log(error);
+		return "";
+	}
+}
+
 export async function setJWTToDB(ourId: string, jwt: string): Promise<number> {
 	// Set JWT in DB
 	try {

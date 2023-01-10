@@ -192,3 +192,9 @@ export interface IStatisticsVisit {
 	userid: string;
 	visit: Array<IStatVisit>;
 }
+
+export interface IChangePass {
+	passwordnow: string;
+	passwordnew: string;
+	captcha: string;
+}

@@ -1,5 +1,6 @@
 import { validationResult } from "express-validator";
 import {
+	IChangePass,
 	ILogin,
 	IProfile,
 	IProfileRegistration,
@@ -10,6 +11,7 @@ import {
 	getIdByEmailFromDB,
 	getPasswordByIdFromDB,
 	setJWTToDB,
+	setPasswordByIdToDB,
 } from "../query/auth";
 import {
 	arr_age,
@@ -22,6 +24,7 @@ import { getSignZodiac } from "../utils/profile";
 import { getTimecodeNow } from "../utils/datetime";
 import { getRandomString } from "../utils/string";
 import { isHaveCaptcha } from "./captcha";
+import { testToken } from "../utils/token";
 
 const bcrypt = require("bcryptjs");
 const config = require("config");
@@ -86,7 +89,10 @@ export async function queryRegistration(req, res) {
 			});
 		}
 
-		const hashedPassword = await bcrypt.hash(registration.password, 13);
+		const hashedPassword = await bcrypt.hash(
+			registration.password,
+			config.get("saltpass")
+		);
 
 		const profile: IProfileRegistration = {
 			email: registration.email,
@@ -220,6 +226,74 @@ export async function queryLogin(req, res) {
 	} catch (e) {
 		res.status(500).json({
 			message: "Что-то пошло не так при аутентификации!",
+		});
+	}
+}
+
+export async function queryChangePass(req, res) {
+	try {
+		const errors = validationResult(req);
+
+		if (!errors.isEmpty()) {
+			return res.status(400).json({
+				message: "Некорректные данные при изменении пароля!",
+			});
+		}
+
+		let params: IChangePass = req.body;
+		params.passwordnow = String(params.passwordnow);
+		params.passwordnew = String(params.passwordnew);
+		params.captcha = String(params.captcha);
+
+		if (!isHaveCaptcha(params.captcha)) {
+			return res.status(400).json({
+				message: "Код с картинки неверный или просрочен!",
+			});
+		}
+
+		let { jwt } = req.cookies;
+		jwt = String(jwt);
+
+		const jwtDecode = await testToken(jwt);
+
+		if (!jwtDecode)
+			return res.status(400).json({
+				message: "Токен не валидный!",
+			});
+
+		const pass = await getPasswordByIdFromDB(jwtDecode.userId);
+
+		const isMatch = await bcrypt.compare(params.passwordnow, pass);
+
+		if (!isMatch) {
+			return res.status(400).json({
+				message: "Неверный пароль, попробуйте снова!",
+			});
+		}
+
+		const hashedPassword = await bcrypt.hash(
+			params.passwordnew,
+			config.get("saltpass")
+		);
+
+		const isSaveNewPassword = await setPasswordByIdToDB(
+			jwtDecode.userId,
+			hashedPassword
+		);
+
+		if (!isSaveNewPassword) {
+			return res.status(400).json({
+				message: "Ошибка при изменении пароля!",
+			});
+		}
+
+		return res.status(200).json({
+			message: "Пароль успешно изменен!",
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			message: "Что-то пошло не так при изменении пароля!",
 		});
 	}
 }

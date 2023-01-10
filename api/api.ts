@@ -1,4 +1,4 @@
-import { queryLogin, queryRegistration } from "./auth";
+import { queryChangePass, queryLogin, queryRegistration } from "./auth";
 import { queryGetCaptcha } from "./captcha";
 import { queryGetDialog, queryGetDialogs, querySetMessage } from "./dialogs";
 import { querySetLike } from "./likes";
@@ -68,5 +68,20 @@ router.get("/api/photo/*.jpg", [], queryGetPhoto);
 router.get("/api/captcha/*", [], queryGetCaptcha);
 
 router.get("/api/sticker/*.png", [], queryGetSticker);
+
+router.put(
+	"/api/changepass",
+	[
+		check("passwordnow", "Некоректный текущий пароль").isLength({
+			min: 8,
+			max: 30,
+		}),
+		check("passwordnew", "Некоректный новый пароль").isLength({
+			min: 8,
+			max: 30,
+		}),
+	],
+	queryChangePass
+);
 
 module.exports = router;
