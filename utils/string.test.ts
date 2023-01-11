@@ -1,21 +1,20 @@
 import { getRandomString } from "./string";
 
-let testArrClassic: Array<number> = [];
+const testArrClassic: Array<number> = [];
 for (let i = 0; i < 3; i++)
 	testArrClassic.push(1 + Math.floor(Math.random() * 30));
 
 describe.each(testArrClassic)("getRandomString classic test", (value) => {
-	test(`input: ${value}`, () => {
-		expect(getRandomString(value).length).toBe(value);
-	});
-	test(`input: ${value}`, () => {
-		expect(typeof getRandomString(value)).toBe("string");
+	it(`input: ${value}`, () => {
+		const str = getRandomString(value);
+		expect(str.length).toBe(value);
+		expect(typeof str).toBe("string");
 	});
 });
 
 const testArrSpecial = [
 	Math.floor(Math.random() * 30) - 50,
-	-[],
+	[],
 	{},
 	null,
 	undefined,
