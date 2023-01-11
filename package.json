@@ -8,14 +8,14 @@
     "server": "nodemon dist/app.js",
     "test": "jest --watchAll"
   },
-  "jest":{
+  "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
     "transform": {
       "^.+\\.ts?$": "ts-jest"
-    }, 
-    "testPathIgnorePatterns" : [
-      "/dist/" 
+    },
+    "testPathIgnorePatterns": [
+      "/dist/"
     ]
   },
   "repository": {
