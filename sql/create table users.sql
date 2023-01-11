@@ -40,27 +40,11 @@ CREATE TABLE users (
     visit JSON[]
 );
 
-CREATE TABLE filters (
-    id serial PRIMARY KEY,
-    location VARCHAR(255),
-    agestart INT,
-    ageend INT,
-    growthstart INT,
-    growthend INT,
-    weight INT,
-    signzodiac INT,
-    gendervapor INT,
-    religion INT,
-    smoke INT,
-    alcohol INT,
-    interests TEXT[]
-);
-
 CREATE TABLE bots (
     id serial PRIMARY KEY,
-    type VARCHAR(255),
-    discription VARCHAR(255),
-    nmodel VARCHAR(255),
+    type TEXT,
+    discription TEXT,
+    nmodel TEXT,
 );
 
 CREATE TABLE dialogs (
@@ -70,9 +54,4 @@ CREATE TABLE dialogs (
     timecode BIGINT,
     dck TEXT,
     messages JSON[]
-);
-
-CREATE TABLE users_statistics (
-    id serial PRIMARY KEY,
-    visit JSON[]
 );
