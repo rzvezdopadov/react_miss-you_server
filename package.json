@@ -13,7 +13,10 @@
     "testEnvironment": "node",
     "transform": {
       "^.+\\.ts?$": "ts-jest"
-    }
+    }, 
+    "testPathIgnorePatterns" : [
+      "/dist/" 
+    ]
   },
   "repository": {
     "type": "git",
