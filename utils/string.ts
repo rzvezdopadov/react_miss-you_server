@@ -3,7 +3,7 @@ let alphabet = "abdehkmnpswxzABDEFGHKMNPQRSTWXZ123456789";
 export function getRandomString(count: number): string {
 	let str = "";
 
-	if (!count || count > 100) return str;
+	if (!count || count > 50) return str;
 
 	for (let i = 0; i < count; i++) {
 		var pos = Math.floor(Math.random() * alphabet.length);
