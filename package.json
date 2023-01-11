@@ -5,7 +5,15 @@
   "main": "app.js",
   "scripts": {
     "start": "tsc && nodemon dist/app.js",
-    "server": "nodemon dist/app.js"
+    "server": "nodemon dist/app.js",
+    "test": "jest --watchAll"
+  },
+  "jest":{
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    }
   },
   "repository": {
     "type": "git",
@@ -27,7 +35,7 @@
     "express": "^4.18.1",
     "express-fileupload": "^1.4.0",
     "express-validator": "^6.14.2",
-    "jest": "^27.5.1",
+    "jest": "^29.3.1",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.19",
     "pg": "^8.8.0",
@@ -36,7 +44,10 @@
     "typescript": "^4.7.4"
   },
   "devDependencies": {
+    "@jest/globals": "^29.3.1",
     "@types/express": "^4.17.13",
-    "@types/node": "^18.7.1"
+    "@types/jest": "^29.2.5",
+    "@types/node": "^18.7.1",
+    "ts-jest": "^29.0.3"
   }
 }
