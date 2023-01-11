@@ -2,8 +2,8 @@ import { validationResult } from "express-validator";
 import {
 	IChangePass,
 	ILogin,
-	IProfile,
 	IProfileRegistration,
+	IRecoveryPass,
 	IRegistration,
 } from "../interfaces/iprofiles";
 import {
@@ -289,6 +289,45 @@ export async function queryChangePass(req, res) {
 
 		return res.status(200).json({
 			message: "Пароль успешно изменен!",
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			message: "Что-то пошло не так при изменении пароля!",
+		});
+	}
+}
+
+export async function queryRecoveryPass(req, res) {
+	try {
+		const errors = validationResult(req);
+
+		if (!errors.isEmpty()) {
+			return res.status(400).json({
+				message: "Некорректные данные при изменении пароля!",
+			});
+		}
+
+		let params: IRecoveryPass = req.body;
+		params.email = String(params.email);
+		params.captcha = String(params.captcha);
+
+		if (!isHaveCaptcha(params.captcha)) {
+			return res.status(400).json({
+				message: "Код с картинки неверный или просрочен!",
+			});
+		}
+
+		const ourId = await getIdByEmailFromDB(params.email);
+
+		if (ourId === "") {
+			return res
+				.status(400)
+				.json({ message: "Такой пользователь не существует!" });
+		}
+
+		return res.status(200).json({
+			message: "Инструкции по восстановлению высланы на e-mail!",
 		});
 	} catch (error) {
 		console.log(error);

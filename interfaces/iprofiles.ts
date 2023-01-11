@@ -198,3 +198,8 @@ export interface IChangePass {
 	passwordnew: string;
 	captcha: string;
 }
+
+export interface IRecoveryPass {
+	email: string;
+	captcha: string;
+}

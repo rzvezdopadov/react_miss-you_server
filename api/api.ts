@@ -1,4 +1,9 @@
-import { queryChangePass, queryLogin, queryRegistration } from "./auth";
+import {
+	queryChangePass,
+	queryLogin,
+	queryRecoveryPass,
+	queryRegistration,
+} from "./auth";
 import { queryGetCaptcha } from "./captcha";
 import { queryGetDialog, queryGetDialogs, querySetMessage } from "./dialogs";
 import { querySetLike } from "./likes";
@@ -83,5 +88,7 @@ router.put(
 	],
 	queryChangePass
 );
+
+router.post("/api/recoverypass", [], queryRecoveryPass);
 
 module.exports = router;
