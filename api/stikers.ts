@@ -1,7 +1,7 @@
 import { getWaySticker } from "../utils/stickers";
 import { testToken } from "../utils/token";
 
-export async function queryGetSticker(req, res) {
+export async function queryGetSticker(req, res, next) {
 	try {
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
@@ -18,7 +18,9 @@ export async function queryGetSticker(req, res) {
 			.replace("/api/sticker/", "")
 			.replace(".png", "");
 
-		return res.sendFile(getWaySticker(nameFile));
+		return res.sendFile(getWaySticker(nameFile), {}, function (err) {
+			if (err) next();
+		});
 	} catch (e) {
 		res.status(500).json({
 			message: "Ошибка QTDB!",

@@ -85,7 +85,7 @@ export async function queryCheckPhoto(req, res) {
 	}
 }
 
-export async function queryGetPhoto(req, res) {
+export async function queryGetPhoto(req, res, next) {
 	try {
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
@@ -100,7 +100,9 @@ export async function queryGetPhoto(req, res) {
 		let { url } = req;
 		const nameFile = url.substring(url.length - 34).replace(".jpg", "");
 
-		return res.sendFile(getWayPhoto(nameFile));
+		return res.sendFile(getWayPhoto(nameFile), {}, function (err) {
+			if (err) next();
+		});
 	} catch (e) {
 		res.status(500).json({
 			message: "Ошибка QTDB!",
