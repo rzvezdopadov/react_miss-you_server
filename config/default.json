@@ -2,5 +2,7 @@
     "jwtSecret": "missrada956eva",
     "saltpass": 13,
     "port": 5000,
-    "socketPort": 8000
+    "socketPort": 8000,
+    "emailUser": "service.miss.you@gmail.com",
+    "emailPass": "5615615113"
 }

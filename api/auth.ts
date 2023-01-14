@@ -25,6 +25,7 @@ import { getTimecodeNow } from "../utils/datetime";
 import { getRandomString } from "../utils/string";
 import { isHaveCaptcha } from "./captcha";
 import { testToken } from "../utils/token";
+import { sendMessageToEmail } from "../utils/transporter";
 
 const bcrypt = require("bcryptjs");
 const config = require("config");
@@ -325,6 +326,8 @@ export async function queryRecoveryPass(req, res) {
 				.status(400)
 				.json({ message: "Такой пользователь не существует!" });
 		}
+
+		await sendMessageToEmail(getRandomString(20), params.email);
 
 		return res.status(200).json({
 			message: "Инструкции по восстановлению высланы на e-mail!",
