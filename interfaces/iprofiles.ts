@@ -173,6 +173,12 @@ export interface IQuerySendMessage {
 	message: string;
 }
 
+export interface IQuerySendSticker {
+	userid: string;
+	stickerid: string;
+	stickerpos: number;
+}
+
 export interface IQueryLike {
 	userid: string;
 }
