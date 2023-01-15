@@ -55,3 +55,13 @@ CREATE TABLE dialogs (
     dck TEXT,
     messages JSON[]
 );
+
+CREATE TABLE stickers (
+    id serial PRIMARY KEY,
+    idstickerpack TEXT,
+    name TEXT,
+    discription TEXT,
+    price INT, 
+    author TEXT,
+    stickers JSON[]
+);
