@@ -352,10 +352,10 @@ const arrPersonQuery = arrPerson.map((item)=>{
     return str;
 });
 
-const appUsers = document.getElementById('appUsers');
+const app = document.getElementById('app');
 
 arrPersonQuery.forEach((value, i) => {
-    appUsers.innerHTML += '<div><span>' + value + '</span></div>'
+    app.innerHTML += '<div><span>' + value + '</span></div>'
 })
 
 // console.log(arrPersonQuery);
