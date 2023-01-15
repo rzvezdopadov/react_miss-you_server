@@ -20,7 +20,7 @@ import {
 	querySetProfile,
 	querySetProfileShort,
 } from "./profile";
-import { queryGetSticker } from "./stikers";
+import { queryGetAllStickerpacks, queryGetSticker } from "./stikers";
 
 const express = require("express");
 const router = express.Router();
@@ -73,6 +73,8 @@ router.get("/api/photo/*.jpg", [], queryGetPhoto);
 router.get("/api/captcha/*", [], queryGetCaptcha);
 
 router.get("/api/sticker/*.png", [], queryGetSticker);
+
+router.get("/api/stickers", [], queryGetAllStickerpacks);
 
 router.put(
 	"/api/changepass",

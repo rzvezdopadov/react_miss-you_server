@@ -68,6 +68,7 @@ export interface IProfile {
 	ilikecharacter: Array<number>;
 	idontlikecharacter: Array<number>;
 	raiting: number;
+	stickerpacks: Array<string>;
 	filters: IFilterUsers;
 }
 
@@ -208,4 +209,19 @@ export interface IChangePass {
 export interface IRecoveryPass {
 	email: string;
 	captcha: string;
+}
+
+export interface ISticker {
+	position: number;
+	associate: string;
+	link: string;
+}
+
+export interface IStickerpack {
+	idstickerpack: string;
+	name: string;
+	discription: string;
+	price: number;
+	author: string;
+	stickers: Array<ISticker>;
 }

@@ -112,7 +112,7 @@ export async function createProfile(
 			"education, fieldofactivity, maritalstatus, children, " +
 			"religion, smoke, alcohol, discription, profit, interests, " +
 			"filters, ilikecharacter, idontlikecharacter, " +
-			"raiting, cash, acctype, visit" +
+			"raiting, cash, stickerpacks, acctype, visit" +
 			") VALUES (" +
 			`'${profile.email}', '${profile.password}', '', '${profile.userid}', '0.0.0.0', ${profile.timecode}, ` +
 			`'${profile.name}', 0, 0, '${profile.location}', ARRAY [] :: TEXT [], ` +
@@ -123,7 +123,7 @@ export async function createProfile(
 			`'${JSON.stringify(
 				profile.filters
 			)}' :: JSON, ARRAY [] :: INTEGER [], ARRAY [] :: INTEGER [], ` +
-			`${profile.raiting}, ${profile.cash}, '${profile.acctype}', ARRAY [] :: JSON []` +
+			`${profile.raiting}, ${profile.cash}, ARRAY [] :: TEXT [], '${profile.acctype}', ARRAY [] :: JSON []` +
 			")";
 
 		console.log(queryStr);

@@ -4,7 +4,6 @@ import {
 	IProfileForDialog,
 } from "../interfaces/iprofiles";
 import { getYearFromAge } from "../utils/datetime";
-import { lazyloadingusercount } from "../utils/globalconst";
 import { poolDB } from "./config";
 
 const fieldProfile =
@@ -13,7 +12,7 @@ const fieldProfile =
 	"gender, gendervapor, photomain, photolink, signzodiac, " +
 	"education, fieldofactivity, maritalstatus, children, religion, " +
 	"smoke, alcohol, discription, profit, interests, filters," +
-	"ilikeCharacter, idontlikeCharacter, raiting";
+	"ilikeCharacter, idontlikeCharacter, raiting, stickerpacks";
 
 const fieldFilters =
 	"location, signzodiac, agestart, ageend, " +
@@ -284,15 +283,4 @@ export async function setProfileByIdToDB(
 		console.log("setProfileByIdToDB get:", error);
 		return undefined;
 	}
-}
-
-export function setProfileShort(profile: IProfile) {
-	// for (let i = 0; i < userList.length; i++) {
-	//     if (userList[i].id === profile.id) {
-
-	//         return true;
-	//     }
-	// }
-
-	return false;
 }

@@ -1,4 +1,8 @@
-import { IQueryLike, IQuerySendMessage } from "../interfaces/iprofiles";
+import {
+	IQueryLike,
+	IQuerySendMessage,
+	IQuerySendSticker,
+} from "../interfaces/iprofiles";
 import { testToken } from "../utils/token";
 import { setTimecodeToDB } from "../query/auth";
 import { setLikesById } from "../utils/likes";
@@ -84,6 +88,33 @@ export const socketHandler = (socketIO, socket) => {
 				ourId,
 				socket.userid,
 				socket.message
+			);
+
+			socketIO.to(socketId).emit("dialog", dialog);
+
+			const data = {
+				command: "add",
+				userid: ourId,
+				message: dialog.messages[dialog.messages.length - 1],
+			};
+
+			sendToAllSocketsById(socketIO, socket.userid, "message", data);
+		} catch (error) {
+			console.log("message error", error);
+		}
+	});
+
+	socket.on("sticker", async (socket: IQuerySendSticker) => {
+		try {
+			const ourId = getUserIdFromSocketTable(socketId);
+
+			if (!(ourId && socket.userid)) return;
+
+			const dialog = await setDialog(
+				ourId,
+				socket.userid,
+				socket.stickerid
+				// socket.stickerpos
 			);
 
 			socketIO.to(socketId).emit("dialog", dialog);
