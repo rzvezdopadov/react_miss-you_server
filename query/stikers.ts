@@ -8,7 +8,7 @@ export async function getAllStickerpacks(): Promise<IStickerpack[]> {
 
 		const answerDB = await poolDB.query(queryStr);
 
-		return answerDB.rows[0];
+		return answerDB.rows;
 	} catch (error) {
 		console.log("getAllStickerpacks", error);
 		return [];
