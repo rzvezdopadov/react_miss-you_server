@@ -74,7 +74,7 @@ router.get("/api/captcha/*", [], queryGetCaptcha);
 
 router.get("/api/sticker/*.png", [], queryGetSticker);
 
-router.get("/api/stickers", [], queryGetAllStickerpacks);
+router.get("/api/stickerpacks", [], queryGetAllStickerpacks);
 
 router.put(
 	"/api/changepass",
