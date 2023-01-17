@@ -129,10 +129,26 @@ export const getDialogs = async (
 			const id1 = a.userid1 === ourId ? a.userid2 : a.userid1;
 			const id2 = b.userid1 === ourId ? b.userid2 : b.userid1;
 
-			return Number(id1 > id2);
+			if (id1 > id2) {
+				return 1;
+			}
+			if (id1 < id2) {
+				return -1;
+			}
+			return 0;
 		});
 
-		users.sort((a, b) => Number(a.userid > b.userid));
+		users.sort((a, b) => {
+			if (a.userid > b.userid) {
+				return 1;
+			}
+
+			if (a.userid < b.userid) {
+				return -1;
+			}
+
+			return 0;
+		});
 
 		let newDialogs: Array<IDialogOutput> = [];
 
