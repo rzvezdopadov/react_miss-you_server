@@ -37,9 +37,7 @@ export async function queryGetSticker(req, res, next) {
 			});
 
 		const { url } = req;
-		const nameFile: string = url
-			.replace("/api/sticker/", "")
-			.replace(".png", "");
+		let nameFile: string = url.replace("/api/sticker/", "");
 
 		return res.sendFile(getWaySticker(nameFile), {}, function (err) {
 			if (err) next();

@@ -73,6 +73,7 @@ router.get("/api/photo/*.jpg", [], queryGetPhoto);
 router.get("/api/captcha/*", [], queryGetCaptcha);
 
 router.get("/api/sticker/*.png", [], queryGetSticker);
+router.get("/api/sticker/*.webp", [], queryGetSticker);
 
 router.get("/api/stickerpacks", [], queryGetAllStickerpacks);
 
