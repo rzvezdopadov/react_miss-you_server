@@ -154,6 +154,12 @@ export const getDialogs = async (
 
 		if (dialogs.length) {
 			dialogs.forEach((value, index) => {
+				if (
+					dialogs[index].userid1 !== users[index].userid &&
+					dialogs[index].userid2 !== users[index].userid
+				)
+					return;
+
 				const newDialog: IDialogOutput = {
 					timecode: dialogs[index].timecode,
 					userid: users[index].userid,
