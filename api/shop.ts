@@ -48,8 +48,6 @@ export async function queryBuyRating(req, res) {
 			(value) => value.idRate === idrate
 		);
 
-		console.log("that", idrate, idrate, posTariff);
-
 		if (posTariff === -1)
 			return res.status(400).json({
 				message: "Такого тарифа не существует!",
