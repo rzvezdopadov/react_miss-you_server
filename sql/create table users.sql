@@ -65,3 +65,8 @@ CREATE TABLE stickers (
     author TEXT,
     stickers JSON[]
 );
+
+CREATE TABLE shop (
+    id serial PRIMARY KEY,
+    rating JSON[]
+);
