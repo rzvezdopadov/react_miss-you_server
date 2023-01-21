@@ -12,7 +12,7 @@ const fieldProfile =
 	"gender, gendervapor, photomain, photolink, signzodiac, " +
 	"education, fieldofactivity, maritalstatus, children, religion, " +
 	"smoke, alcohol, discription, profit, interests, filters," +
-	"ilikeCharacter, idontlikeCharacter, raiting, stickerpacks";
+	"ilikeCharacter, idontlikeCharacter, rating, stickerpacks, cash";
 
 const fieldFilters =
 	"location, signzodiac, agestart, ageend, " +
@@ -33,7 +33,7 @@ export async function getProfileByIdFromDB(userid: string): Promise<IProfile> {
 }
 
 const fieldProfileShort =
-	"userid, timecode, name, birthday, monthofbirth, yearofbirth, gender, photomain, photolink, interests, raiting";
+	"userid, timecode, name, birthday, monthofbirth, yearofbirth, gender, photomain, photolink, interests, rating";
 
 export async function getProfiles(
 	QueryGetProfiles: IGetProfiles
@@ -282,5 +282,67 @@ export async function setProfileByIdToDB(
 	} catch (error) {
 		console.log("setProfileByIdToDB get:", error);
 		return undefined;
+	}
+}
+
+export async function getProfileCashByIdFromDB(
+	userid: string
+): Promise<number> {
+	try {
+		let queryStr = `SELECT cash FROM users WHERE userid = $1`;
+		const answerDB = await poolDB.query(queryStr, [userid]);
+
+		const { cash } = answerDB.rows[0];
+
+		return cash;
+	} catch (error) {
+		console.log("getProfileCashByIdFromDB", error);
+		return 0;
+	}
+}
+
+export async function setProfileCashByIdToDB(
+	userid: string,
+	cash: number
+): Promise<number> {
+	try {
+		let queryStr = `UPDATE users SET cash = $2 WHERE userid = $1`;
+		const answerDB = await poolDB.query(queryStr, [userid, cash]);
+
+		return answerDB.count;
+	} catch (error) {
+		console.log("setProfileCashByIdToDB", error);
+		return 0;
+	}
+}
+
+export async function getProfileRatingByIdFromDB(
+	userid: string
+): Promise<number> {
+	try {
+		let queryStr = `SELECT rating FROM users WHERE userid = $1`;
+		const answerDB = await poolDB.query(queryStr, [userid]);
+
+		const { rating } = answerDB.rows[0];
+
+		return rating;
+	} catch (error) {
+		console.log("getProfileRatingByIdFromDB", error);
+		return 0;
+	}
+}
+
+export async function setProfileRatingByIdToDB(
+	userid: string,
+	rating: number
+): Promise<number> {
+	try {
+		let queryStr = `UPDATE users SET rating = $2 WHERE userid = $1`;
+		const answerDB = await poolDB.query(queryStr, [userid, rating]);
+
+		return answerDB.count;
+	} catch (error) {
+		console.log("setProfileRatingByIdToDB", error);
+		return 0;
 	}
 }

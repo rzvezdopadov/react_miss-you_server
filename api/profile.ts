@@ -84,6 +84,8 @@ export async function queryGetProfile(req, res) {
 			} else {
 				profile.likes = [jwtDecode.userId];
 			}
+
+			profile.cash = 0;
 		}
 
 		return res.status(200).json(profile);
