@@ -123,10 +123,10 @@ export async function getProfiles(
 			answerDB = await poolDB.query(queryStr);
 		}
 
-		let profiles = answerDB.rows;
+		let profiles: IProfile[] = answerDB.rows;
 
 		if (profiles.length > 1) {
-			let newProfiles = profiles.sort((a, b) => b.raiting - a.raiting);
+			let newProfiles = profiles.sort((a, b) => b.rating - a.rating);
 
 			if (startPos - endPos) {
 				newProfiles = newProfiles.slice(startPos, endPos);
