@@ -67,8 +67,9 @@ export interface IProfile {
 	interests: Array<string>;
 	ilikecharacter: Array<number>;
 	idontlikecharacter: Array<number>;
-	raiting: number;
+	rating: number;
 	stickerpacks: Array<string>;
+	cash: number;
 	filters: IFilterUsers;
 }
 
