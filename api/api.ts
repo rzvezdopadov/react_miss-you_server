@@ -20,6 +20,7 @@ import {
 	querySetProfile,
 	querySetProfileShort,
 } from "./profile";
+import { queryGetRatingTariffs } from "./shop";
 import { queryGetAllStickerpacks, queryGetSticker } from "./stikers";
 
 const express = require("express");
@@ -76,6 +77,8 @@ router.get("/api/sticker/*.png", [], queryGetSticker);
 router.get("/api/sticker/*.webp", [], queryGetSticker);
 
 router.get("/api/stickerpacks", [], queryGetAllStickerpacks);
+
+router.get("/api/ratingtariffs", [], queryGetRatingTariffs);
 
 router.put(
 	"/api/changepass",
