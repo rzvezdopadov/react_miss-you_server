@@ -20,7 +20,12 @@ import {
 	querySetProfile,
 	querySetProfileShort,
 } from "./profile";
-import { queryBuyRating, queryGetRatingTariffs } from "./shop";
+import {
+	queryAddStickerpack,
+	queryBuyRating,
+	queryDeleteStickerpack,
+	queryGetRatingTariffs,
+} from "./shop";
 import { queryGetAllStickerpacks, queryGetSticker } from "./stikers";
 
 const express = require("express");
@@ -81,6 +86,10 @@ router.get("/api/stickerpacks", [], queryGetAllStickerpacks);
 router.get("/api/ratingtariffs", [], queryGetRatingTariffs);
 
 router.post("/api/buyrating", [], queryBuyRating);
+
+router.post("/api/stickerpack", [], queryAddStickerpack);
+
+router.delete("/api/stickerpack", [], queryDeleteStickerpack);
 
 router.put(
 	"/api/changepass",

@@ -346,3 +346,34 @@ export async function setProfileRatingByIdToDB(
 		return 0;
 	}
 }
+
+export async function getProfileStickerpacksByIdFromDB(
+	userid: string
+): Promise<string[]> {
+	try {
+		let queryStr = `SELECT stickerpacks FROM users WHERE userid = $1`;
+		const answerDB = await poolDB.query(queryStr, [userid]);
+
+		const { stickerpacks } = answerDB.rows[0];
+
+		return stickerpacks;
+	} catch (error) {
+		console.log("getProfileStickerpacksByIdFromDB", error);
+		return [];
+	}
+}
+
+export async function setProfileStickerpacksByIdToDB(
+	userid: string,
+	stickerpacks: string[]
+): Promise<number> {
+	try {
+		let queryStr = `UPDATE users SET stickerpacks = $2 WHERE userid = $1`;
+		const answerDB = await poolDB.query(queryStr, [userid, stickerpacks]);
+
+		return answerDB.count;
+	} catch (error) {
+		console.log("setProfileStickerpacksByIdToDB", error);
+		return 0;
+	}
+}
