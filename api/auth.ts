@@ -99,7 +99,7 @@ export async function queryRegistration(req, res) {
 			email: registration.email,
 			password: hashedPassword,
 			jwt: "",
-			userid: getRandomString(8),
+			userid: getRandomString(12),
 			timecode: getTimecodeNow(),
 			name: registration.name,
 			latitude: 0,
