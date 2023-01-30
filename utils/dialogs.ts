@@ -1,4 +1,9 @@
-import { IDialogBase, IDialogOutput, IMessage } from "../interfaces/iprofiles";
+import {
+	IDialogBase,
+	IDialogOutput,
+	IMessage,
+	messageType,
+} from "../interfaces/iprofiles";
 import {
 	getDialogByIdFromDB,
 	getDialogsByIdFromDB,
@@ -10,7 +15,10 @@ import { getTimecodeNow } from "./datetime";
 export const setDialog = async (
 	ourId: string,
 	userId: string,
-	message: string
+	type: messageType,
+	message: string,
+	stickerpackid: string,
+	stickerpos: number
 ): Promise<IDialogOutput> => {
 	const newDialog: IDialogOutput = {
 		timecode: 0,
@@ -30,9 +38,12 @@ export const setDialog = async (
 		const newMessageObj: IMessage = {
 			userid: ourId,
 			timecode: getTimecodeNow(),
+			type: type,
 			userid1del: false,
 			userid2del: false,
 			message: message,
+			stickerpackid: stickerpackid,
+			stickerpos: stickerpos,
 		};
 
 		if (dialog && Object.keys(dialog).length) {

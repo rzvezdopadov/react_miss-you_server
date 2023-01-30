@@ -2,6 +2,7 @@ import {
 	IQueryLike,
 	IQuerySendMessage,
 	IQuerySendSticker,
+	messageType,
 } from "../interfaces/iprofiles";
 import { testToken } from "../utils/token";
 import { setTimecodeToDB } from "../query/auth";
@@ -87,7 +88,10 @@ export const socketHandler = (socketIO, socket) => {
 			const dialog = await setDialog(
 				ourId,
 				socket.userid,
-				socket.message
+				messageType.message,
+				socket.message,
+				"",
+				0
 			);
 
 			socketIO.to(socketId).emit("dialog", dialog);
@@ -113,8 +117,10 @@ export const socketHandler = (socketIO, socket) => {
 			const dialog = await setDialog(
 				ourId,
 				socket.userid,
-				socket.stickerid
-				// socket.stickerpos
+				messageType.sticker,
+				"",
+				socket.stickerpackid,
+				socket.stickerpos
 			);
 
 			socketIO.to(socketId).emit("dialog", dialog);

@@ -132,12 +132,20 @@ export interface ILogin {
 	captcha: string;
 }
 
+export enum messageType {
+	message,
+	sticker,
+}
+
 export interface IMessage {
 	userid: string;
 	timecode: number;
+	type: messageType;
 	userid1del: boolean;
 	userid2del: boolean;
 	message: string;
+	stickerpackid: string;
+	stickerpos: number;
 }
 
 export interface IDialogBase {
@@ -177,7 +185,7 @@ export interface IQuerySendMessage {
 
 export interface IQuerySendSticker {
 	userid: string;
-	stickerid: string;
+	stickerpackid: string;
 	stickerpos: number;
 }
 
