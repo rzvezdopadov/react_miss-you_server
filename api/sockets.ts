@@ -9,6 +9,8 @@ import { setTimecodeToDB } from "../query/auth";
 import { setLikesById } from "../utils/likes";
 import { setDialog } from "../utils/dialogs";
 import { setVisitByIdToDB } from "../query/statistics";
+import { botPhraseCensure, botPhraseSpam } from "../utils/bots";
+import { setAdminBannedByIdToDB } from "../query/admin";
 
 interface ISocketUser {
 	userid: string;
@@ -84,6 +86,29 @@ export const socketHandler = (socketIO, socket) => {
 			const ourId = getUserIdFromSocketTable(socketId);
 
 			if (!(ourId && socket.userid)) return;
+
+			const testBotSpam = botPhraseSpam(socket.message);
+			if (testBotSpam.enabled) {
+				setAdminBannedByIdToDB(ourId, {
+					timecode: testBotSpam.timecode,
+					whobanned: testBotSpam.whobanned,
+					discription: testBotSpam.discription,
+				});
+				socketIO.to(socketId).emit("delete_jwt");
+
+				return;
+			}
+			const testBotCensure = botPhraseCensure(socket.message);
+			if (testBotCensure.enabled) {
+				setAdminBannedByIdToDB(ourId, {
+					timecode: testBotCensure.timecode,
+					whobanned: testBotCensure.whobanned,
+					discription: testBotCensure.discription,
+				});
+				socketIO.to(socketId).emit("delete_jwt");
+
+				return;
+			}
 
 			const dialog = await setDialog(
 				ourId,
