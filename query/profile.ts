@@ -11,13 +11,10 @@ const fieldProfile =
 	"likes, birthday, monthofbirth, yearofbirth, growth, weight, " +
 	"gender, gendervapor, photomain, photolink, signzodiac, " +
 	"education, fieldofactivity, maritalstatus, children, religion, " +
-	"smoke, alcohol, discription, profit, interests, filters," +
-	"ilikeCharacter, idontlikeCharacter, rating, stickerpacks, cash";
+	"smoke, alcohol, discription, profit, interests, " +
+	"ilikeCharacter, idontlikeCharacter, rating, stickerpacks, cash," +
+	"acctype, filters";
 
-const fieldFilters =
-	"location, signzodiac, agestart, ageend, " +
-	"growthstart, growthend, weight, gendervapor, " +
-	"religion, smoke, alcohol, interests";
 export async function getProfileByIdFromDB(userid: string): Promise<IProfile> {
 	try {
 		let queryStr = `SELECT ${fieldProfile} FROM users WHERE userid = $1`;
