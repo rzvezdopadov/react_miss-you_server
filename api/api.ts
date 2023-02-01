@@ -1,4 +1,9 @@
 import {
+	queryAdminGetVisit,
+	queryAdminSetAcctype,
+	queryAdminSetRaiting,
+} from "./admin";
+import {
 	queryChangePass,
 	queryLogin,
 	queryRecoveryPass,
@@ -49,7 +54,7 @@ router.post(
 	],
 	queryLogin
 );
-
+// Users routs
 router.put("/api/profile", [], querySetProfile);
 
 router.put("/api/profileshort", [], querySetProfileShort);
@@ -107,5 +112,11 @@ router.put(
 );
 
 router.post("/api/recoverypass", [], queryRecoveryPass);
+// Admins routs
+router.get("/api/admin/visit", [], queryAdminGetVisit);
+
+router.put("/api/admin/acctype", [], queryAdminSetAcctype);
+
+router.put("/api/admin/rating", [], queryAdminSetRaiting);
 
 module.exports = router;
