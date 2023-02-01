@@ -1,9 +1,11 @@
+import { ACCTYPE } from "./iadmin";
+
 export interface IProfileRegistration {
 	email: string;
 	password: string;
 	jwt: string;
 	userid: string;
-	timecode: Number;
+	timecode: number;
 	name: string;
 	latitude: number;
 	longitude: number;
@@ -33,7 +35,7 @@ export interface IProfileRegistration {
 	idontlikecharacter: Array<number>;
 	raiting: number;
 	cash: number;
-	acctype: string;
+	acctype: ACCTYPE;
 	filters: IFilterUsers;
 	visit: Array<IStatVisit>;
 }
@@ -70,6 +72,7 @@ export interface IProfile {
 	rating: number;
 	stickerpacks: Array<string>;
 	cash: number;
+	acctype: ACCTYPE;
 	filters: IFilterUsers;
 }
 
