@@ -221,8 +221,6 @@ export async function queryLogin(req, res) {
 			});
 		}
 
-		console.log(isBanned, isBanned.timecode, getTimecodeNow());
-
 		const token = await jwtToken.sign(
 			{ userId: ourId },
 			config.get("jwtSecret"),
