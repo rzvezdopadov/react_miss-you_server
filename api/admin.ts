@@ -1,6 +1,11 @@
-import { ACCTYPE } from "../interfaces/iadmin";
+import {
+	ACCTYPE,
+	IAdminFilterUsers,
+	IQueryGetAdminProfiles,
+} from "../interfaces/iadmin";
 import {
 	getAdminAcctypeByIdFromDB,
+	getAdminProfiles,
 	getAdminStatVisitByIdFromDB,
 	setAdminAcctypeByIdToDB,
 } from "../query/admin";
@@ -9,6 +14,54 @@ import {
 	setProfileRatingByIdToDB,
 } from "../query/profile";
 import { testToken } from "../utils/token";
+
+export async function queryAdminGetProfiles(req, res) {
+	try {
+		let { jwt }: { jwt: string } = req.cookies;
+		jwt = String(jwt);
+
+		const jwtDecode = await testToken(jwt);
+
+		if (!jwtDecode)
+			return res.status(400).json({
+				message: "Токен не валидный!",
+			});
+
+		const adminCandidate = await getAdminAcctypeByIdFromDB(
+			jwtDecode.userId
+		);
+
+		if (adminCandidate !== ACCTYPE.admin)
+			return res.status(400).json({
+				message:
+					"У вас нет прав доступа на выполнение данной операции!",
+			});
+
+		const QueryGetAdminProfiles: IQueryGetAdminProfiles = req.query;
+
+		const getAdminProfilesVal: IQueryGetAdminProfiles = {
+			startcount: QueryGetAdminProfiles.startcount,
+			amount: QueryGetAdminProfiles.amount,
+			filters: QueryGetAdminProfiles.filters,
+		};
+
+		const { filters } = getAdminProfilesVal;
+
+		if (filters) {
+			const filtersParse = JSON.parse(filters as any);
+			getAdminProfilesVal.filters = filtersParse;
+		}
+
+		const profiles = await getAdminProfiles(getAdminProfilesVal);
+
+		return res.status(200).json(profiles);
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({
+			message: "Что-то пошло не так при получении пользователей!",
+		});
+	}
+}
 
 export async function queryAdminGetVisit(req, res) {
 	try {
