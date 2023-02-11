@@ -13,13 +13,6 @@ import {
 	setJWTToDB,
 	setPasswordByIdToDB,
 } from "../query/auth";
-import {
-	arr_age,
-	arr_gender,
-	arr_genderVapor,
-	arr_growth,
-	arr_location,
-} from "../arrdata/profiles";
 import { getSignZodiac } from "../utils/profile";
 import { getTimecodeNow } from "../utils/datetime";
 import { getRandomString } from "../utils/string";
@@ -28,6 +21,13 @@ import { testToken } from "../utils/token";
 import { sendMessageToEmail } from "../utils/transporter";
 import { getAdminBannedByIdFromDB } from "../query/admin";
 import { ACCTYPE } from "../interfaces/iadmin";
+import {
+	data_age,
+	data_gender,
+	data_genderVapor,
+	data_growth,
+	data_location,
+} from "../data/profiles";
 
 const bcrypt = require("bcryptjs");
 const config = require("config");
@@ -55,7 +55,7 @@ export async function queryRegistration(req, res) {
 		}
 		if (
 			registration.gender < 0 ||
-			registration.gender > arr_gender.length
+			registration.gender > data_gender.length
 		) {
 			return res
 				.status(400)
@@ -63,20 +63,20 @@ export async function queryRegistration(req, res) {
 		}
 		if (
 			registration.gendervapor < 0 ||
-			registration.gendervapor > arr_genderVapor.length
+			registration.gendervapor > data_genderVapor.length
 		) {
 			return res
 				.status(400)
 				.json({ message: "Неверно задано поле 'Кого ищу?'!" });
 		}
-		if (!arr_location.includes(registration.location)) {
+		if (!data_location.includes(registration.location)) {
 			return res
 				.status(400)
 				.json({ message: "Неверно задано поле 'Локация'!" });
 		}
 		if (
-			registration.growth < arr_growth[0] ||
-			registration.growth > arr_growth[arr_growth.length - 1]
+			registration.growth < data_growth[0] ||
+			registration.growth > data_growth[data_growth.length - 1]
 		) {
 			return res
 				.status(400)
@@ -137,11 +137,11 @@ export async function queryRegistration(req, res) {
 			cash: 100,
 			filters: {
 				location: registration.location,
-				signzodiac: 12,
-				agestart: arr_age[0],
-				ageend: arr_age[arr_age.length - 1],
-				growthstart: arr_growth[0],
-				growthend: arr_growth[arr_growth.length - 1],
+				signzodiac: 0,
+				agestart: data_age[0],
+				ageend: data_age[data_age.length - 1],
+				growthstart: data_growth[0],
+				growthend: data_growth[data_growth.length - 1],
 				weight: 0,
 				gendervapor: registration.gendervapor,
 				religion: 0,
