@@ -1,16 +1,19 @@
+import { ACCTYPE } from "../interfaces/iadmin";
 import { minage } from "../utils/globalconst";
 
-export const arr_age: Array<number> = [];
+export const data_acctype = [ACCTYPE.user, ACCTYPE.admin];
+
+export const data_age: Array<number> = [];
 for (let i = minage; i < 121; i++) {
-	arr_age.push(i);
+	data_age.push(i);
 }
 
-export const arr_growth: Array<number> = [];
+export const data_growth: Array<number> = [];
 for (let i = 120; i < 230; i++) {
-	arr_growth.push(i);
+	data_growth.push(i);
 }
 
-export const arr_weight = [
+export const data_weight = [
 	"Не имеет значения",
 	"Худощавое",
 	"Спортивное",
@@ -18,9 +21,9 @@ export const arr_weight = [
 	"Пара лишних кило",
 ];
 
-export const arr_location = ["Россия, Рязанская область, г.Рязань"];
+export const data_location = ["Россия, Рязанская область, г.Рязань"];
 
-export const arr_monthOfBirth = [
+export const data_monthOfBirth = [
 	"Января",
 	"Февраля",
 	"Марта",
@@ -35,11 +38,12 @@ export const arr_monthOfBirth = [
 	"Декабря",
 ];
 
-export const arr_gender = ["Я мужчина", "Я женщина"];
+export const data_gender = ["Я мужчина", "Я женщина"];
 
-export const arr_genderVapor = ["Ищу мужчин", "Ищу женщин", "Ищу друзей"];
+export const data_genderVapor = ["Ищу мужчин", "Ищу женщин", "Ищу друзей"];
 
-export const arr_signZodiac = [
+export const data_signZodiac = [
+	"Не имеет значения",
 	"Овен",
 	"Телец",
 	"Близнецы",
@@ -52,10 +56,9 @@ export const arr_signZodiac = [
 	"Козерог",
 	"Водолей",
 	"Рыбы",
-	"Не имеет значения",
 ];
 
-export const arr_education = [
+export const data_education = [
 	"Не имеет значения",
 	"Среднее",
 	"Неоконченное высшее",
@@ -64,7 +67,7 @@ export const arr_education = [
 	"Среднее специальное",
 ];
 
-export const arr_fieldOfActivity = [
+export const data_fieldOfActivity = [
 	"Не имеет значения",
 	"Не работаю",
 	"Образование",
@@ -103,13 +106,14 @@ export const arr_fieldOfActivity = [
 	"Студент",
 ];
 
-export const arr_maritalStatus = [
+export const data_maritalStatus = [
+	"Не имеет значения",
 	"В браке не состою",
 	"В разводе",
 	"Вдова/вдовец",
 ];
 
-export const arr_children = [
+export const data_children = [
 	"Не имеет значения",
 	"Детей нет",
 	"Маленькие дети, живем вместе",
@@ -118,7 +122,7 @@ export const arr_children = [
 	"Взрослые дети, живем раздельно",
 ];
 
-export const arr_religion = [
+export const data_religion = [
 	"Не имеет значения",
 	"Атеизм",
 	"Православие",
@@ -129,11 +133,11 @@ export const arr_religion = [
 	"Иудаизм",
 ];
 
-export const arr_smoke = ["Не имеет значения", "Не курю", "Иногда курю"];
+export const data_smoke = ["Не имеет значения", "Не курю", "Иногда курю"];
 
-export const arr_alcohol = ["Не имеет значения", "Не пью", "Иногда пью"];
+export const data_alcohol = ["Не имеет значения", "Не пью", "Иногда пью"];
 
-export const arr_profit = [
+export const data_profit = [
 	"Не имеет значения",
 	"До 30к.",
 	"До 50к.",
@@ -143,7 +147,7 @@ export const arr_profit = [
 	"Свыше 500к.",
 ];
 
-export const arr_iLikeСharacter = [
+export const data_iLikeСharacter = [
 	[
 		"Без детей",
 		"Мне нужен человек, который разделит со мной мое желание не иметь детей",
@@ -328,7 +332,7 @@ export const arr_iLikeСharacter = [
 	],
 ];
 
-export const arr_iDontLikeСharacter = [
+export const data_iDontLikeСharacter = [
 	[
 		"Суетность",
 		"Мне не нравятся люди, которые слишком интересуются своей внешностью",
