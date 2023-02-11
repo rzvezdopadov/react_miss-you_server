@@ -110,6 +110,8 @@ export const socketHandler = (socketIO, socket) => {
 				return;
 			}
 
+			if (ourId === socket.userid) return;
+
 			const dialog = await setDialog(
 				ourId,
 				socket.userid,
@@ -138,6 +140,8 @@ export const socketHandler = (socketIO, socket) => {
 			const ourId = getUserIdFromSocketTable(socketId);
 
 			if (!(ourId && socket.userid)) return;
+
+			if (ourId === socket.userid) return;
 
 			const dialog = await setDialog(
 				ourId,
