@@ -29,7 +29,7 @@ export async function getProfileByIdFromDB(userid: string): Promise<IProfile> {
 	}
 }
 
-const fieldProfileShort =
+export const fieldProfileShort =
 	"userid, timecode, name, birthday, monthofbirth, yearofbirth, gender, photomain, photolink, interests, rating";
 
 export async function getProfiles(
