@@ -43,16 +43,6 @@ export async function querySetProfile(req, res) {
 	}
 }
 
-export async function querySetProfileShort(req, res) {
-	try {
-		return res.status(200).json([]);
-	} catch (e) {
-		res.status(500).json({
-			message: "Токен не валидный!",
-		});
-	}
-}
-
 export async function queryGetProfile(req, res) {
 	try {
 		const QueryGetProfiles: IQueryGetProfile = req.query;

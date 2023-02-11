@@ -1,4 +1,5 @@
 import {
+	queryAdminGetProfiles,
 	queryAdminGetVisit,
 	queryAdminSetAcctype,
 	queryAdminSetRaiting,
@@ -23,7 +24,6 @@ import {
 	queryGetProfiles,
 	queryGetProfilesForLikes,
 	querySetProfile,
-	querySetProfileShort,
 } from "./profile";
 import {
 	queryAddStickerpack,
@@ -57,8 +57,6 @@ router.post(
 // Users routs
 router.put("/api/profile", [], querySetProfile);
 
-router.put("/api/profileshort", [], querySetProfileShort);
-
 router.get("/api/profilesforlikes", [], queryGetProfilesForLikes);
 
 router.get("/api/profile", [], queryGetProfile);
@@ -66,8 +64,6 @@ router.get("/api/profile", [], queryGetProfile);
 router.get("/api/profiles", [], queryGetProfiles);
 
 router.put("/api/like", [], querySetLike);
-
-router.put("/api/message", [], querySetMessage);
 
 router.get("/api/dialog", [], queryGetDialog);
 
@@ -113,6 +109,8 @@ router.put(
 
 router.post("/api/recoverypass", [], queryRecoveryPass);
 // Admins routs
+router.get("/api/admin/profiles", [], queryAdminGetProfiles);
+
 router.get("/api/admin/visit", [], queryAdminGetVisit);
 
 router.put("/api/admin/acctype", [], queryAdminSetAcctype);
