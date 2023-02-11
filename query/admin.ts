@@ -1,5 +1,14 @@
-import { ACCTYPE, IAdminBanned, IAdminStatVisit } from "../interfaces/iadmin";
+import {
+	ACCTYPE,
+	IAdminBanned,
+	IAdminStatVisit,
+	IQueryGetAdminProfiles,
+} from "../interfaces/iadmin";
+import { IProfile } from "../interfaces/iprofiles";
+import { getYearFromAge } from "../utils/datetime";
+import { conditionStr } from "../utils/query";
 import { poolDB } from "./config";
+import { fieldProfileShort } from "./profile";
 
 export async function getAdminAcctypeByIdFromDB(
 	userId: string
@@ -7,8 +16,9 @@ export async function getAdminAcctypeByIdFromDB(
 	try {
 		const queryStr = "SELECT acctype FROM users WHERE userid = $1";
 		const answerDB = await poolDB.query(queryStr, [userId]);
+		const { acctype } = answerDB.rows[0];
 
-		return answerDB.rows[0];
+		return acctype;
 	} catch (error) {
 		console.log("getAdminAcctypeByIdFromDB", error);
 		return ACCTYPE.user;
@@ -77,5 +87,69 @@ export async function setAdminBannedByIdToDB(
 	} catch (error) {
 		console.log("setAdminBannedByIdToDB", error);
 		return 0;
+	}
+}
+
+export async function getAdminProfiles(
+	QueryGetProfiles: IQueryGetAdminProfiles
+): Promise<IProfile[]> {
+	const startPos = Number(QueryGetProfiles.startcount);
+	const endPos = startPos + Number(QueryGetProfiles.amount);
+	const { filters } = QueryGetProfiles;
+
+	try {
+		let answerDB = { rows: [] };
+
+		let queryStr = `SELECT ${fieldProfileShort} FROM users WHERE `;
+
+		if (filters.acctype === ACCTYPE.admin) {
+			queryStr += `acctype = '${ACCTYPE.admin}'`;
+			answerDB = await poolDB.query(queryStr);
+		} else if (filters.userid) {
+			queryStr += `userid ~ '${filters.userid}'`;
+			answerDB = await poolDB.query(queryStr);
+		} else {
+			queryStr += `(location = '${filters.location}') AND `;
+			queryStr += `(yearofbirth >= ${getYearFromAge(
+				filters.ageend
+			)}) AND (yearofbirth <= ${getYearFromAge(filters.agestart)}) AND `;
+			queryStr += `(growth >= ${filters.growthstart}) AND (growth <= ${filters.growthend}) AND `;
+			queryStr += conditionStr("weight", filters.weight);
+			queryStr += conditionStr("signzodiac", filters.signzodiac);
+			queryStr += `gender = ${filters.gender} AND `;
+			queryStr += `gendervapor = '${filters.gendervapor}' AND `;
+			queryStr += conditionStr("education", filters.education);
+			queryStr += conditionStr(
+				"fieldofactivity",
+				filters.fieldofactivity
+			);
+			queryStr += conditionStr("maritalstatus", filters.maritalstatus);
+			queryStr += conditionStr("children", filters.children);
+			queryStr += conditionStr("religion", filters.religion);
+			queryStr += conditionStr("smoke", filters.smoke);
+			queryStr += conditionStr("alcohol", filters.alcohol);
+			queryStr += conditionStr("profit", filters.profit);
+
+			queryStr = queryStr.slice(0, -5);
+
+			answerDB = await poolDB.query(queryStr);
+		}
+
+		let profiles: IProfile[] = answerDB.rows;
+
+		if (profiles.length > 1) {
+			let newProfiles = profiles.sort((a, b) => b.rating - a.rating);
+
+			if (startPos - endPos) {
+				newProfiles = newProfiles.slice(startPos, endPos);
+			}
+
+			profiles = newProfiles;
+		}
+
+		return profiles;
+	} catch (error) {
+		console.log("getAdminProfiles", error);
+		return [];
 	}
 }
