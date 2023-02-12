@@ -167,7 +167,7 @@ export async function queryAdminSetRaiting(req, res) {
 		let { userid, addrating }: { userid: string; addrating: number } =
 			req.body;
 		userid = String(userid);
-		addrating = Number(addrating);
+		addrating = Math.floor(Number(addrating));
 
 		let rating = await getProfileRatingByIdFromDB(userid);
 		rating += addrating;
