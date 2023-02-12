@@ -1,4 +1,5 @@
 import {
+	queryAdminGetProfile,
 	queryAdminGetProfiles,
 	queryAdminGetVisit,
 	queryAdminSetAcctype,
@@ -110,6 +111,7 @@ router.put(
 router.post("/api/recoverypass", [], queryRecoveryPass);
 // Admins routs
 router.get("/api/admin/profiles", [], queryAdminGetProfiles);
+router.get("/api/admin/profile", [], queryAdminGetProfile);
 
 router.get("/api/admin/visit", [], queryAdminGetVisit);
 

@@ -3,6 +3,7 @@ import {
 	IAdminFilterUsers,
 	IQueryGetAdminProfiles,
 } from "../interfaces/iadmin";
+import { IQueryGetProfile } from "../interfaces/iprofiles";
 import {
 	getAdminAcctypeByIdFromDB,
 	getAdminProfiles,
@@ -10,6 +11,7 @@ import {
 	setAdminAcctypeByIdToDB,
 } from "../query/admin";
 import {
+	getProfileByIdFromDB,
 	getProfileRatingByIdFromDB,
 	setProfileRatingByIdToDB,
 } from "../query/profile";
@@ -181,6 +183,41 @@ export async function queryAdminSetRaiting(req, res) {
 		console.log(error);
 		return res.status(500).json({
 			message: "Что-то пошло не так при корректировке рейтинга!",
+		});
+	}
+}
+
+export async function queryAdminGetProfile(req, res) {
+	try {
+		let { jwt } = req.cookies;
+		jwt = String(jwt);
+
+		const jwtDecode = await testToken(jwt);
+
+		if (!jwtDecode)
+			return res.status(400).json({
+				message: "Токен не валидный!",
+			});
+
+		const adminCandidate = await getAdminAcctypeByIdFromDB(
+			jwtDecode.userId
+		);
+
+		if (adminCandidate !== ACCTYPE.admin)
+			return res.status(400).json({
+				message:
+					"У вас нет прав доступа на выполнение данной операции!",
+			});
+
+		const QueryGetProfiles: IQueryGetProfile = req.query;
+		const userid = String(QueryGetProfiles.userid);
+
+		const profile = await getProfileByIdFromDB(userid);
+
+		return res.status(200).json(profile);
+	} catch (e) {
+		res.status(500).json({
+			message: "Ошибка QTDB!",
 		});
 	}
 }
