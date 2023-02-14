@@ -169,6 +169,12 @@ export async function queryAdminSetRaiting(req, res) {
 		userid = String(userid);
 		addrating = Math.floor(Number(addrating));
 
+		const diffRating = 5000;
+		if (addrating < -1 * diffRating || addrating > diffRating)
+			return res.status(400).json({
+				message: `Нельзя назначить за один раз больше ${diffRating} баллов!`,
+			});
+
 		let rating = await getProfileRatingByIdFromDB(userid);
 		rating += addrating;
 		if (rating < 0) rating = 0;
@@ -179,7 +185,9 @@ export async function queryAdminSetRaiting(req, res) {
 				message: "Данные не были записанны!",
 			});
 
-		return res.status(200).json({ message: "Успешно выполненно!" });
+		const profile = await getProfileByIdFromDB(userid);
+
+		return res.status(200).json(profile);
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({
