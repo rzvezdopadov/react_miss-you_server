@@ -33,7 +33,7 @@ export async function setAdminAcctypeByIdToDB(
 		const queryStr = "UPDATE users SET acctype = $2 WHERE userid = $1";
 		const answerDB = await poolDB.query(queryStr, [userId, acctype]);
 
-		return answerDB.count;
+		return answerDB.rowCount;
 	} catch (error) {
 		console.log("getAdminAcctypeByIdFromDB", error);
 		return 0;
@@ -83,7 +83,7 @@ export async function setAdminBannedByIdToDB(
 		const queryStr = "UPDATE users SET banned = $2 WHERE userid = $1";
 		const answerDB = await poolDB.query(queryStr, [userId, banned]);
 
-		return answerDB.count;
+		return answerDB.rowCount;
 	} catch (error) {
 		console.log("setAdminBannedByIdToDB", error);
 		return 0;
