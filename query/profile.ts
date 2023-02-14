@@ -306,7 +306,7 @@ export async function setProfileCashByIdToDB(
 		let queryStr = `UPDATE users SET cash = $2 WHERE userid = $1`;
 		const answerDB = await poolDB.query(queryStr, [userid, cash]);
 
-		return answerDB.count;
+		return answerDB.rowCount;
 	} catch (error) {
 		console.log("setProfileCashByIdToDB", error);
 		return 0;
@@ -337,7 +337,7 @@ export async function setProfileRatingByIdToDB(
 		let queryStr = `UPDATE users SET rating = $2 WHERE userid = $1`;
 		const answerDB = await poolDB.query(queryStr, [userid, rating]);
 
-		return answerDB.count;
+		return answerDB.rowCount;
 	} catch (error) {
 		console.log("setProfileRatingByIdToDB", error);
 		return 0;
@@ -368,7 +368,7 @@ export async function setProfileStickerpacksByIdToDB(
 		let queryStr = `UPDATE users SET stickerpacks = $2 WHERE userid = $1`;
 		const answerDB = await poolDB.query(queryStr, [userid, stickerpacks]);
 
-		return answerDB.count;
+		return answerDB.rowCount;
 	} catch (error) {
 		console.log("setProfileStickerpacksByIdToDB", error);
 		return 0;
