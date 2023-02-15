@@ -68,5 +68,5 @@ CREATE TABLE stickers (
 
 CREATE TABLE shop (
     id serial PRIMARY KEY,
-    rating JSON[]
+    ratingtariffs JSON[]
 );
