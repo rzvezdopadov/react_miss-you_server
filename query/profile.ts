@@ -7,7 +7,7 @@ import { getYearFromAge } from "../utils/datetime";
 import { poolDB } from "./config";
 
 const fieldProfile =
-	"userid, timecode, name, latitude, longitude, location, " +
+	"userid, timecode, name, location, " +
 	"likes, birthday, monthofbirth, yearofbirth, growth, weight, " +
 	"gender, gendervapor, photomain, photolink, signzodiac, " +
 	"education, fieldofactivity, maritalstatus, children, religion, " +
