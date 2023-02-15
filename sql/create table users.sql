@@ -34,9 +34,11 @@ CREATE TABLE users (
     filters JSON,
     ilikecharacter INT[],
     idontlikecharacter INT[],
-    raiting INT,
+    stickerpacks TEXT[], 
+    rating INT,
     cash INT,
     acctype TEXT,
+    banned JSON,
     visit JSON[]
 );
 
