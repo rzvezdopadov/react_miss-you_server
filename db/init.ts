@@ -5,7 +5,7 @@ export async function initDB(): Promise<boolean> {
 	try {
 		await dbShopInit();
 		await initDBDialogs();
-		await initDBStickers();
+		await initDBStickerpacks();
 		await initDBUsers();
 
 		return true;
@@ -38,10 +38,10 @@ async function initDBDialogs(): Promise<boolean> {
 	}
 }
 
-async function initDBStickers(): Promise<boolean> {
+async function initDBStickerpacks(): Promise<boolean> {
 	try {
 		const queryStr = `
-            CREATE TABLE IF NOT EXISTS stickers (
+            CREATE TABLE IF NOT EXISTS stickerpacks (
                 id serial PRIMARY KEY,
                 idstickerpack TEXT,
                 name TEXT,
@@ -101,9 +101,11 @@ async function initDBUsers(): Promise<boolean> {
                 filters JSON,
                 ilikecharacter INT[],
                 idontlikecharacter INT[],
-                raiting INT,
+                stickerpacks TEXT[],
+                rating INT,
                 cash INT,
                 acctype TEXT,
+                banned INT, 
                 visit JSON[]
             );
         `;
