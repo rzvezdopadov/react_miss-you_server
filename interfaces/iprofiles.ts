@@ -1,14 +1,20 @@
 import { ACCTYPE } from "./iadmin";
 
+export interface ICoordinates {
+	ipaddress: string;
+	latitude: number;
+	longitude: number;
+}
+
 export interface IProfileRegistration {
 	email: string;
 	password: string;
 	jwt: string;
 	userid: string;
+	coordinates: ICoordinates[];
+	registrationdate: number;
 	timecode: number;
 	name: string;
-	latitude: number;
-	longitude: number;
 	location: string;
 	likes: Array<string>;
 	birthday: number;
@@ -43,8 +49,6 @@ export interface IProfileRegistration {
 export interface IProfile {
 	userid: string;
 	name: string;
-	latitude: number;
-	longitude: number;
 	location: string;
 	likes: Array<string>;
 	birthday: number;
