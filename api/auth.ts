@@ -97,15 +97,17 @@ export async function queryRegistration(req, res) {
 			config.get("saltpass")
 		);
 
+		const timecode = getTimecodeNow();
+
 		const profile: IProfileRegistration = {
 			email: registration.email,
 			password: hashedPassword,
 			jwt: "",
 			userid: getRandomString(12),
-			timecode: getTimecodeNow(),
+			coordinates: [],
+			registrationdate: timecode,
+			timecode: timecode,
 			name: registration.name,
-			latitude: 0,
-			longitude: 0,
 			location: registration.location,
 			likes: [],
 			birthday: registration.birthday,
