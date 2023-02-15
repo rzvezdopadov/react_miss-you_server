@@ -100,7 +100,7 @@ export async function getJWTFromDB(ourId: string): Promise<String> {
 export async function createProfile(
 	profile: IProfileRegistration
 ): Promise<boolean> {
-	let answerDB = { rows: [] };
+	let answerDB = { rowCount: false };
 
 	try {
 		const queryStr =
@@ -131,7 +131,7 @@ export async function createProfile(
 		answerDB = await poolDB.query(queryStr);
 		console.log(answerDB);
 
-		return answerDB.rows[0];
+		return answerDB.rowCount;
 	} catch (error) {
 		console.log(error);
 		return false;
