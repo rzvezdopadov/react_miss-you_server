@@ -13,7 +13,7 @@ import { testToken } from "../utils/token";
 
 export async function queryGetRatingTariffs(req, res) {
 	try {
-		let { jwt } = req.cookies;
+		let { jwt }: { jwt: string } = req.cookies;
 		jwt = String(jwt);
 
 		const jwtDecode = await testToken(jwt);
@@ -35,7 +35,7 @@ export async function queryGetRatingTariffs(req, res) {
 
 export async function queryBuyRating(req, res) {
 	try {
-		let { jwt } = req.cookies;
+		let { jwt }: { jwt: string } = req.cookies;
 		jwt = String(jwt);
 
 		const jwtDecode = await testToken(jwt);
