@@ -1,7 +1,9 @@
 import {
 	ACCTYPE,
+	IAdminBanned,
 	IAdminFilterUsers,
 	IQueryGetAdminProfiles,
+	IQuerySetAdminBanned,
 } from "../interfaces/iadmin";
 import { IQueryGetProfile } from "../interfaces/iprofiles";
 import {
@@ -9,6 +11,7 @@ import {
 	getAdminProfiles,
 	getAdminStatVisitByIdFromDB,
 	setAdminAcctypeByIdToDB,
+	setAdminBannedByIdToDB,
 } from "../query/admin";
 import {
 	getProfileByIdFromDB,
@@ -17,6 +20,7 @@ import {
 	setProfileCashByIdToDB,
 	setProfileRatingByIdToDB,
 } from "../query/profile";
+import { getTimecodeNow } from "../utils/datetime";
 import { testToken } from "../utils/token";
 
 export async function queryAdminGetProfiles(req, res) {
@@ -282,6 +286,68 @@ export async function queryAdminGetProfile(req, res) {
 	} catch (e) {
 		res.status(500).json({
 			message: "Ошибка QTDB!",
+		});
+	}
+}
+
+export async function queryAdminSetBanned(req, res) {
+	try {
+		let { jwt }: { jwt: string } = req.cookies;
+		jwt = String(jwt);
+
+		const jwtDecode = await testToken(jwt);
+
+		if (!jwtDecode)
+			return res.status(400).json({
+				message: "Токен не валидный!",
+			});
+
+		const adminCandidate = await getAdminAcctypeByIdFromDB(
+			jwtDecode.userId
+		);
+
+		if (adminCandidate !== ACCTYPE.admin)
+			return res.status(400).json({
+				message:
+					"У вас нет прав доступа на выполнение данной операции!",
+			});
+
+		let { userid, discription, minute, hour, month }: IQuerySetAdminBanned =
+			req.body;
+		userid = String(userid);
+		discription = String(discription);
+		minute = Number(minute);
+		hour = Number(hour);
+		month = Number(month);
+
+		const sumTime = minute + hour + month;
+
+		if (sumTime && !discription)
+			return res.status(400).json({
+				message: `Не указанно за что забанить пользователя!`,
+			});
+
+		const timecodeBanned =
+			getTimecodeNow() + month * 12 + hour * 24 + minute * 60;
+
+		const answerDB = await setAdminBannedByIdToDB(userid, {
+			timecode: timecodeBanned,
+			whobanned: adminCandidate,
+			discription: discription,
+		});
+
+		if (!answerDB)
+			return res.status(400).json({
+				message: "Данные не были записанны!",
+			});
+
+		return res.status(200).json({
+			message: "Успешно выполненно!",
+		});
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({
+			message: "Что-то пошло не так при корректировке рейтинга!",
 		});
 	}
 }

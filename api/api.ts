@@ -3,6 +3,7 @@ import {
 	queryAdminGetProfiles,
 	queryAdminGetVisit,
 	queryAdminSetAcctype,
+	queryAdminSetBanned,
 	queryAdminSetCash,
 	queryAdminSetRaiting,
 } from "./admin";
@@ -121,5 +122,9 @@ router.put("/api/admin/acctype", [], queryAdminSetAcctype);
 router.put("/api/admin/rating", [], queryAdminSetRaiting);
 
 router.put("/api/admin/cash", [], queryAdminSetCash);
+
+router.put("/api/admin/cash", [], queryAdminSetCash);
+
+router.put("/api/admin/banned", [], queryAdminSetBanned);
 
 module.exports = router;

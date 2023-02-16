@@ -44,3 +44,11 @@ export interface IQueryGetAdminProfiles {
 	amount: number;
 	filters: IAdminFilterUsers;
 }
+
+export interface IQuerySetAdminBanned {
+	userid: string;
+	minute: number;
+	hour: number;
+	month: number;
+	discription: string;
+}
