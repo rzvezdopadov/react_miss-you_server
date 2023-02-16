@@ -12,7 +12,9 @@ import {
 } from "../query/admin";
 import {
 	getProfileByIdFromDB,
+	getProfileCashByIdFromDB,
 	getProfileRatingByIdFromDB,
+	setProfileCashByIdToDB,
 	setProfileRatingByIdToDB,
 } from "../query/profile";
 import { testToken } from "../utils/token";
@@ -181,6 +183,59 @@ export async function queryAdminSetRaiting(req, res) {
 		const raitingResult = await setProfileRatingByIdToDB(userid, rating);
 
 		if (!raitingResult)
+			return res.status(400).json({
+				message: "Данные не были записанны!",
+			});
+
+		const profile = await getProfileByIdFromDB(userid);
+
+		return res.status(200).json(profile);
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({
+			message: "Что-то пошло не так при корректировке рейтинга!",
+		});
+	}
+}
+
+export async function queryAdminSetCash(req, res) {
+	try {
+		let { jwt }: { jwt: string } = req.cookies;
+		jwt = String(jwt);
+
+		const jwtDecode = await testToken(jwt);
+
+		if (!jwtDecode)
+			return res.status(400).json({
+				message: "Токен не валидный!",
+			});
+
+		const adminCandidate = await getAdminAcctypeByIdFromDB(
+			jwtDecode.userId
+		);
+
+		if (adminCandidate !== ACCTYPE.admin)
+			return res.status(400).json({
+				message:
+					"У вас нет прав доступа на выполнение данной операции!",
+			});
+
+		let { userid, addcash }: { userid: string; addcash: number } = req.body;
+		userid = String(userid);
+		addcash = Math.floor(Number(addcash));
+
+		const diffCash = 5000;
+		if (addcash < -1 * diffCash || addcash > diffCash)
+			return res.status(400).json({
+				message: `Нельзя назначить за один раз больше ${diffCash} MY-баллов!`,
+			});
+
+		let cash = await getProfileCashByIdFromDB(userid);
+		cash += addcash;
+		if (cash < 0) cash = 0;
+		const cashResult = await setProfileCashByIdToDB(userid, cash);
+
+		if (!cashResult)
 			return res.status(400).json({
 				message: "Данные не были записанны!",
 			});
