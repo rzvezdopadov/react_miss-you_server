@@ -12,7 +12,7 @@ const shopRatingGenerate = (): string => {
 	return str;
 };
 
-export async function initDBShopInit(): Promise<boolean> {
+export async function initDBShop(): Promise<boolean> {
 	try {
 		let queryStr = `
             CREATE TABLE IF NOT EXISTS shop (
@@ -33,10 +33,10 @@ export async function initDBShopInit(): Promise<boolean> {
 			await poolDB.query(queryStr);
 		}
 
-		console.log("dbShopInit Ok!");
+		console.log("initDB Shop Ok!");
 		return true;
 	} catch (error) {
-		console.log("dbShopInit Error:", error);
+		console.log("initDB Shop Error:", error);
 		return false;
 	}
 }

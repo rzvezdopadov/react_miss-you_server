@@ -1,11 +1,11 @@
+import { initDBShop } from "./shop";
 import { initDBDialogs } from "./dialogs";
-import { initDBShopInit } from "./shop";
 import { initDBStickerpacks } from "./stickerpacks";
 import { initDBUsers } from "./users";
 
 export async function initDB(): Promise<boolean> {
 	try {
-		await initDBShopInit();
+		await initDBShop();
 		await initDBDialogs();
 		await initDBStickerpacks();
 		await initDBUsers();
