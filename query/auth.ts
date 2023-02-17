@@ -105,8 +105,8 @@ export async function createProfile(
 	try {
 		const queryStr =
 			"INSERT INTO users (" +
-			"email, password, jwt, userid, ipaddress, timecode, " +
-			"name, latitude, longitude, location, likes, " +
+			"email, password, jwt, userid, registrationdate, timecode, " +
+			"name, location, likes, " +
 			"birthday, monthofbirth, yearofbirth, growth, weight, " +
 			"gender, gendervapor, photomain, photolink, signzodiac, " +
 			"education, fieldofactivity, maritalstatus, children, " +
@@ -114,8 +114,8 @@ export async function createProfile(
 			"filters, ilikecharacter, idontlikecharacter, " +
 			"raiting, cash, stickerpacks, acctype, visit" +
 			") VALUES (" +
-			`'${profile.email}', '${profile.password}', '', '${profile.userid}', '0.0.0.0', ${profile.timecode}, ` +
-			`'${profile.name}', 0, 0, '${profile.location}', ARRAY [] :: TEXT [], ` +
+			`'${profile.email}', '${profile.password}', '', '${profile.userid}', ${profile.registrationdate}, ${profile.timecode}, ` +
+			`'${profile.name}', '${profile.location}', ARRAY [] :: TEXT [], ` +
 			`${profile.birthday}, ${profile.monthofbirth}, ${profile.yearofbirth}, ${profile.growth}, ${profile.weight}, ` +
 			`${profile.gender}, ${profile.gendervapor}, ${profile.photomain}, ARRAY [] :: TEXT [], ${profile.signzodiac}, ` +
 			`${profile.education}, ${profile.fieldofactivity}, ${profile.maritalstatus}, ${profile.children}, ` +
