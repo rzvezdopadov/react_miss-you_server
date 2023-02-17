@@ -42,7 +42,7 @@ export async function initDBUsers(): Promise<boolean> {
                 rating INT,
                 cash INT,
                 acctype TEXT,
-                banned INT, 
+                banned JSON, 
                 visit JSON[]
             );
         `;
