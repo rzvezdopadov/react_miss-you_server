@@ -29,6 +29,7 @@ import {
 	data_growth,
 	data_location,
 } from "../data/profiles";
+import { isBannedUser } from "../utils/banned";
 
 const bcrypt = require("bcryptjs");
 const config = require("config");
@@ -219,18 +220,12 @@ export async function queryLogin(req, res) {
 			});
 		}
 
-		const isBanned = await getAdminBannedByIdFromDB(ourId);
-		if (isBanned.timecode && isBanned.timecode > getTimecodeNow()) {
-			const date = new Date(Number(isBanned.timecode));
-
+		const isBanned = await isBannedUser(ourId);
+		
+		if (isBanned)
 			return res.status(400).json({
-				message: `Ваш аккаунт был забанен ${
-					isBanned.whobanned
-				} по причине ${
-					isBanned.discription
-				}, ваш аккаунт будет разбанен ${date.toLocaleDateString()} в ${date.toLocaleTimeString()} по МСК`,
+				message: isBanned,
 			});
-		}
 
 		const token = await jwtToken.sign(
 			{ userId: ourId },
