@@ -331,7 +331,10 @@ export async function queryAdminSetBanned(req, res) {
 			});
 
 		const timecodeBanned =
-			getTimecodeNow() + month * 12 + hour * 24 + minute * 60;
+			getTimecodeNow() +
+			month * 12 * 24 * 60 * 1000 +
+			hour * 24 * 60 * 1000 +
+			minute * 60 * 1000;
 
 		const answerDB = await setAdminBannedByIdToDB(userid, {
 			timecode: timecodeBanned,
