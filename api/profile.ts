@@ -12,6 +12,7 @@ import {
 	getProfilesForLikes,
 	setProfileByIdToDB,
 } from "../query/profile";
+import { isBannedUser } from "../utils/banned";
 
 export async function querySetProfile(req, res) {
 	try {
@@ -56,6 +57,13 @@ export async function queryGetProfile(req, res) {
 		const jwtDecode = await testToken(jwt);
 
 		if (!jwtDecode)
+			return res.status(400).json({
+				message: "Токен не валидный!",
+			});
+
+		const isBanned = await isBannedUser(jwtDecode.userId);
+
+		if (isBanned)
 			return res.status(400).json({
 				message: "Токен не валидный!",
 			});
