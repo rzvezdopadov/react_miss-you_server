@@ -318,6 +318,11 @@ export async function queryAdminSetBanned(req, res) {
 		hour = Number(hour);
 		month = Number(month);
 
+		if (jwtDecode.userId === userid)
+			return res.status(400).json({
+				message: "Нельзя забанить самого себя!",
+			});
+
 		const sumTime = minute + hour + month;
 
 		if (sumTime && !discription)
