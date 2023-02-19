@@ -1,3 +1,4 @@
+import { ACCTYPE } from "../interfaces/iadmin";
 import {
 	IGetProfiles,
 	IProfile,
@@ -89,7 +90,8 @@ export async function getProfiles(
 			queryStr += conditionStr("smoke", filters.smoke);
 			queryStr += conditionStr("alcohol", filters.alcohol);
 			queryStr += conditionStr("profit", filters.profit);
-			queryStr += `(userid <> '${QueryGetProfiles.userid}')`;
+			queryStr += `(userid <> '${QueryGetProfiles.userid}') AND `;
+			queryStr += `(acctype = '${ACCTYPE.user}')`;
 
 			answerDB = await poolDB.query(queryStr);
 		} else if (users) {
