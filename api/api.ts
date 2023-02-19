@@ -58,10 +58,9 @@ router.post(
 	queryLogin
 );
 // Users routs
-router.put("/api/profile", [], querySetProfile);
-
 router.get("/api/profilesforlikes", [], queryGetProfilesForLikes);
 
+router.put("/api/profile", [], querySetProfile);
 router.get("/api/profile", [], queryGetProfile);
 
 router.get("/api/profiles", [], queryGetProfiles);

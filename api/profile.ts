@@ -15,9 +15,6 @@ import {
 
 export async function querySetProfile(req, res) {
 	try {
-		const { profile } = req.body;
-		profile as IProfile;
-
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
 
@@ -28,12 +25,20 @@ export async function querySetProfile(req, res) {
 				message: "Токен не валидный!",
 			});
 
+		const { profile } = req.body;
+		profile as IProfile;
+
 		profile.signzodiac = getSignZodiac(
 			profile.birthday,
 			profile.monthofbirth
 		);
 
 		const newProfile = await setProfileByIdToDB(jwtDecode.userId, profile);
+
+		if (!newProfile)
+			return res.status(400).json({
+				message: "Ошибка QTDB!",
+			});
 
 		return res.status(200).json(newProfile);
 	} catch (e) {
@@ -45,9 +50,6 @@ export async function querySetProfile(req, res) {
 
 export async function queryGetProfile(req, res) {
 	try {
-		const QueryGetProfiles: IQueryGetProfile = req.query;
-		const userid = String(QueryGetProfiles.userid);
-
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
 
@@ -58,6 +60,9 @@ export async function queryGetProfile(req, res) {
 				message: "Токен не валидный!",
 			});
 
+		const QueryGetProfile: IQueryGetProfile = req.query;
+		const userid = String(QueryGetProfile.userid);
+
 		let userIdNew = userid;
 
 		if (userIdNew === "0") {
@@ -65,6 +70,11 @@ export async function queryGetProfile(req, res) {
 		}
 
 		const profile = await getProfileByIdFromDB(userIdNew);
+
+		if (!profile)
+			res.status(400).json({
+				message: "Ошибка QTDB!",
+			});
 
 		if (userid !== "0") {
 			const posId = profile.likes.indexOf(jwtDecode.userId);
@@ -88,8 +98,6 @@ export async function queryGetProfile(req, res) {
 
 export async function queryGetProfiles(req, res) {
 	try {
-		const QueryGetProfiles: IQueryGetProfiles = req.query;
-
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
 
@@ -99,6 +107,8 @@ export async function queryGetProfiles(req, res) {
 			return res.status(400).json({
 				message: "Токен не валидный!",
 			});
+
+		const QueryGetProfiles: IQueryGetProfiles = req.query;
 
 		const getProfilesVal: IGetProfiles = {
 			userid: QueryGetProfiles.userid,
@@ -127,15 +137,13 @@ export async function queryGetProfiles(req, res) {
 		return res.status(200).json(profiles);
 	} catch (e) {
 		res.status(500).json({
-			message: "Токен не валидный!",
+			message: "Ошибка QTDB!",
 		});
 	}
 }
 
 export async function queryGetProfilesForLikes(req, res) {
 	try {
-		const QueryGetProfiles: IQueryGetProfiles = req.query;
-
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
 
@@ -145,6 +153,8 @@ export async function queryGetProfilesForLikes(req, res) {
 			return res.status(400).json({
 				message: "Токен не валидный!",
 			});
+
+		const QueryGetProfiles: IQueryGetProfiles = req.query;
 
 		const getProfilesVal: IGetProfiles = {
 			userid: QueryGetProfiles.userid,
@@ -161,7 +171,7 @@ export async function queryGetProfilesForLikes(req, res) {
 		return res.status(200).json(profiles);
 	} catch (e) {
 		res.status(500).json({
-			message: "Токен не валидный!",
+			message: "Ошибка QTDB!",
 		});
 	}
 }

@@ -32,13 +32,17 @@ export const testToken = async (jwt: string) => {
 
 		const token = await getJWTFromDB(userId);
 
-		if (token !== jwt) {
-			return false;
+		if (!token.length) return false;
+
+		for (let i = 0; i < token.length; i++) {
+			if (token[i].token === jwt) {
+				decode.userId = String(decode.userId);
+
+				return decode;
+			}
 		}
 
-		decode.userId = String(decode.userId);
-
-		return decode;
+		return false;
 	} catch (error) {
 		return false;
 	}

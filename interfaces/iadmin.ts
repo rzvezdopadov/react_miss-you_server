@@ -1,4 +1,4 @@
-import { IStatVisit } from "./iprofiles";
+import { ICoordinates, IFilterUsers, IPaid, IStatVisit } from "./iprofiles";
 
 export enum ACCTYPE {
 	user = "user",
@@ -16,27 +16,21 @@ export interface IAdminBanned {
 	discription: string;
 }
 
-export interface IAdminFilterUsers {
+export interface IAdminUserProfile {
+	email: string;
 	userid: string;
-	location: string;
-	agestart: number;
-	ageend: number;
-	growthstart: number;
-	growthend: number;
-	weight: number;
-	signzodiac: number;
+	coordinates: ICoordinates[];
+	registrationdate: number;
+	likes: string[];
+	visit: IStatVisit[];
+	banned: IAdminBanned;
+	paid: IPaid;
+}
+
+export interface IAdminFilterUsers extends IFilterUsers {
+	userid: string;
 	gender: number;
-	gendervapor: number;
-	education: number;
-	fieldofactivity: number;
-	maritalstatus: number;
-	children: number;
-	religion: number;
-	smoke: number;
-	alcohol: number;
-	profit: number;
 	acctype: ACCTYPE;
-	interests: Array<string>;
 }
 
 export interface IQueryGetAdminProfiles {

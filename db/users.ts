@@ -6,7 +6,7 @@ export async function initDBUsers(): Promise<boolean> {
             CREATE TABLE IF NOT EXISTS users (
                 email TEXT,
                 password TEXT,
-                jwt TEXT,
+                jwt JSON[],
                 id serial PRIMARY KEY,
                 userid TEXT,
                 coordinates JSON[],
@@ -42,8 +42,9 @@ export async function initDBUsers(): Promise<boolean> {
                 rating INT,
                 cash INT,
                 acctype TEXT,
-                banned INT, 
-                visit JSON[]
+                banned JSON, 
+                visit JSON[],
+                paid JSON
             );
         `;
 

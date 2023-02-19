@@ -14,8 +14,8 @@ export async function getAdminAcctypeByIdFromDB(
 	userId: string
 ): Promise<ACCTYPE> {
 	try {
-		const queryStr = "SELECT acctype FROM users WHERE userid = $1";
-		const answerDB = await poolDB.query(queryStr, [userId]);
+		const queryStr = `SELECT acctype FROM users WHERE userid = '${userId}'`;
+		const answerDB = await poolDB.query(queryStr);
 		const { acctype } = answerDB.rows[0];
 
 		return acctype;
@@ -30,8 +30,8 @@ export async function setAdminAcctypeByIdToDB(
 	acctype: ACCTYPE
 ): Promise<number> {
 	try {
-		const queryStr = "UPDATE users SET acctype = $2 WHERE userid = $1";
-		const answerDB = await poolDB.query(queryStr, [userId, acctype]);
+		const queryStr = `UPDATE users SET acctype = '${acctype}' WHERE userid = '${userId}'`;
+		const answerDB = await poolDB.query(queryStr);
 
 		return answerDB.rowCount;
 	} catch (error) {
@@ -63,8 +63,8 @@ export async function getAdminBannedByIdFromDB(
 	userId: string
 ): Promise<IAdminBanned> {
 	try {
-		const queryStr = "SELECT banned FROM users WHERE userid = $1";
-		const answerDB = await poolDB.query(queryStr, [userId]);
+		const queryStr = `SELECT banned FROM users WHERE userid = '${userId}'`;
+		const answerDB = await poolDB.query(queryStr);
 
 		const { banned } = answerDB.rows[0];
 
@@ -80,8 +80,8 @@ export async function setAdminBannedByIdToDB(
 	banned: IAdminBanned
 ): Promise<number> {
 	try {
-		const queryStr = "UPDATE users SET banned = $2 WHERE userid = $1";
-		const answerDB = await poolDB.query(queryStr, [userId, banned]);
+		const queryStr = `UPDATE users SET banned = $1 WHERE userid = '${userId}'`;
+		const answerDB = await poolDB.query(queryStr, [banned]);
 
 		return answerDB.rowCount;
 	} catch (error) {
@@ -109,6 +109,9 @@ export async function getAdminProfiles(
 			queryStr += `userid ~ '${filters.userid}'`;
 			answerDB = await poolDB.query(queryStr);
 		} else {
+			for (let key in filters)
+				if (filters[key] === null) filters[key] = 0;
+
 			queryStr += `(location = '${filters.location}') AND `;
 			queryStr += `(yearofbirth >= ${getYearFromAge(
 				filters.ageend

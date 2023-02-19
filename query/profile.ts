@@ -4,6 +4,7 @@ import {
 	IProfileForDialog,
 } from "../interfaces/iprofiles";
 import { getYearFromAge } from "../utils/datetime";
+import { conditionStr } from "../utils/query";
 import { poolDB } from "./config";
 
 const fieldProfile =
@@ -17,8 +18,8 @@ const fieldProfile =
 
 export async function getProfileByIdFromDB(userid: string): Promise<IProfile> {
 	try {
-		let queryStr = `SELECT ${fieldProfile} FROM users WHERE userid = $1`;
-		const answerDB = await poolDB.query(queryStr, [userid]);
+		let queryStr = `SELECT ${fieldProfile} FROM users WHERE userid = '${userid}'`;
+		const answerDB = await poolDB.query(queryStr);
 
 		if (!answerDB.rows[0]) return undefined;
 
@@ -37,7 +38,7 @@ export async function getProfiles(
 ): Promise<IProfile[]> {
 	const startPos = Number(QueryGetProfiles.startcount);
 	const endPos = startPos + Number(QueryGetProfiles.amount);
-	const { filters, users } = QueryGetProfiles;
+	const { filters, users, userid } = QueryGetProfiles;
 
 	try {
 		let answerDB = { rows: [] };
@@ -45,73 +46,58 @@ export async function getProfiles(
 		let queryStr = `SELECT ${fieldProfileShort} FROM users WHERE `;
 
 		if (filters) {
-			queryStr += "(location = $1) AND ";
+			for (let key in filters)
+				if (filters[key] === null) filters[key] = 0;
 
-			if (filters.signzodiac === 12) {
-				queryStr += "(signzodiac <> $2) AND ";
-			} else {
-				queryStr += "(signzodiac = $2) AND ";
+			const subAnswerDB = await poolDB.query(
+				`SELECT gender FROM users WHERE userid = '${userid}'`
+			);
+			const { gender } = subAnswerDB.rows[0];
+
+			queryStr += `(location = '${filters.location}') AND `;
+			queryStr += `(yearofbirth >= ${getYearFromAge(
+				filters.ageend
+			)}) AND (yearofbirth <= ${getYearFromAge(filters.agestart)}) AND `;
+			queryStr += `(growth >= ${filters.growthstart}) AND (growth <= ${filters.growthend}) AND `;
+			queryStr += conditionStr("weight", filters.weight);
+			queryStr += conditionStr("signzodiac", filters.signzodiac);
+
+			if (filters.gendervapor !== 2) {
+				if (gender === 0) {
+					queryStr += `(gender = '${1}') AND `;
+				} else if (gender === 1) {
+					queryStr += `(gender = '${0}') AND `;
+				}
 			}
-
-			queryStr += "(yearofbirth >= $3) AND (yearofbirth <= $4) AND ";
-			queryStr += "(growth >= $5) AND (growth <= $6) AND ";
-
-			if (filters.weight === 0) {
-				queryStr += "((weight <> $7) OR (weight = 0)) AND ";
-			} else {
-				queryStr += "(weight = $7) AND ";
-			}
-
-			queryStr += "(gendervapor = $8) AND ";
-
-			if (filters.religion === 0) {
-				queryStr += "((religion <> $9) OR (religion = 0)) AND ";
-			} else {
-				queryStr += "(religion = $9) AND ";
-			}
-
-			if (filters.smoke === 0) {
-				queryStr += "((smoke <> $10) OR (smoke = 0)) AND ";
-			} else {
-				queryStr += "(smoke = $10) AND ";
-			}
-
-			if (filters.alcohol === 0) {
-				queryStr += "((alcohol <> $11) OR (alcohol = 0)) AND ";
-			} else {
-				queryStr += "(alcohol = $11) AND ";
-			}
-
-			queryStr += "(userid <> $12)";
-
-			let gendervapor = filters.gendervapor;
 
 			if (filters.gendervapor === 0) {
-				gendervapor = 1;
+				queryStr += `(gendervapor = '${1}') AND `;
 			} else if (filters.gendervapor === 1) {
-				gendervapor = 0;
+				queryStr += `(gendervapor = '${0}') AND `;
+			} else {
+				queryStr += `(gendervapor = '${2}') AND `;
 			}
 
-			answerDB = await poolDB.query(queryStr, [
-				filters.location,
-				filters.signzodiac,
-				getYearFromAge(filters.ageend),
-				getYearFromAge(filters.agestart),
-				filters.growthstart,
-				filters.growthend,
-				filters.weight,
-				gendervapor,
-				filters.religion,
-				filters.smoke,
-				filters.alcohol,
-				QueryGetProfiles.userid,
-			]);
+			queryStr += conditionStr("education", filters.education);
+			queryStr += conditionStr(
+				"fieldofactivity",
+				filters.fieldofactivity
+			);
+			queryStr += conditionStr("maritalstatus", filters.maritalstatus);
+			queryStr += conditionStr("children", filters.children);
+			queryStr += conditionStr("religion", filters.religion);
+			queryStr += conditionStr("smoke", filters.smoke);
+			queryStr += conditionStr("alcohol", filters.alcohol);
+			queryStr += conditionStr("profit", filters.profit);
+			queryStr += `(userid <> '${QueryGetProfiles.userid}')`;
+
+			answerDB = await poolDB.query(queryStr);
 		} else if (users) {
 			if (users.length === 0) {
 				return [];
 			} else {
 				users.forEach((value) => {
-					queryStr += `(userid = ${value} :: TEXT) OR `;
+					queryStr += `(userid = '${value}' :: TEXT) OR `;
 				});
 			}
 
@@ -146,7 +132,7 @@ export async function getProfilesForLikes(
 	const endPos = startPos + Number(QueryGetProfiles.amount);
 
 	try {
-		let answerDB = { rows: [] };
+		let answerDB: { rows: IProfile[] } = { rows: [] };
 
 		let queryStr = `SELECT likes FROM users WHERE userid = '${QueryGetProfiles.userid}'`;
 
@@ -164,7 +150,7 @@ export async function getProfilesForLikes(
 			return [];
 		} else {
 			likes.forEach((value) => {
-				queryStr += `(userid = ${value} :: TEXT) OR `;
+				queryStr += `(userid = '${value}' :: TEXT) OR `;
 			});
 		}
 
@@ -175,7 +161,7 @@ export async function getProfilesForLikes(
 		let profiles = answerDB.rows;
 
 		if (profiles.length > 1) {
-			let newProfiles = profiles.sort((a, b) => b.raiting - a.raiting);
+			let newProfiles = profiles.sort((a, b) => b.rating - a.rating);
 
 			if (startPos - endPos) {
 				newProfiles = newProfiles.slice(startPos, endPos);
@@ -195,7 +181,7 @@ export async function getProfilesForDialogs(
 	users: Array<string>
 ): Promise<IProfileForDialog[]> {
 	try {
-		let answerDB = { rows: [] };
+		let answerDB: { rows: IProfileForDialog[] } = { rows: [] };
 
 		let queryStr =
 			"SELECT userid, name, birthday, monthofbirth, yearofbirth, photomain, photolink FROM users WHERE ";
@@ -228,42 +214,32 @@ export async function setProfileByIdToDB(
 	try {
 		let queryStrProfile = "UPDATE users SET ";
 
-		queryStrProfile += "name = $2, location = $3, ";
-		queryStrProfile +=
-			"birthday = $4, monthofbirth = $5, yearofbirth = $6, ";
-		queryStrProfile += "growth = $7, weight = $8, ";
-		queryStrProfile += "gender = $9, gendervapor = $10, ";
-		queryStrProfile += "signzodiac = $11, education = $12, ";
-		queryStrProfile += "fieldofactivity = $13, maritalstatus = $14, ";
-		queryStrProfile += "children = $15, religion = $16, ";
-		queryStrProfile += "smoke = $17, alcohol = $18, ";
-		queryStrProfile += "discription = $19, profit = $20, ";
-		queryStrProfile += "interests = $21, ";
-		queryStrProfile += "filters = $22, ";
-		queryStrProfile += "ilikecharacter = $23, idontlikecharacter = $24 ";
-		queryStrProfile += "WHERE userid = $1";
+		queryStrProfile += `name = '${profile.name}', `;
+		queryStrProfile += `location = '${profile.location}', `;
+		queryStrProfile += `birthday = '${profile.birthday}', `;
+		queryStrProfile += `monthofbirth = '${profile.monthofbirth}', `;
+		queryStrProfile += `yearofbirth = '${profile.yearofbirth}', `;
+		queryStrProfile += `growth = '${profile.growth}', `;
+		queryStrProfile += `weight = '${profile.weight}', `;
+		queryStrProfile += `gender = '${profile.gender}', `;
+		queryStrProfile += `gendervapor = '${profile.gendervapor}', `;
+		queryStrProfile += `signzodiac = '${profile.signzodiac}', `;
+		queryStrProfile += `education = '${profile.education}', `;
+		queryStrProfile += `fieldofactivity = '${profile.fieldofactivity}', `;
+		queryStrProfile += `maritalstatus = '${profile.maritalstatus}', `;
+		queryStrProfile += `children = '${profile.children}', `;
+		queryStrProfile += `religion = '${profile.religion}', `;
+		queryStrProfile += `smoke = '${profile.smoke}', `;
+		queryStrProfile += `alcohol = '${profile.alcohol}', `;
+		queryStrProfile += `discription = '${profile.discription}', `;
+		queryStrProfile += `profit = '${profile.profit}', `;
+		queryStrProfile += `interests = $1, `;
+		queryStrProfile += `filters = $2, `;
+		queryStrProfile += `ilikecharacter = $3, `;
+		queryStrProfile += `idontlikecharacter = $4 `;
+		queryStrProfile += `WHERE userid = '${ourId}'`;
 
 		const answerDBProfile = await poolDB.query(queryStrProfile, [
-			ourId,
-			profile.name,
-			profile.location,
-			profile.birthday,
-			profile.monthofbirth,
-			profile.yearofbirth,
-			profile.growth,
-			profile.weight,
-			profile.gender,
-			profile.gendervapor,
-			profile.signzodiac,
-			profile.education,
-			profile.fieldofactivity,
-			profile.maritalstatus,
-			profile.children,
-			profile.religion,
-			profile.smoke,
-			profile.alcohol,
-			profile.discription,
-			profile.profit,
 			profile.interests,
 			profile.filters,
 			profile.ilikecharacter,
@@ -271,6 +247,7 @@ export async function setProfileByIdToDB(
 		]);
 	} catch (error) {
 		console.log("setProfileByIdToDB:", error);
+		return undefined;
 	}
 
 	try {
@@ -286,8 +263,8 @@ export async function getProfileCashByIdFromDB(
 	userid: string
 ): Promise<number> {
 	try {
-		let queryStr = `SELECT cash FROM users WHERE userid = $1`;
-		const answerDB = await poolDB.query(queryStr, [userid]);
+		let queryStr = `SELECT cash FROM users WHERE userid = '${userid}'`;
+		const answerDB = await poolDB.query(queryStr);
 
 		const { cash } = answerDB.rows[0];
 
@@ -303,8 +280,8 @@ export async function setProfileCashByIdToDB(
 	cash: number
 ): Promise<number> {
 	try {
-		let queryStr = `UPDATE users SET cash = $2 WHERE userid = $1`;
-		const answerDB = await poolDB.query(queryStr, [userid, cash]);
+		let queryStr = `UPDATE users SET cash = ${cash} WHERE userid = '${userid}'`;
+		const answerDB = await poolDB.query(queryStr);
 
 		return answerDB.rowCount;
 	} catch (error) {
@@ -317,8 +294,8 @@ export async function getProfileRatingByIdFromDB(
 	userid: string
 ): Promise<number> {
 	try {
-		let queryStr = `SELECT rating FROM users WHERE userid = $1`;
-		const answerDB = await poolDB.query(queryStr, [userid]);
+		let queryStr = `SELECT rating FROM users WHERE userid = '${userid}'`;
+		const answerDB = await poolDB.query(queryStr);
 
 		const { rating } = answerDB.rows[0];
 
@@ -334,8 +311,8 @@ export async function setProfileRatingByIdToDB(
 	rating: number
 ): Promise<number> {
 	try {
-		let queryStr = `UPDATE users SET rating = $2 WHERE userid = $1`;
-		const answerDB = await poolDB.query(queryStr, [userid, rating]);
+		let queryStr = `UPDATE users SET rating = ${rating} WHERE userid = '${userid}'`;
+		const answerDB = await poolDB.query(queryStr);
 
 		return answerDB.rowCount;
 	} catch (error) {
@@ -348,8 +325,8 @@ export async function getProfileStickerpacksByIdFromDB(
 	userid: string
 ): Promise<string[]> {
 	try {
-		let queryStr = `SELECT stickerpacks FROM users WHERE userid = $1`;
-		const answerDB = await poolDB.query(queryStr, [userid]);
+		let queryStr = `SELECT stickerpacks FROM users WHERE userid = '${userid}'`;
+		const answerDB = await poolDB.query(queryStr);
 
 		const { stickerpacks } = answerDB.rows[0];
 
@@ -365,8 +342,8 @@ export async function setProfileStickerpacksByIdToDB(
 	stickerpacks: string[]
 ): Promise<number> {
 	try {
-		let queryStr = `UPDATE users SET stickerpacks = $2 WHERE userid = $1`;
-		const answerDB = await poolDB.query(queryStr, [userid, stickerpacks]);
+		let queryStr = `UPDATE users SET stickerpacks = $1 WHERE userid = '${userid}'`;
+		const answerDB = await poolDB.query(queryStr, [stickerpacks]);
 
 		return answerDB.rowCount;
 	} catch (error) {

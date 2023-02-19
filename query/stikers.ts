@@ -4,14 +4,15 @@ import { poolDB } from "./config";
 export async function getAllStickerpacks(): Promise<IStickerpack[]> {
 	try {
 		let queryStr =
-			"SELECT idstickerpack, name, discription, price, author, stickers FROM stickerpacks";
+			`SELECT idstickerpack, name, discription, price, author, stickers ` +
+			`FROM stickerpacks`;
 
 		const answerDB = await poolDB.query(queryStr);
 
 		return answerDB.rows;
 	} catch (error) {
 		console.log("getAllStickerpacks", error);
-		return [];
+		return undefined;
 	}
 }
 
@@ -29,12 +30,15 @@ export async function getStickerpackById(
 
 	try {
 		let queryStr =
-			"SELECT  idstickerpack, name, discription, price, author, stickers FROM stickerpacks WHERE idstickerpack = $1";
-		const answerDB = await poolDB.query(queryStr, [idStickerpack]);
+			`SELECT idstickerpack, name, discription, price, author, stickers ` +
+			`FROM stickerpacks ` +
+			`WHERE idstickerpack = '${idStickerpack}'`;
+
+		const answerDB = await poolDB.query(queryStr);
 
 		return answerDB.rows[0];
 	} catch (error) {
 		console.log("getAllStickerpacks", error);
-		return stickerpack;
+		return undefined;
 	}
 }

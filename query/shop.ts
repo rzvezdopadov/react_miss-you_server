@@ -18,17 +18,17 @@ export async function getRatingTariffs(): Promise<IRate[]> {
 	}
 }
 
-export async function setRatingTariffs(Rates: IRate[]): Promise<IRate[]> {
+export async function setRatingTariffs(rates: IRate[]): Promise<number> {
 	try {
-		let answerDB = { rows: [] };
+		let answerDB = { rowCount: 0 };
 
-		let queryStr = "UPDATE shop SET ratingtariffs = $1 ::json[] ";
+		let queryStr = `UPDATE shop SET ratingtariffs = ${rates} ::json[] `;
 
-		answerDB = await poolDB.query(queryStr, [Rates]);
+		answerDB = await poolDB.query(queryStr);
 
-		return answerDB.rows[0];
+		return answerDB.rowCount;
 	} catch (error) {
 		console.log("getRatingTariffs", error);
-		return [];
+		return 0;
 	}
 }

@@ -121,10 +121,15 @@ export async function queryAddStickerpack(req, res) {
 		if (priceStickerpack === 0) {
 			profileStickerpacks.unshift(idstickerpack);
 
-			await setProfileStickerpacksByIdToDB(
+			const answerAddStickerpack = await setProfileStickerpacksByIdToDB(
 				jwtDecode.userId,
 				profileStickerpacks
 			);
+
+			if (!answerAddStickerpack)
+				return res.status(400).json({
+					message: "Произошла ошибка добавления стикерпака!",
+				});
 		} else {
 			let cash = await getProfileCashByIdFromDB(jwtDecode.userId);
 
@@ -137,10 +142,16 @@ export async function queryAddStickerpack(req, res) {
 			profileStickerpacks.unshift(idstickerpack);
 
 			cash -= priceStickerpack;
-			await setProfileStickerpacksByIdToDB(
+			const answerAddStickerpack = await setProfileStickerpacksByIdToDB(
 				jwtDecode.userId,
 				profileStickerpacks
 			);
+
+			if (!answerAddStickerpack)
+				return res.status(400).json({
+					message: "Произошла ошибка добавления стикерпака!",
+				});
+
 			await setProfileCashByIdToDB(jwtDecode.userId, cash);
 		}
 

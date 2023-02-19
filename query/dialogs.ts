@@ -7,60 +7,61 @@ export async function getDialogByIdFromDB(
 	userId: string
 ): Promise<IDialogBase> {
 	try {
-		let answerDB = { rows: [] };
+		let answerDB: { rows: IDialogBase[] } = { rows: [] };
 
 		let queryStr =
 			"SELECT userid1, userid2, timecode, dck, messages::json[] FROM dialogs WHERE ";
 
 		queryStr +=
-			"(userid1 = $1 AND userid2 = $2) OR (userid1 = $2 AND userid2 = $1)";
+			`(userid1 = '${ourId}' AND userid2 = '${userId}') OR ` +
+			`(userid1 = '${userId}' AND userid2 = '${ourId}')`;
 
-		answerDB = await poolDB.query(queryStr, [ourId, userId]);
+		answerDB = await poolDB.query(queryStr);
 
 		return answerDB.rows[0];
 	} catch (error) {
 		console.log("getDialogByIdFromDB", error);
-		return {} as any;
+		return undefined;
 	}
 }
 
-export async function setDialogByIdToDB(
-	dialog: IDialogBase
-): Promise<IDialogBase> {
+export async function setDialogByIdToDB(dialog: IDialogBase): Promise<number> {
 	const timecode = getTimecodeNow();
 	dialog.timecode = timecode;
 
-	let answerDB = { rows: [] };
+	let answerDB = { rowCount: 0 };
 
 	try {
 		if (dialog.messages.length === 1) {
 			const queryStr =
-				"INSERT INTO dialogs (userid1, userid2, timecode, dck, messages) VALUES ($1, $2, $3, $4, ARRAY [$5]::json[])";
+				`INSERT INTO dialogs (` +
+				`userid1, userid2, ` +
+				`timecode, dck, ` +
+				`messages` +
+				`) VALUES (` +
+				`'${dialog.userid1}', '${dialog.userid2}', ` +
+				`${timecode}, '${dialog.dck}', ` +
+				`$1 :: json[]` +
+				`)`;
 
-			answerDB = await poolDB.query(queryStr, [
-				dialog.userid1,
-				dialog.userid2,
-				timecode,
-				dialog.dck,
-				dialog.messages[0],
-			]);
+			answerDB = await poolDB.query(queryStr, [dialog.messages]);
 
-			return answerDB.rows[0];
+			return answerDB.rowCount;
 		} else {
 			const queryStr =
-				"UPDATE dialogs SET messages = $3::json[] WHERE ((userid1 = $1) AND (userid2 = $2)) OR ((userid1 = $2) AND (userid1 = $1))";
+				`UPDATE dialogs SET ` +
+				`messages = $1 :: json[] ` +
+				`WHERE ` +
+				`((userid1 = '${dialog.userid1}') AND (userid2 = '${dialog.userid2}')) OR ` +
+				`((userid1 = '${dialog.userid2}') AND (userid1 = '${dialog.userid1}'))`;
 
-			answerDB = await poolDB.query(queryStr, [
-				dialog.userid1,
-				dialog.userid2,
-				dialog.messages,
-			]);
+			answerDB = await poolDB.query(queryStr, [dialog.messages]);
 
-			return answerDB.rows[0];
+			return answerDB.rowCount;
 		}
 	} catch (error) {
 		console.log("setDialogByIdToDB", error);
-		return {} as any;
+		return 0;
 	}
 }
 
@@ -68,9 +69,11 @@ export async function getDialogsByIdFromDB(
 	ourId: string
 ): Promise<Array<IDialogBase>> {
 	try {
-		let answerDB = { rows: [] };
+		let answerDB: { rows: IDialogBase[] } = { rows: [] };
 
-		let queryStr = `SELECT userid1, userid2, timecode, messages::json[] FROM dialogs WHERE (userid1 = '${ourId}' :: TEXT) OR (userid2 = '${ourId}' :: TEXT)`;
+		let queryStr =
+			`SELECT userid1, userid2, timecode, messages::json[] ` +
+			`FROM dialogs WHERE (userid1 = '${ourId}') OR (userid2 = '${ourId}')`;
 
 		answerDB = await poolDB.query(queryStr);
 

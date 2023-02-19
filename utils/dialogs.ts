@@ -41,6 +41,8 @@ export const setDialog = async (
 			type: type,
 			userid1del: false,
 			userid2del: false,
+			userid1rd: false,
+			userid2rd: false,
 			message: message,
 			stickerpackid: stickerpackid,
 			stickerpos: stickerpos,

@@ -7,8 +7,9 @@ import {
 	IRegistration,
 } from "../interfaces/iprofiles";
 import {
-	createProfile,
+	createProfileToDB,
 	getIdByEmailFromDB,
+	getJWTFromDB,
 	getPasswordByIdFromDB,
 	setJWTToDB,
 	setPasswordByIdToDB,
@@ -102,7 +103,7 @@ export async function queryRegistration(req, res) {
 		const profile: IProfileRegistration = {
 			email: registration.email,
 			password: hashedPassword,
-			jwt: "",
+			jwt: [],
 			userid: getRandomString(12),
 			coordinates: [],
 			registrationdate: timecode,
@@ -135,27 +136,35 @@ export async function queryRegistration(req, res) {
 			interests: [],
 			ilikecharacter: [],
 			idontlikecharacter: [],
-			raiting: 0,
-			cash: 100,
+			rating: 0,
+			cash: 1000,
 			filters: {
 				location: registration.location,
-				signzodiac: 0,
 				agestart: data_age[0],
 				ageend: data_age[data_age.length - 1],
 				growthstart: data_growth[0],
 				growthend: data_growth[data_growth.length - 1],
 				weight: 0,
+				signzodiac: 0,
 				gendervapor: registration.gendervapor,
+				education: 0,
+				fieldofactivity: 0,
+				maritalstatus: 0,
+				children: 0,
 				religion: 0,
 				smoke: 0,
 				alcohol: 0,
+				profit: 0,
 				interests: [],
 			},
 			acctype: ACCTYPE.user,
 			visit: [],
+			banned: { timecode: 0, whobanned: "", discription: "" },
+			paid: { messageread: false },
+			stickerpacks: [],
 		};
 
-		const isReg = await createProfile(profile);
+		const isReg = await createProfileToDB(profile);
 
 		if (isReg)
 			return res
@@ -229,7 +238,29 @@ export async function queryLogin(req, res) {
 			{ expiresIn: "7d" }
 		);
 
-		const answerSetJWT = await setJWTToDB(ourId, token);
+		const jwts = await getJWTFromDB(ourId);
+
+		if (!jwts)
+			return res.status(400).json({
+				message: "Ошибка QTDB!",
+			});
+
+		const timeNow = getTimecodeNow();
+
+		const timeAdd = 7 * 24 * 60 * 60 * 1000;
+
+		const newJWTs = jwts.filter((jwt) => {
+			if (jwt.timecode + timeAdd > timeNow) return true;
+		});
+
+		newJWTs.push({
+			timecode: timeNow,
+			token: token,
+			ipaddress: "",
+			browser: "",
+		});
+
+		const answerSetJWT = await setJWTToDB(ourId, newJWTs);
 
 		if (answerSetJWT) {
 			return res.status(200).json({

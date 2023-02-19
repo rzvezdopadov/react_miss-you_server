@@ -1,7 +1,5 @@
 import {
 	ACCTYPE,
-	IAdminBanned,
-	IAdminFilterUsers,
 	IQueryGetAdminProfiles,
 	IQuerySetAdminBanned,
 } from "../interfaces/iadmin";

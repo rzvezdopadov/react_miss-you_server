@@ -13,8 +13,6 @@ export async function setVisitByIdToDB(
 		const statistics = await getVisitByIdFromDB(userId);
 
 		if (type === "open") {
-			const queryStr = "UPDATE users SET visit = $1 WHERE userid = $2";
-
 			const statVisit: IStatVisit = {
 				key: key,
 				tco: timecode,
@@ -23,15 +21,15 @@ export async function setVisitByIdToDB(
 
 			statistics.visit.push(statVisit);
 
-			const answerDB = await poolDB.query(queryStr, [
-				statistics.visit,
-				userId,
-			]);
+			const queryStr =
+				`UPDATE users SET ` +
+				`visit = $1 ` +
+				`WHERE userid = '${userId}'`;
+
+			const answerDB = await poolDB.query(queryStr, [statistics.visit]);
 
 			return answerDB.rowCount;
 		} else if (type === "closed") {
-			const queryStr = "UPDATE users SET visit = $1 WHERE userid = $2";
-
 			const visitPos = statistics.visit.findIndex(
 				(value) => value.key === key
 			);
@@ -40,10 +38,12 @@ export async function setVisitByIdToDB(
 
 			statistics.visit[visitPos].tcc = timecode;
 
-			const answerDB = await poolDB.query(queryStr, [
-				statistics.visit,
-				userId,
-			]);
+			const queryStr =
+				`UPDATE users ` +
+				`SET visit = $1 :: JSON[] ` +
+				`WHERE userid = '${userId}'`;
+
+			const answerDB = await poolDB.query(queryStr, [statistics.visit]);
 			return answerDB.rowCount;
 		}
 	} catch (error) {
@@ -58,14 +58,13 @@ export async function getVisitByIdFromDB(
 	try {
 		let answerDB = { rows: [] };
 
-		let queryStr =
-			"SELECT userid, visit::json[] FROM users WHERE userid = $1";
+		let queryStr = `SELECT userid, visit::json[] FROM users WHERE userid = '${userId}'`;
 
-		answerDB = await poolDB.query(queryStr, [userId]);
+		answerDB = await poolDB.query(queryStr);
 
 		return answerDB.rows[0];
 	} catch (error) {
 		console.log("getVisitByIdFromDB", error);
-		return { userid: userId, visit: [] };
+		return undefined;
 	}
 }

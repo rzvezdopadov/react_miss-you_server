@@ -1,4 +1,4 @@
-import { ACCTYPE } from "./iadmin";
+import { ACCTYPE, IAdminBanned } from "./iadmin";
 
 export interface ICoordinates {
 	ipaddress: string;
@@ -6,51 +6,19 @@ export interface ICoordinates {
 	longitude: number;
 }
 
-export interface IProfileRegistration {
-	email: string;
-	password: string;
-	jwt: string;
-	userid: string;
-	coordinates: ICoordinates[];
-	registrationdate: number;
+export interface IJWT {
 	timecode: number;
-	name: string;
-	location: string;
-	likes: Array<string>;
-	birthday: number;
-	monthofbirth: number;
-	yearofbirth: number;
-	growth: number;
-	weight: number;
-	gender: number;
-	gendervapor: number;
-	photomain: number;
-	photolink: Array<string>;
-	signzodiac: number;
-	education: number;
-	fieldofactivity: number;
-	maritalstatus: number;
-	children: number;
-	religion: number;
-	smoke: number;
-	alcohol: number;
-	discription: string;
-	profit: number;
-	interests: Array<string>;
-	ilikecharacter: Array<number>;
-	idontlikecharacter: Array<number>;
-	raiting: number;
-	cash: number;
-	acctype: ACCTYPE;
-	filters: IFilterUsers;
-	visit: Array<IStatVisit>;
+	token: string;
+	ipaddress: string;
+	browser: string;
 }
 
 export interface IProfile {
 	userid: string;
+	timecode: number;
 	name: string;
 	location: string;
-	likes: Array<string>;
+	likes: string[];
 	birthday: number;
 	monthofbirth: number;
 	yearofbirth: number;
@@ -59,7 +27,7 @@ export interface IProfile {
 	gender: number;
 	gendervapor: number;
 	photomain: number;
-	photolink: Array<string>;
+	photolink: string[];
 	signzodiac: number;
 	education: number;
 	fieldofactivity: number;
@@ -70,29 +38,47 @@ export interface IProfile {
 	alcohol: number;
 	discription: string;
 	profit: number;
-	interests: Array<string>;
-	ilikecharacter: Array<number>;
-	idontlikecharacter: Array<number>;
+	interests: string[];
+	filters: IFilterUsers;
+	ilikecharacter: number[];
+	idontlikecharacter: number[];
 	rating: number;
-	stickerpacks: Array<string>;
+	stickerpacks: string[];
 	cash: number;
 	acctype: ACCTYPE;
-	filters: IFilterUsers;
 }
 
-interface IFilterUsers {
+export interface IProfileRegistration extends IProfile {
+	email: string;
+	password: string;
+	jwt: IJWT[];
+	userid: string;
+	coordinates: ICoordinates[];
+	registrationdate: number;
+	likes: string[];
+	visit: IStatVisit[];
+	banned: IAdminBanned;
+	paid: IPaid;
+}
+
+export interface IFilterUsers {
 	location: string;
-	signzodiac: number;
 	agestart: number;
 	ageend: number;
 	growthstart: number;
 	growthend: number;
 	weight: number;
+	signzodiac: number;
 	gendervapor: number;
+	education: number;
+	fieldofactivity: number;
+	maritalstatus: number;
+	children: number;
 	religion: number;
 	smoke: number;
 	alcohol: number;
-	interests: Array<string>;
+	profit: number;
+	interests: string[];
 }
 
 export interface IQueryGetProfiles {
@@ -108,7 +94,7 @@ export interface IGetProfiles {
 	startcount: number;
 	amount: number;
 	filters: IFilterUsers;
-	users: Array<string>;
+	users: string[];
 }
 
 export interface IQueryGetProfile {
@@ -150,6 +136,8 @@ export interface IMessage {
 	type: messageType;
 	userid1del: boolean;
 	userid2del: boolean;
+	userid1rd: boolean;
+	userid2rd: boolean;
 	message: string;
 	stickerpackid: string;
 	stickerpos: number;
@@ -160,7 +148,7 @@ export interface IDialogBase {
 	userid2: string;
 	timecode: number;
 	dck: string;
-	messages: Array<IMessage>;
+	messages: IMessage[];
 }
 
 export interface IDialogOutput {
@@ -171,8 +159,8 @@ export interface IDialogOutput {
 	monthofbirth: number;
 	yearofbirth: number;
 	photomain: number;
-	photolink: Array<string>;
-	messages: Array<IMessage>;
+	photolink: string[];
+	messages: IMessage[];
 }
 
 export interface IProfileForDialog {
@@ -182,7 +170,7 @@ export interface IProfileForDialog {
 	monthofbirth: number;
 	yearofbirth: number;
 	photomain: number;
-	photolink: Array<string>;
+	photolink: string[];
 }
 
 export interface IQuerySendMessage {
@@ -201,7 +189,7 @@ export interface IQueryLike {
 }
 
 export interface IPhotos {
-	photolink: Array<string>;
+	photolink: string[];
 	photomain: number;
 }
 
@@ -213,7 +201,7 @@ export interface IStatVisit {
 
 export interface IStatisticsVisit {
 	userid: string;
-	visit: Array<IStatVisit>;
+	visit: IStatVisit[];
 }
 
 export interface IChangePass {
@@ -239,5 +227,9 @@ export interface IStickerpack {
 	discription: string;
 	price: number;
 	author: string;
-	stickers: Array<ISticker>;
+	stickers: ISticker[];
+}
+
+export interface IPaid {
+	messageread: false;
 }
