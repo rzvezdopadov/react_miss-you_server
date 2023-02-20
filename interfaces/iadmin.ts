@@ -46,3 +46,8 @@ export interface IQuerySetAdminBanned {
 	month: number;
 	discription: string;
 }
+
+export interface IQueryDeleteAdminPhoto {
+	userid: string;
+	photoPos: number;
+}

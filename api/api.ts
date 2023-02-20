@@ -1,4 +1,5 @@
 import {
+	queryAdminDeletePhoto,
 	queryAdminGetProfile,
 	queryAdminGetProfiles,
 	queryAdminGetVisit,
@@ -125,5 +126,7 @@ router.put("/api/admin/cash", [], queryAdminSetCash);
 router.put("/api/admin/cash", [], queryAdminSetCash);
 
 router.put("/api/admin/banned", [], queryAdminSetBanned);
+
+router.delete("/api/admin/photo", [], queryAdminDeletePhoto);
 
 module.exports = router;

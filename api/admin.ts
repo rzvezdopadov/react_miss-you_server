@@ -1,5 +1,6 @@
 import {
 	ACCTYPE,
+	IQueryDeleteAdminPhoto,
 	IQueryGetAdminProfiles,
 	IQuerySetAdminBanned,
 } from "../interfaces/iadmin";
@@ -19,6 +20,7 @@ import {
 	setProfileRatingByIdToDB,
 } from "../query/profile";
 import { getTimecodeNow } from "../utils/datetime";
+import { deletePhoto } from "../utils/photos";
 import { testToken } from "../utils/token";
 
 export async function queryAdminGetProfiles(req, res) {
@@ -354,6 +356,42 @@ export async function queryAdminSetBanned(req, res) {
 		console.log(error);
 		return res.status(500).json({
 			message: "Что-то пошло не так при корректировке рейтинга!",
+		});
+	}
+}
+
+export async function queryAdminDeletePhoto(req, res) {
+	try {
+		let { jwt } = req.cookies;
+		jwt = String(jwt);
+
+		const jwtDecode = await testToken(jwt);
+
+		if (!jwtDecode)
+			return res.status(400).json({
+				message: "Токен не валидный!",
+			});
+
+		const adminCandidate = await getAdminAcctypeByIdFromDB(
+			jwtDecode.userId
+		);
+
+		if (adminCandidate !== ACCTYPE.admin)
+			return res.status(400).json({
+				message:
+					"У вас нет прав доступа на выполнение данной операции!",
+			});
+
+		let { userid, photoPos }: IQueryDeleteAdminPhoto = req.body;
+		userid = String(userid);
+		photoPos = Number(photoPos);
+
+		const photos = await deletePhoto(userid, photoPos);
+
+		return res.status(200).json(photos);
+	} catch (e) {
+		res.status(500).json({
+			message: "Ошибка QTDB!",
 		});
 	}
 }
