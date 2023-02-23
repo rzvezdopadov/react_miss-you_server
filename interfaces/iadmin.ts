@@ -1,8 +1,16 @@
-import { ICoordinates, IFilterUsers, IPaid, IStatVisit } from "./iprofiles";
+import { IPaid } from "./ipaid";
+import { ICoordinates, IFilterUsers } from "./iprofiles";
+import { IStatVisit } from "./istatistics";
 
 export enum ACCTYPE {
 	user = "user",
 	admin = "admin",
+}
+
+export enum COMPLAINTSTATUS {
+	open = "open",
+	inwork = "inwork",
+	close = "close",
 }
 
 export interface IAdminStatVisit {
