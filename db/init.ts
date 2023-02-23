@@ -2,6 +2,7 @@ import { initDBShop } from "./shop";
 import { initDBDialogs } from "./dialogs";
 import { initDBStickerpacks } from "./stickerpacks";
 import { initDBUsers } from "./users";
+import { initDBComplaints } from "./complaints";
 
 export async function initDB(): Promise<boolean> {
 	try {
@@ -9,6 +10,7 @@ export async function initDB(): Promise<boolean> {
 		await initDBDialogs();
 		await initDBStickerpacks();
 		await initDBUsers();
+		await initDBComplaints();
 
 		return true;
 	} catch (error) {
