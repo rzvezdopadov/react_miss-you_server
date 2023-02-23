@@ -1,4 +1,4 @@
-import { IStickerpack } from "../interfaces/iprofiles";
+import { IStickerpack } from "../interfaces/istickers";
 import { poolDB } from "./config";
 
 export async function getAllStickerpacks(): Promise<IStickerpack[]> {

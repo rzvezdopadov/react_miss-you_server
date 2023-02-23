@@ -5,7 +5,7 @@ import {
 	IProfileRegistration,
 	IRecoveryPass,
 	IRegistration,
-} from "../interfaces/iprofiles";
+} from "../interfaces/iauth";
 import {
 	createProfileToDB,
 	getIdByEmailFromDB,
@@ -221,7 +221,7 @@ export async function queryLogin(req, res) {
 		}
 
 		const isBanned = await isBannedUser(ourId);
-		
+
 		if (isBanned)
 			return res.status(400).json({
 				message: isBanned,

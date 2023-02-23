@@ -1,4 +1,4 @@
-import { IDialogBase } from "../interfaces/iprofiles";
+import { IDialogBase } from "../interfaces/idialogs";
 import { getTimecodeNow } from "../utils/datetime";
 import { poolDB } from "./config";
 

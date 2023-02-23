@@ -1,4 +1,4 @@
-import { IJWT, IProfileRegistration } from "../interfaces/iprofiles";
+import { IJWT, IProfileRegistration } from "../interfaces/iauth";
 import { poolDB } from "./config";
 
 export async function getIdByEmailFromDB(email: string): Promise<string> {

@@ -1,6 +1,6 @@
 import { testToken } from "../utils/token";
 import { getDialog, getDialogs, setDialog } from "../utils/dialogs";
-import { messageType } from "../interfaces/iprofiles";
+import { MESSAGETYPE } from "../interfaces/idialogs";
 
 export async function querySetMessage(req, res) {
 	try {
@@ -26,7 +26,7 @@ export async function querySetMessage(req, res) {
 		const newDialog = await setDialog(
 			jwtDecode.userId,
 			userId,
-			messageType.message,
+			MESSAGETYPE.message,
 			message,
 			"",
 			0

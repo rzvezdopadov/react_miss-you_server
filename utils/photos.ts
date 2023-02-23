@@ -1,4 +1,4 @@
-import { IPhotos } from "../interfaces/iprofiles";
+import { IPhotos } from "../interfaces/iphotos";
 import { getPhotosByIdFromDB, setPhotosByIdToDB } from "../query/photos";
 import { getRandomString } from "./string";
 const fs = require("fs");

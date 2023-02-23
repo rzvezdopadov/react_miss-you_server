@@ -2,8 +2,8 @@ import {
 	IDialogBase,
 	IDialogOutput,
 	IMessage,
-	messageType,
-} from "../interfaces/iprofiles";
+	MESSAGETYPE,
+} from "../interfaces/idialogs";
 import {
 	getDialogByIdFromDB,
 	getDialogsByIdFromDB,
@@ -15,7 +15,7 @@ import { getTimecodeNow } from "./datetime";
 export const setDialog = async (
 	ourId: string,
 	userId: string,
-	type: messageType,
+	type: MESSAGETYPE,
 	message: string,
 	stickerpackid: string,
 	stickerpos: number

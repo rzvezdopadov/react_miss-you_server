@@ -1,9 +1,3 @@
-import {
-	IQueryLike,
-	IQuerySendMessage,
-	IQuerySendSticker,
-	messageType,
-} from "../interfaces/iprofiles";
 import { testToken } from "../utils/token";
 import { setTimecodeToDB } from "../query/auth";
 import { setLikesById } from "../utils/likes";
@@ -11,6 +5,9 @@ import { setDialog } from "../utils/dialogs";
 import { setVisitByIdToDB } from "../query/statistics";
 import { botPhraseCensure, botPhraseSpam } from "../utils/bots";
 import { setAdminBannedByIdToDB } from "../query/admin";
+import { IQuerySendMessage, MESSAGETYPE } from "../interfaces/idialogs";
+import { IQuerySendSticker } from "../interfaces/istickers";
+import { IQueryLike } from "../interfaces/ilikes";
 
 interface ISocketUser {
 	userid: string;
@@ -115,7 +112,7 @@ export const socketHandler = (socketIO, socket) => {
 			const dialog = await setDialog(
 				ourId,
 				socket.userid,
-				messageType.message,
+				MESSAGETYPE.message,
 				socket.message,
 				"",
 				0
@@ -146,7 +143,7 @@ export const socketHandler = (socketIO, socket) => {
 			const dialog = await setDialog(
 				ourId,
 				socket.userid,
-				messageType.sticker,
+				MESSAGETYPE.sticker,
 				"",
 				socket.stickerpackid,
 				socket.stickerpos
