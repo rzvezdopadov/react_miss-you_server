@@ -14,6 +14,7 @@ export interface IComplaintBase {
 export interface IComplaintOutput {
 	timecode: number;
 	userid: string;
+	userto: string;
 	name: string;
 	birthday: number;
 	monthofbirth: number;

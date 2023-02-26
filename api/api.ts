@@ -15,7 +15,8 @@ import {
 	queryRegistration,
 } from "./auth";
 import { queryGetCaptcha } from "./captcha";
-import { queryGetDialog, queryGetDialogs, querySetMessage } from "./dialogs";
+import { queryGetComplaints } from "./complaints";
+import { queryGetDialog, queryGetDialogs } from "./dialogs";
 import { querySetLike } from "./likes";
 import {
 	queryCheckPhoto,
@@ -94,6 +95,8 @@ router.post("/api/buyrating", [], queryBuyRating);
 router.post("/api/stickerpack", [], queryAddStickerpack);
 
 router.delete("/api/stickerpack", [], queryDeleteStickerpack);
+
+router.get("/api/complaints", [], queryGetComplaints);
 
 router.put(
 	"/api/changepass",
