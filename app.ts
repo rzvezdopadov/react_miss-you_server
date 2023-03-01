@@ -22,9 +22,10 @@ app.use(
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.use("/static", express.static(__dirname + "/static"));
 app.use("/", require("./api/api"));
 
-const PORT = config.get("port") || 5000;
+const httpPORT = config.get("httpPort") || 5000;
 const socketPORT = config.get("socketPort") || 8000;
 
 const http = require("http").Server(app);
@@ -44,11 +45,11 @@ async function startSocket() {
 
 async function startServer() {
 	try {
-		app.listen(PORT, () => {
-			console.log(`Web started on port: "${PORT}"`);
+		app.listen(httpPORT, () => {
+			console.log(`Server started on port: "${httpPORT}"`);
 		});
 	} catch (e) {
-		console.log("Web error with:", e.message);
+		console.log("Server error with:", e.message);
 	}
 }
 
