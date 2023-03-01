@@ -1,7 +1,8 @@
 {
     "jwtSecret": "wrecsxa7",
     "saltpass": 13,
-    "port": 5000,
+    "httpPort": 5000,
+    "httpsPort": 5443,
     "socketPort": 8000,
     "emailUser": "service.miss.you@gmail.com",
     "emailPass": "5615615113"
