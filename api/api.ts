@@ -1,3 +1,4 @@
+import path from "path";
 import {
 	queryAdminDeletePhoto,
 	queryAdminGetProfile,
@@ -131,5 +132,9 @@ router.put("/api/admin/cash", [], queryAdminSetCash);
 router.put("/api/admin/banned", [], queryAdminSetBanned);
 
 router.delete("/api/admin/photo", [], queryAdminDeletePhoto);
+
+router.get("/*", function (_req, res) {
+	res.sendFile(path.join(__dirname, "../index.html"));
+});
 
 module.exports = router;
