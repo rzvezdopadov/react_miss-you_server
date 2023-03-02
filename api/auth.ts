@@ -161,7 +161,13 @@ export async function queryRegistration(req, res) {
 			acctype: ACCTYPE.user,
 			visit: [],
 			banned: { timecode: 0, whobanned: "", discription: "" },
-			paid: { messageread: false },
+			paid: {
+				messageread: { enabled: false, timecode: 0 },
+				longfilters: { enabled: false, timecode: 0 },
+				userfavorite: { enabled: false, timecode: 0 },
+				photoall: { enabled: false, timecode: 0 },
+				photofull: { enabled: false, timecode: 0 },
+			},
 			stickerpacks: [],
 		};
 
