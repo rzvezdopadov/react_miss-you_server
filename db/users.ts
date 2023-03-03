@@ -126,125 +126,115 @@ const fakeUsersGenerate = async (
 			fakePerson.monthofbirth
 		);
 		// added admin how is first user
-		arrFakeUsers.push(fakePerson);
+		arrFakeUsers.push(JSON.parse(JSON.stringify(fakePerson)));
 		// added more users
 		const dayTimecode = 24 * 60 * 60 * 1000;
 
-		for (let i = 1; i < countFakeUser; i++) {
-			const newFakePerson: IProfileRegistration = JSON.parse(
-				JSON.stringify(fakePerson)
-			);
-			newFakePerson.email = `${i}@gmail.com`;
-			newFakePerson.userid = `${i}`;
-			newFakePerson.password = hashedPasswordFakeUser;
-			newFakePerson.registrationdate =
-				timecodeNow - getRandomInteger(dayTimecode, dayTimecode * 100);
-			newFakePerson.timecode =
-				newFakePerson.registrationdate +
-				getRandomInteger(0, dayTimecode);
+		fakePerson.password = hashedPasswordFakeUser;
+		fakePerson.acctype = ACCTYPE.user;
 
-			newFakePerson.gender = getRandomInteger(0, data_gender.length - 1);
+		for (let i = 1; i < countFakeUser; i++) {
+			fakePerson.email = `${i}@gmail.com`;
+			fakePerson.userid = `${i}`;
+
+			fakePerson.registrationdate =
+				timecodeNow - getRandomInteger(dayTimecode, dayTimecode * 100);
+			fakePerson.timecode =
+				fakePerson.registrationdate + getRandomInteger(0, dayTimecode);
+
+			fakePerson.gender = getRandomInteger(0, data_gender.length - 1);
 
 			const newFakeSurnames =
 				fakeSurnames[getRandomInteger(0, fakeSurnames.length - 1)];
-			if (newFakePerson.gender) {
-				newFakePerson.name = `${
+			if (fakePerson.gender) {
+				fakePerson.name = `${
 					fakeNamesWoman[
 						getRandomInteger(0, fakeNamesWoman.length - 1)
 					]
 				} ${newFakeSurnames}`;
 			} else {
-				newFakePerson.name = `${
+				fakePerson.name = `${
 					fakeNamesMan[getRandomInteger(0, fakeNamesMan.length - 1)]
 				} ${newFakeSurnames}`;
 			}
-			newFakePerson.likes = getUniqueIntegerArr(
+			fakePerson.likes = getUniqueIntegerArr(
 				1,
 				countFakeUser - 1,
 				countFakeUser - 1 / 10
 			).map((value) => String(value));
-			newFakePerson.birthday = getRandomInteger(1, 28);
-			newFakePerson.monthofbirth = getRandomInteger(1, 12);
-			newFakePerson.yearofbirth = getRandomInteger(1960, 2005);
-			newFakePerson.growth = getRandomInteger(
+			fakePerson.birthday = getRandomInteger(1, 28);
+			fakePerson.monthofbirth = getRandomInteger(1, 12);
+			fakePerson.yearofbirth = getRandomInteger(1960, 2005);
+			fakePerson.growth = getRandomInteger(
 				data_growth[0],
 				data_growth[data_growth.length - 1]
 			);
-			newFakePerson.weight = getRandomInteger(0, data_weight.length - 1);
-			newFakePerson.gendervapor = getRandomInteger(
+			fakePerson.weight = getRandomInteger(0, data_weight.length - 1);
+			fakePerson.gendervapor = getRandomInteger(
 				0,
 				data_genderVapor.length - 1
 			);
-			if (newFakePerson.gender) {
-				newFakePerson.photolink = getUniqueIntegerArr(
+			if (fakePerson.gender) {
+				fakePerson.photolink = getUniqueIntegerArr(
 					0,
 					fakeUsersWoman.length - 1,
 					getRandomInteger(0, 10)
 				).map((value) => fakeUsersWoman[value]);
 			} else {
-				newFakePerson.photolink = getUniqueIntegerArr(
+				fakePerson.photolink = getUniqueIntegerArr(
 					0,
 					fakeUsersMan.length - 1,
 					getRandomInteger(0, 10)
 				).map((value) => fakeUsersMan[value]);
 			}
-			newFakePerson.photomain = getRandomInteger(
+			fakePerson.photomain = getRandomInteger(
 				0,
-				newFakePerson.photolink.length - 1
+				fakePerson.photolink.length - 1
 			);
-			newFakePerson.signzodiac = getSignZodiac(
-				newFakePerson.birthday,
-				newFakePerson.monthofbirth
+			fakePerson.signzodiac = getSignZodiac(
+				fakePerson.birthday,
+				fakePerson.monthofbirth
 			);
-			newFakePerson.education = getRandomInteger(
+			fakePerson.education = getRandomInteger(
 				0,
 				data_education.length - 1
 			);
-			newFakePerson.fieldofactivity = getRandomInteger(
+			fakePerson.fieldofactivity = getRandomInteger(
 				0,
 				data_fieldOfActivity.length - 1
 			);
-			newFakePerson.maritalstatus = getRandomInteger(
+			fakePerson.maritalstatus = getRandomInteger(
 				0,
 				data_maritalStatus.length - 1
 			);
-			newFakePerson.children = getRandomInteger(
-				0,
-				data_children.length - 1
-			);
-			newFakePerson.religion = getRandomInteger(
-				0,
-				data_religion.length - 1
-			);
-			newFakePerson.smoke = getRandomInteger(0, data_smoke.length - 1);
-			newFakePerson.alcohol = getRandomInteger(
-				0,
-				data_alcohol.length - 1
-			);
-			newFakePerson.discription =
+			fakePerson.children = getRandomInteger(0, data_children.length - 1);
+			fakePerson.religion = getRandomInteger(0, data_religion.length - 1);
+			fakePerson.smoke = getRandomInteger(0, data_smoke.length - 1);
+			fakePerson.alcohol = getRandomInteger(0, data_alcohol.length - 1);
+			fakePerson.discription =
 				fakeUsersHello[getRandomInteger(0, fakeUsersHello.length - 1)] +
 				", меня зовут " +
-				newFakePerson.name;
-			newFakePerson.profit = getRandomInteger(0, data_profit.length - 1);
-			newFakePerson.interests = getUniqueIntegerArr(
+				fakePerson.name;
+			fakePerson.profit = getRandomInteger(0, data_profit.length - 1);
+			fakePerson.interests = getUniqueIntegerArr(
 				0,
 				interests.length - 1,
 				getRandomInteger(0, 10)
 			).map((value) => interests[value]);
-			newFakePerson.ilikecharacter = getUniqueIntegerArr(
+			fakePerson.ilikecharacter = getUniqueIntegerArr(
 				0,
 				data_iLikeСharacter.length - 1,
 				getRandomInteger(0, 10)
 			);
-			newFakePerson.idontlikecharacter = getUniqueIntegerArr(
+			fakePerson.idontlikecharacter = getUniqueIntegerArr(
 				0,
 				data_iDontLikeСharacter.length - 1,
 				getRandomInteger(0, 10)
 			);
-			newFakePerson.rating = getRandomInteger(0, 10000);
-			newFakePerson.cash = getRandomInteger(1000, 10000);
-			(newFakePerson.acctype = ACCTYPE.user),
-				arrFakeUsers.push(newFakePerson);
+			fakePerson.rating = getRandomInteger(0, 10000);
+			fakePerson.cash = getRandomInteger(1000, 10000);
+
+			arrFakeUsers.push(JSON.parse(JSON.stringify(fakePerson)));
 		}
 	} catch (error) {
 		console.log("fakeUsersGenerate", error);
@@ -291,58 +281,64 @@ const fakeQueryStringUsersGenerate = async (
 ): Promise<string[]> => {
 	let fakeQueryUsers: string[] = [];
 
-	const fakeUsers = await fakeUsersGenerate(countFakeUser);
+	try {
+		const fakeUsers = await fakeUsersGenerate(countFakeUser);
 
-	fakeQueryUsers = fakeUsers.map((fakeUser) => {
-		const strQuery =
-			"INSERT INTO users (" +
-			"email, password, jwt, " +
-			"userid, coordinates, registrationdate, " +
-			"timecode, name, location, likes, " +
-			"birthday, monthofbirth, yearofbirth, " +
-			"growth, weight, " +
-			"gender, gendervapor, " +
-			"photomain, photolink, " +
-			"signzodiac, education, " +
-			"fieldofactivity, maritalstatus, " +
-			"children, religion, " +
-			"smoke, alcohol, " +
-			"discription, profit, " +
-			"interests, " +
-			"filters, " +
-			"ilikecharacter, idontlikecharacter, " +
-			"stickerpacks, " +
-			"rating, cash, acctype, " +
-			"banned, " +
-			"visit, paid" +
-			") VALUES (" +
-			`'${fakeUser.email}', '${fakeUser.password}', ARRAY [] :: JSON [], ` +
-			`'${fakeUser.userid}', ARRAY [] :: JSON[], ${fakeUser.registrationdate}, ` +
-			`${fakeUser.timecode}, '${fakeUser.name}', '${
-				fakeUser.location
-			}', ${arrQueryStr(fakeUser.likes)}, ` +
-			`${fakeUser.birthday}, ${fakeUser.monthofbirth}, ${fakeUser.yearofbirth}, ` +
-			`${fakeUser.growth}, ${fakeUser.weight}, ` +
-			`${fakeUser.gender}, ${fakeUser.gendervapor}, ` +
-			`${fakeUser.photomain}, ${arrQueryStr(fakeUser.photolink)}, ` +
-			`${fakeUser.signzodiac}, ${fakeUser.education}, ` +
-			`${fakeUser.fieldofactivity}, ${fakeUser.maritalstatus}, ` +
-			`${fakeUser.children}, ${fakeUser.religion}, ` +
-			`${fakeUser.smoke}, ${fakeUser.alcohol}, ` +
-			`'${fakeUser.discription}', ${fakeUser.profit}, ` +
-			`${arrQueryStr(fakeUser.interests)}, ` +
-			`'${JSON.stringify(fakeUser.filters)}' :: JSON, ` +
-			`${arrQueryInt(fakeUser.ilikecharacter)}, ${arrQueryInt(
-				fakeUser.idontlikecharacter
-			)}, ` +
-			`ARRAY [] :: TEXT [], ` +
-			`${fakeUser.rating}, ${fakeUser.cash}, '${fakeUser.acctype}', ` +
-			`'${JSON.stringify(fakeUser.banned)}' :: JSON, ` +
-			`ARRAY [] :: JSON [], '${JSON.stringify(fakeUser.paid)}' :: JSON` +
-			")";
+		fakeQueryUsers = fakeUsers.map((fakeUser) => {
+			const strQuery =
+				"INSERT INTO users (" +
+				"email, password, jwt, " +
+				"userid, coordinates, registrationdate, " +
+				"timecode, name, location, likes, " +
+				"birthday, monthofbirth, yearofbirth, " +
+				"growth, weight, " +
+				"gender, gendervapor, " +
+				"photomain, photolink, " +
+				"signzodiac, education, " +
+				"fieldofactivity, maritalstatus, " +
+				"children, religion, " +
+				"smoke, alcohol, " +
+				"discription, profit, " +
+				"interests, " +
+				"filters, " +
+				"ilikecharacter, idontlikecharacter, " +
+				"stickerpacks, " +
+				"rating, cash, acctype, " +
+				"banned, " +
+				"visit, paid" +
+				") VALUES (" +
+				`'${fakeUser.email}', '${fakeUser.password}', ARRAY [] :: JSON [], ` +
+				`'${fakeUser.userid}', ARRAY [] :: JSON[], ${fakeUser.registrationdate}, ` +
+				`${fakeUser.timecode}, '${fakeUser.name}', '${
+					fakeUser.location
+				}', ${arrQueryStr(fakeUser.likes)}, ` +
+				`${fakeUser.birthday}, ${fakeUser.monthofbirth}, ${fakeUser.yearofbirth}, ` +
+				`${fakeUser.growth}, ${fakeUser.weight}, ` +
+				`${fakeUser.gender}, ${fakeUser.gendervapor}, ` +
+				`${fakeUser.photomain}, ${arrQueryStr(fakeUser.photolink)}, ` +
+				`${fakeUser.signzodiac}, ${fakeUser.education}, ` +
+				`${fakeUser.fieldofactivity}, ${fakeUser.maritalstatus}, ` +
+				`${fakeUser.children}, ${fakeUser.religion}, ` +
+				`${fakeUser.smoke}, ${fakeUser.alcohol}, ` +
+				`'${fakeUser.discription}', ${fakeUser.profit}, ` +
+				`${arrQueryStr(fakeUser.interests)}, ` +
+				`'${JSON.stringify(fakeUser.filters)}' :: JSON, ` +
+				`${arrQueryInt(fakeUser.ilikecharacter)}, ${arrQueryInt(
+					fakeUser.idontlikecharacter
+				)}, ` +
+				`ARRAY [] :: TEXT [], ` +
+				`${fakeUser.rating}, ${fakeUser.cash}, '${fakeUser.acctype}', ` +
+				`'${JSON.stringify(fakeUser.banned)}' :: JSON, ` +
+				`ARRAY [] :: JSON [], '${JSON.stringify(
+					fakeUser.paid
+				)}' :: JSON` +
+				")";
 
-		return strQuery;
-	});
+			return strQuery;
+		});
+	} catch (error) {
+		console.log("fakeQueryStringUsersGenerate", error);
+	}
 
 	return fakeQueryUsers;
 };
