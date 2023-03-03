@@ -1,4 +1,4 @@
-import { getRandomString } from "./string";
+import { getRandomString } from "./random";
 
 const testArrClassic: Array<number> = [];
 for (let i = 0; i < 3; i++)
