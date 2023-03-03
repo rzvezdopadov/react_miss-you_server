@@ -16,7 +16,7 @@ import {
 } from "../query/auth";
 import { getSignZodiac } from "../utils/profile";
 import { getTimecodeNow } from "../utils/datetime";
-import { getRandomString } from "../utils/string";
+import { getRandomString } from "../utils/random";
 import { isHaveCaptcha } from "./captcha";
 import { testToken } from "../utils/token";
 import { sendMessageToEmail } from "../utils/transporter";
