@@ -1,6 +1,6 @@
 import { IPhotos } from "../interfaces/iphotos";
 import { getPhotosByIdFromDB, setPhotosByIdToDB } from "../query/photos";
-import { getRandomString } from "./string";
+import { getRandomString } from "./random";
 const fs = require("fs");
 
 export const deletePhoto = async (
