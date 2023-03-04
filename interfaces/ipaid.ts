@@ -9,4 +9,7 @@ export interface IPaid {
 	userfavorite: IPaidContent;
 	photoall: IPaidContent;
 	photofull: IPaidContent;
+	infinityinterests: IPaidContent;
+	infinitymessages: IPaidContent;
+	longfilterslikes: IPaidContent;
 }
