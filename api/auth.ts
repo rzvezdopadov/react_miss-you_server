@@ -167,6 +167,9 @@ export async function queryRegistration(req, res) {
 				userfavorite: { enabled: false, timecode: 0 },
 				photoall: { enabled: false, timecode: 0 },
 				photofull: { enabled: false, timecode: 0 },
+				infinityinterests: { enabled: false, timecode: 0 },
+				infinitymessages: { enabled: false, timecode: 0 },
+				longfilterslikes: { enabled: false, timecode: 0 },
 			},
 			stickerpacks: [],
 		};
