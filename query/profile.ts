@@ -51,9 +51,9 @@ export async function getProfiles(
 				if (filters[key] === null) filters[key] = 0;
 
 			const subAnswerDB = await poolDB.query(
-				`SELECT gender FROM users WHERE userid = '${userid}'`
+				`SELECT gendervapor FROM users WHERE userid = '${userid}'`
 			);
-			const { gender } = subAnswerDB.rows[0];
+			const { gendervapor } = subAnswerDB.rows[0];
 
 			queryStr += `(location = '${filters.location}') AND `;
 			queryStr += `(yearofbirth >= ${getYearFromAge(
@@ -64,17 +64,17 @@ export async function getProfiles(
 			queryStr += conditionStr("signzodiac", filters.signzodiac);
 
 			if (filters.gendervapor !== 2) {
-				if (gender === 0) {
-					queryStr += `(gender = '${1}') AND `;
-				} else if (gender === 1) {
-					queryStr += `(gender = '${0}') AND `;
+				if (gendervapor === 0) {
+					queryStr += `(gendervapor = '${1}') AND `;
+				} else if (gendervapor === 1) {
+					queryStr += `(gendervapor = '${0}') AND `;
 				}
-			}
 
-			if (filters.gendervapor === 0) {
-				queryStr += `(gendervapor = '${1}') AND `;
-			} else if (filters.gendervapor === 1) {
-				queryStr += `(gendervapor = '${0}') AND `;
+				if (filters.gendervapor === 0) {
+					queryStr += `(gender = '${0}') AND `;
+				} else if (filters.gendervapor === 1) {
+					queryStr += `(gender = '${1}') AND `;
+				}
 			} else {
 				queryStr += `(gendervapor = '${2}') AND `;
 			}
