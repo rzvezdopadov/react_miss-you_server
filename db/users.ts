@@ -117,6 +117,9 @@ const fakeUsersGenerate = async (
 				userfavorite: { enabled: false, timecode: 0 },
 				photoall: { enabled: false, timecode: 0 },
 				photofull: { enabled: false, timecode: 0 },
+				infinityinterests: { enabled: false, timecode: 0 },
+				infinitymessages: { enabled: false, timecode: 0 },
+				longfilterslikes: { enabled: false, timecode: 0 },
 			},
 			stickerpacks: [],
 		};
@@ -160,7 +163,7 @@ const fakeUsersGenerate = async (
 			fakePerson.likes = getUniqueIntegerArr(
 				1,
 				countFakeUser - 1,
-				countFakeUser - 1 / 10
+				(countFakeUser - 1) / 10
 			).map((value) => String(value));
 			fakePerson.birthday = getRandomInteger(1, 28);
 			fakePerson.monthofbirth = getRandomInteger(1, 12);
@@ -270,6 +273,7 @@ function arrQueryStr(arr) {
 
 		for (let i = 0; i < arr.length; i++) str += "'" + arr[i] + "', ";
 
+		str = str.slice(0, -2);
 		str += "]";
 	}
 
@@ -345,7 +349,7 @@ const fakeQueryStringUsersGenerate = async (
 
 export async function initDBUsers(): Promise<boolean> {
 	try {
-		const queryStr = `
+		let queryStr = `
             CREATE TABLE IF NOT EXISTS users (
                 email TEXT,
                 password TEXT,
@@ -393,7 +397,23 @@ export async function initDBUsers(): Promise<boolean> {
 
 		await poolDB.query(queryStr);
 
-		fakeQueryStringUsersGenerate(config.get("countFakeUser"));
+		queryStr = `SELECT * FROM users`;
+
+		const answerDB = await poolDB.query(queryStr);
+
+		if (answerDB.rows.length === 0) {
+			let arrFakeUsers: string[] = [];
+
+			if (config.get("server") === "test") {
+				arrFakeUsers = await fakeQueryStringUsersGenerate(
+					config.get("countFakeUser")
+				);
+			} else {
+				arrFakeUsers = await fakeQueryStringUsersGenerate(0);
+			}
+
+			arrFakeUsers.forEach(async (value) => await poolDB.query(value));
+		}
 
 		console.log("initDB Users Ok!");
 		return true;
