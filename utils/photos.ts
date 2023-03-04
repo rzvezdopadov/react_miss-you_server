@@ -83,7 +83,7 @@ export const addPhoto = async (ourId: string, image: any): Promise<IPhotos> => {
 
 			if (photos.photomain === -1) photos.photomain = 0;
 
-			photos.photolink.push("api/photo/" + strRand + ".jpg");
+			photos.photolink.push(strRand + ".jpg");
 			const setPhotoAnswer = await setPhotosByIdToDB(ourId, photos);
 
 			if (!setPhotoAnswer) return undefined;
