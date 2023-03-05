@@ -9,5 +9,10 @@
     "httpsPort": 5443,
     "socketPort": 8000,
     "emailUser": "service.miss.you@gmail.com",
-    "emailPass": "5615615113"
+    "emailPass": "5615615113",
+    "DBuser": "postgres",
+	"DBhost": "localhost",
+	"DBdatabase": "miss-you",
+	"DBpassword": "123456789",
+	"DBport": 5432
 }
