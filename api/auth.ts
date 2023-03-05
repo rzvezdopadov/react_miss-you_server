@@ -172,6 +172,7 @@ export async function queryRegistration(req, res) {
 				longfilterslikes: { enabled: false, timecode: 0 },
 			},
 			stickerpacks: [],
+			referral: registration.referral,
 		};
 
 		const isReg = await createProfileToDB(profile);

@@ -20,6 +20,7 @@ export interface IProfileRegistration extends IProfile {
 	likes: string[];
 	visit: IStatVisit[];
 	banned: IAdminBanned;
+	referral: string;
 	paid: IPaid;
 }
 
@@ -34,6 +35,7 @@ export interface IRegistration {
 	growth: number;
 	email: string;
 	password: string;
+	referral: string;
 	captcha: string;
 }
 

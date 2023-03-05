@@ -36,7 +36,7 @@ const config = require("config");
 const bcrypt = require("bcryptjs");
 
 const fakeUsersGenerate = async (
-	countFakeUser: number
+	fakeUserCount: number
 ): Promise<IProfileRegistration[]> => {
 	const arrFakeUsers: IProfileRegistration[] = [];
 
@@ -122,6 +122,7 @@ const fakeUsersGenerate = async (
 				longfilterslikes: { enabled: false, timecode: 0 },
 			},
 			stickerpacks: [],
+			referral: "",
 		};
 
 		fakePerson.signzodiac = getSignZodiac(
@@ -136,7 +137,7 @@ const fakeUsersGenerate = async (
 		fakePerson.password = hashedPasswordFakeUser;
 		fakePerson.acctype = ACCTYPE.user;
 
-		for (let i = 1; i < countFakeUser; i++) {
+		for (let i = 1; i < fakeUserCount; i++) {
 			fakePerson.email = `${i}@gmail.com`;
 			fakePerson.userid = `${i}`;
 
@@ -162,8 +163,8 @@ const fakeUsersGenerate = async (
 			}
 			fakePerson.likes = getUniqueIntegerArr(
 				1,
-				countFakeUser - 1,
-				(countFakeUser - 1) / 10
+				fakeUserCount - 1,
+				(fakeUserCount - 1) / 10
 			).map((value) => String(value));
 			fakePerson.birthday = getRandomInteger(1, 28);
 			fakePerson.monthofbirth = getRandomInteger(1, 12);
@@ -236,6 +237,9 @@ const fakeUsersGenerate = async (
 			);
 			fakePerson.rating = getRandomInteger(0, 10000);
 			fakePerson.cash = getRandomInteger(1000, 10000);
+			fakePerson.referral = String(
+				getRandomInteger(1, fakeUserCount - 1)
+			);
 
 			arrFakeUsers.push(JSON.parse(JSON.stringify(fakePerson)));
 		}
@@ -281,12 +285,12 @@ function arrQueryStr(arr) {
 }
 
 const fakeQueryStringUsersGenerate = async (
-	countFakeUser: number
+	fakeUserCount: number
 ): Promise<string[]> => {
 	let fakeQueryUsers: string[] = [];
 
 	try {
-		const fakeUsers = await fakeUsersGenerate(countFakeUser);
+		const fakeUsers = await fakeUsersGenerate(fakeUserCount);
 
 		fakeQueryUsers = fakeUsers.map((fakeUser) => {
 			const strQuery =
@@ -309,7 +313,7 @@ const fakeQueryStringUsersGenerate = async (
 				"stickerpacks, " +
 				"rating, cash, acctype, " +
 				"banned, " +
-				"visit, paid" +
+				"visit, paid, referral" +
 				") VALUES (" +
 				`'${fakeUser.email}', '${fakeUser.password}', ARRAY [] :: JSON [], ` +
 				`'${fakeUser.userid}', ARRAY [] :: JSON[], ${fakeUser.registrationdate}, ` +
@@ -335,7 +339,8 @@ const fakeQueryStringUsersGenerate = async (
 				`'${JSON.stringify(fakeUser.banned)}' :: JSON, ` +
 				`ARRAY [] :: JSON [], '${JSON.stringify(
 					fakeUser.paid
-				)}' :: JSON` +
+				)}' :: JSON, ` +
+				`'${fakeUser.referral}'` +
 				")";
 
 			return strQuery;
@@ -391,7 +396,8 @@ export async function initDBUsers(): Promise<boolean> {
                 acctype TEXT,
                 banned JSON, 
                 visit JSON[],
-                paid JSON
+                paid JSON,
+				referral TEXT
             );
         `;
 
