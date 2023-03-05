@@ -18,7 +18,7 @@ import {
 } from "../data/profiles";
 import { ACCTYPE } from "../interfaces/iadmin";
 import { IProfileRegistration } from "../interfaces/iauth";
-import { poolDB } from "../query/config";
+import { poolDB } from "./config";
 import { getTimecodeNow } from "../utils/datetime";
 import { getSignZodiac } from "../utils/profile";
 import { getRandomInteger, getUniqueIntegerArr } from "../utils/random";

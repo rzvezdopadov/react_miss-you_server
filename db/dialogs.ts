@@ -1,4 +1,4 @@
-import { poolDB } from "../query/config";
+import { poolDB } from "./config";
 
 export async function initDBDialogs(): Promise<boolean> {
 	try {

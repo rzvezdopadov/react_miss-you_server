@@ -1,4 +1,4 @@
-import { poolDB } from "../query/config";
+import { poolDB } from "./config";
 import { stickerpacksData } from "./stickerpacksData";
 
 const stickerpacksQueryGenerate = (): string[] => {

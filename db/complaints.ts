@@ -1,4 +1,4 @@
-import { poolDB } from "../query/config";
+import { poolDB } from "./config";
 
 export async function initDBComplaints(): Promise<boolean> {
 	try {
