@@ -1,4 +1,6 @@
 const { createCanvas } = require("canvas");
+const { registerFont } = require("canvas");
+registerFont("fonts/arial.ttf", { family: "Arial" });
 const widthCanvas = 180;
 const heightCanvas = 40;
 
