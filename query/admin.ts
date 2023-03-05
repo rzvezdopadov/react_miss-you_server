@@ -7,7 +7,7 @@ import {
 import { IProfile } from "../interfaces/iprofiles";
 import { getYearFromAge } from "../utils/datetime";
 import { conditionStr } from "../utils/query";
-import { poolDB } from "./config";
+import { poolDB } from "../db/config";
 import { fieldProfileShort } from "./profile";
 
 export async function getAdminAcctypeByIdFromDB(

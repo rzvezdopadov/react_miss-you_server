@@ -1,5 +1,5 @@
 import { IStickerpack } from "../interfaces/istickers";
-import { poolDB } from "./config";
+import { poolDB } from "../db/config";
 
 export async function getAllStickerpacks(): Promise<IStickerpack[]> {
 	try {

@@ -1,4 +1,4 @@
-import { poolDB } from "./config";
+import { poolDB } from "../db/config";
 import { getTimecodeNow } from "../utils/datetime";
 import { IStatVisit, IStatisticsVisit } from "../interfaces/istatistics";
 

@@ -6,7 +6,7 @@ import {
 } from "../interfaces/iprofiles";
 import { getYearFromAge } from "../utils/datetime";
 import { conditionStr } from "../utils/query";
-import { poolDB } from "./config";
+import { poolDB } from "../db/config";
 
 const fieldProfile =
 	"userid, timecode, name, location, " +

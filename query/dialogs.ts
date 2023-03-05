@@ -1,6 +1,6 @@
 import { IDialogBase } from "../interfaces/idialogs";
 import { getTimecodeNow } from "../utils/datetime";
-import { poolDB } from "./config";
+import { poolDB } from "../db/config";
 
 export async function getDialogByIdFromDB(
 	ourId: string,
