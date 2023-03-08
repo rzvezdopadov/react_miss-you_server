@@ -91,7 +91,7 @@ export function isHaveCaptcha(str: string): boolean {
 		}
 	}
 
-	return true;
+	return false;
 }
 
 setInterval(() => {
