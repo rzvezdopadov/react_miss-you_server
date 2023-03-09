@@ -1,15 +1,12 @@
 import { IJWT, IProfileRegistration } from "../../interfaces/iauth";
 import { poolDB } from "../initDB/config";
+import { getUniQueryFromDB } from "../utilsDB/uniquery";
 
 export async function getIdByEmailFromDB(email: string): Promise<string> {
 	try {
-		const answerDB = await poolDB.query(
-			`SELECT userid FROM users WHERE email = '${email}'`
-		);
-
-		if (answerDB.rows[0]) return answerDB.rows[0].userid;
-
-		return "";
+		return (
+			await getUniQueryFromDB(`users`, [`userid`], [`email = '${email}'`])
+		)[0].userid;
 	} catch (error) {
 		console.log("getIdByEmailFromDB:", error);
 		return "";
@@ -18,11 +15,13 @@ export async function getIdByEmailFromDB(email: string): Promise<string> {
 
 export async function getPasswordByIdFromDB(ourId: string): Promise<string> {
 	try {
-		const answerDB = await poolDB.query(
-			`SELECT password FROM users WHERE userid = '${ourId}'`
-		);
-
-		return answerDB.rows[0].password;
+		return (
+			await getUniQueryFromDB(
+				`users`,
+				[`password`],
+				[`userid = '${ourId}'`]
+			)
+		)[0].password;
 	} catch (error) {
 		console.log("getPasswordByIdFromDB:", error);
 		return "";
