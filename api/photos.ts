@@ -98,7 +98,7 @@ export async function queryGetPhoto(req, res, next) {
 			});
 
 		let { url } = req;
-		const nameFile = url.replace("api/photo/", "").replace(".jpg", "");
+		const nameFile = url.replace("/api/photo/", "").replace(".jpg", "");
 
 		return res.sendFile(getWayPhoto(nameFile), {}, function (err) {
 			if (err) next();
