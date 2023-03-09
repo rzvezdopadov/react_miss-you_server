@@ -6,9 +6,9 @@ import {
 	setProfileCashByIdToDB,
 	setProfileRatingByIdToDB,
 	setProfileStickerpacksByIdToDB,
-} from "../query/profile";
-import { getRatingTariffs } from "../query/shop";
-import { getAllStickerpacks } from "../query/stikers";
+} from "../db/queryDB/profile";
+import { getRatingTariffs } from "../db/queryDB/shop";
+import { getAllStickerpacks } from "../db/queryDB/stikers";
 import { testToken } from "../utils/token";
 
 export async function queryGetRatingTariffs(req, res) {

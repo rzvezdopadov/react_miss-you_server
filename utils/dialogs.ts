@@ -8,8 +8,11 @@ import {
 	getDialogByIdFromDB,
 	getDialogsByIdFromDB,
 	setDialogByIdToDB,
-} from "../query/dialogs";
-import { getProfileByIdFromDB, getProfilesForDialogs } from "../query/profile";
+} from "../db/queryDB/dialogs";
+import {
+	getProfileByIdFromDB,
+	getProfilesForDialogs,
+} from "../db/queryDB/profile";
 import { getTimecodeNow } from "./datetime";
 
 export const setDialog = async (
@@ -124,9 +127,7 @@ export const getDialog = async (
 	}
 };
 
-export const getDialogs = async (
-	ourId: string
-): Promise<Array<IDialogOutput>> => {
+export const getDialogs = async (ourId: string): Promise<IDialogOutput[]> => {
 	try {
 		const dialogs = await getDialogsByIdFromDB(ourId);
 
@@ -163,7 +164,7 @@ export const getDialogs = async (
 			return 0;
 		});
 
-		let newDialogs: Array<IDialogOutput> = [];
+		let newDialogs: IDialogOutput[] = [];
 
 		if (dialogs.length) {
 			dialogs.forEach((value, index) => {

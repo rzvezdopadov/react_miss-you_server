@@ -1,5 +1,5 @@
-import { IJWT, IProfileRegistration } from "../interfaces/iauth";
-import { poolDB } from "../db/config";
+import { IJWT, IProfileRegistration } from "../../interfaces/iauth";
+import { poolDB } from "../initDB/config";
 
 export async function getIdByEmailFromDB(email: string): Promise<string> {
 	try {

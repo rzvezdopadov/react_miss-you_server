@@ -15,13 +15,13 @@ import {
 	data_religion,
 	data_smoke,
 	data_weight,
-} from "../data/profiles";
-import { ACCTYPE } from "../interfaces/iadmin";
-import { IProfileRegistration } from "../interfaces/iauth";
+} from "../../data/profiles";
+import { ACCTYPE } from "../../interfaces/iadmin";
+import { IProfileRegistration } from "../../interfaces/iauth";
 import { poolDB } from "./config";
-import { getTimecodeNow } from "../utils/datetime";
-import { getSignZodiac } from "../utils/profile";
-import { getRandomInteger, getUniqueIntegerArr } from "../utils/random";
+import { getTimecodeNow } from "../../utils/datetime";
+import { getSignZodiac } from "../../utils/profile";
+import { getRandomInteger, getUniqueIntegerArr } from "../../utils/random";
 import {
 	fakeNamesMan,
 	fakeNamesWoman,

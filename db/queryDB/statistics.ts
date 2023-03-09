@@ -1,6 +1,6 @@
-import { poolDB } from "../db/config";
-import { getTimecodeNow } from "../utils/datetime";
-import { IStatVisit, IStatisticsVisit } from "../interfaces/istatistics";
+import { poolDB } from "../initDB/config";
+import { getTimecodeNow } from "../../utils/datetime";
+import { IStatVisit, IStatisticsVisit } from "../../interfaces/istatistics";
 
 export async function setVisitByIdToDB(
 	key: string,

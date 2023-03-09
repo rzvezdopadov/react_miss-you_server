@@ -1,12 +1,12 @@
-import { ACCTYPE } from "../interfaces/iadmin";
+import { ACCTYPE } from "../../interfaces/iadmin";
 import {
 	IGetProfiles,
 	IProfile,
 	IProfileForDialog,
-} from "../interfaces/iprofiles";
-import { getYearFromAge } from "../utils/datetime";
-import { conditionStr } from "../utils/query";
-import { poolDB } from "../db/config";
+} from "../../interfaces/iprofiles";
+import { getYearFromAge } from "../../utils/datetime";
+import { conditionStr } from "../../utils/query";
+import { poolDB } from "../initDB/config";
 
 const fieldProfile =
 	"userid, timecode, name, location, " +

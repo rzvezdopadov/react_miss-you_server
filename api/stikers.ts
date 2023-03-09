@@ -1,4 +1,4 @@
-import { getAllStickerpacks } from "../query/stikers";
+import { getAllStickerpacks } from "../db/queryDB/stikers";
 import { getWaySticker } from "../utils/stickers";
 import { testToken } from "../utils/token";
 

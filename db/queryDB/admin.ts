@@ -3,11 +3,11 @@ import {
 	IAdminBanned,
 	IAdminStatVisit,
 	IQueryGetAdminProfiles,
-} from "../interfaces/iadmin";
-import { IProfile } from "../interfaces/iprofiles";
-import { getYearFromAge } from "../utils/datetime";
-import { conditionStr } from "../utils/query";
-import { poolDB } from "../db/config";
+} from "../../interfaces/iadmin";
+import { IProfile } from "../../interfaces/iprofiles";
+import { getYearFromAge } from "../../utils/datetime";
+import { conditionStr } from "../../utils/query";
+import { poolDB } from "../initDB/config";
 import { fieldProfileShort } from "./profile";
 
 export async function getAdminAcctypeByIdFromDB(

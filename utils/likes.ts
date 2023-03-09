@@ -1,4 +1,4 @@
-import { getLikesByIdFromDB, setLikesByIdToDB } from "../query/likes";
+import { getLikesByIdFromDB, setLikesByIdToDB } from "../db/queryDB/likes";
 
 export const setLikesById = async (ourId: string, userId: string) => {
 	try {

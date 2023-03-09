@@ -1,10 +1,10 @@
 import { testToken } from "../utils/token";
-import { setTimecodeToDB } from "../query/auth";
+import { setTimecodeToDB } from "../db/queryDB/auth";
 import { setLikesById } from "../utils/likes";
 import { setDialog } from "../utils/dialogs";
-import { setVisitByIdToDB } from "../query/statistics";
+import { setVisitByIdToDB } from "../db/queryDB/statistics";
 import { botPhraseCensure, botPhraseSpam } from "../utils/bots";
-import { setAdminBannedByIdToDB } from "../query/admin";
+import { setAdminBannedByIdToDB } from "../db/queryDB/admin";
 import { IQuerySendMessage, MESSAGETYPE } from "../interfaces/idialogs";
 import { IQuerySendSticker } from "../interfaces/istickers";
 import { IQueryLike } from "../interfaces/ilikes";

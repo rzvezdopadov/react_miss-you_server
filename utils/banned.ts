@@ -1,4 +1,4 @@
-import { getAdminBannedByIdFromDB } from "../query/admin";
+import { getAdminBannedByIdFromDB } from "../db/queryDB/admin";
 import { getTimecodeNow } from "./datetime";
 
 export async function isBannedUser(ourId: string): Promise<string> {

@@ -1,4 +1,4 @@
-import { IStickerpack } from "../interfaces/istickers";
+import { IStickerpack } from "../../interfaces/istickers";
 
 export const stickerpacksData: IStickerpack[] = [
 	{

@@ -13,14 +13,14 @@ import {
 	getPasswordByIdFromDB,
 	setJWTToDB,
 	setPasswordByIdToDB,
-} from "../query/auth";
+} from "../db/queryDB/auth";
 import { getSignZodiac } from "../utils/profile";
 import { getTimecodeNow } from "../utils/datetime";
 import { getRandomString } from "../utils/random";
 import { isHaveCaptcha } from "./captcha";
 import { testToken } from "../utils/token";
 import { sendMessageToEmail } from "../utils/transporter";
-import { getAdminBannedByIdFromDB } from "../query/admin";
+import { getAdminBannedByIdFromDB } from "../db/queryDB/admin";
 import { ACCTYPE } from "../interfaces/iadmin";
 import {
 	data_age,

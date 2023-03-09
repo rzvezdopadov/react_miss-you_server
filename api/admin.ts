@@ -11,14 +11,14 @@ import {
 	getAdminStatVisitByIdFromDB,
 	setAdminAcctypeByIdToDB,
 	setAdminBannedByIdToDB,
-} from "../query/admin";
+} from "../db/queryDB/admin";
 import {
 	getProfileByIdFromDB,
 	getProfileCashByIdFromDB,
 	getProfileRatingByIdFromDB,
 	setProfileCashByIdToDB,
 	setProfileRatingByIdToDB,
-} from "../query/profile";
+} from "../db/queryDB/profile";
 import { getTimecodeNow } from "../utils/datetime";
 import { deletePhoto } from "../utils/photos";
 import { testToken } from "../utils/token";

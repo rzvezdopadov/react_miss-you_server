@@ -1,7 +1,7 @@
-import { COMPLAINTSTATUS } from "../interfaces/iadmin";
-import { IComplaintBase } from "../interfaces/icomplaints";
-import { getTimecodeNow } from "../utils/datetime";
-import { poolDB } from "../db/config";
+import { COMPLAINTSTATUS } from "../../interfaces/iadmin";
+import { IComplaintBase } from "../../interfaces/icomplaints";
+import { getTimecodeNow } from "../../utils/datetime";
+import { poolDB } from "../initDB/config";
 
 export async function getComplaintByIdFromDB(
 	ourId: string,

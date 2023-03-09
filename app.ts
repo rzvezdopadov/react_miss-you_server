@@ -1,7 +1,7 @@
 import express from "express";
 import { socketHandler } from "./api/sockets";
 import fileupload from "express-fileupload";
-import { initDB } from "./db/init";
+import { initDB } from "./db/initDB/init";
 const config = require("config");
 const cookieParser = require("cookie-parser");
 

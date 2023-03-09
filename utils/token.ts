@@ -1,4 +1,4 @@
-import { getJWTFromDB } from "../query/auth";
+import { getJWTFromDB } from "../db/queryDB/auth";
 
 const config = require("config");
 const jwtToken = require("jsonwebtoken");

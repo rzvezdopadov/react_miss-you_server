@@ -11,7 +11,7 @@ import {
 	getProfiles,
 	getProfilesForLikes,
 	setProfileByIdToDB,
-} from "../query/profile";
+} from "../db/queryDB/profile";
 import { isBannedUser } from "../utils/banned";
 
 export async function querySetProfile(req, res) {

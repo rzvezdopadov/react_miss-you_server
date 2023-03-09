@@ -1,5 +1,5 @@
-import { IPhotos } from "../interfaces/iphotos";
-import { poolDB } from "../db/config";
+import { IPhotos } from "../../interfaces/iphotos";
+import { poolDB } from "../initDB/config";
 
 export async function getPhotosByIdFromDB(ourId: string): Promise<IPhotos> {
 	try {

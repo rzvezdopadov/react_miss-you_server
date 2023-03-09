@@ -1,5 +1,5 @@
 import { IPhotos } from "../interfaces/iphotos";
-import { getPhotosByIdFromDB, setPhotosByIdToDB } from "../query/photos";
+import { getPhotosByIdFromDB, setPhotosByIdToDB } from "../db/queryDB/photos";
 import { getRandomString } from "./random";
 const fs = require("fs");
 

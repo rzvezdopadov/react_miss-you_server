@@ -1,6 +1,6 @@
 import { IComplaintOutput } from "../interfaces/icomplaints";
-import { getComplaintsByIdFromDB } from "../query/complaints";
-import { getProfilesForDialogs } from "../query/profile";
+import { getComplaintsByIdFromDB } from "../db/queryDB/complaints";
+import { getProfilesForDialogs } from "../db/queryDB/profile";
 
 export const getComplaints = async (
 	ourId: string
@@ -39,7 +39,7 @@ export const getComplaints = async (
 			return 0;
 		});
 
-		let newComlaints: Array<IComplaintOutput> = [];
+		let newComlaints: IComplaintOutput[] = [];
 
 		if (complaints.length) {
 			complaints.forEach((complaint, index) => {
