@@ -1,7 +1,7 @@
 import express from "express";
-import { socketHandler } from "./api/sockets";
+import { socketHandler } from "./microservices/sockets/socketsAPI";
 import fileupload from "express-fileupload";
-import { initDB } from "./db/initDB/init";
+import { initDB } from "./db/init";
 const config = require("config");
 const cookieParser = require("cookie-parser");
 
@@ -23,7 +23,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/static", express.static(__dirname + "/static"));
-app.use("/", require("./api/api"));
+
+app.use("/", require("./microservices/auth/authRoutes"));
+app.use("/", require("./microservices/user/userRoutes"));
+app.use("/", require("./microservices/images/imagesRoutes"));
+// app.use("/", require("./microservices/shop/shopRoutes"));
+// app.use("/", require("./microservices/guest/guestRoutes"));
+// app.use("/", require("./microservices/complaints/complaintsRoutes"));
+// app.use("/", require("./microservices/service/serviceRoutes"));
+app.use("/", require("./microservices/admin/adminRoutes"));
+app.use("/", require("./api"));
 
 const httpPORT = config.get("httpPort") || 5000;
 const socketPORT = config.get("socketPort") || 8000;

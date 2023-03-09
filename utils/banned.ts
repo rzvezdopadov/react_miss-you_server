@@ -1,4 +1,4 @@
-import { getAdminBannedByIdFromDB } from "../db/queryDB/admin";
+import { getAdminBannedByIdFromDB } from "../microservices/admin/adminDB";
 import { getTimecodeNow } from "./datetime";
 
 export async function isBannedUser(ourId: string): Promise<string> {
