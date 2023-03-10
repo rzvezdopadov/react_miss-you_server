@@ -23,6 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/static", express.static(__dirname + "/static"));
+app.use("/favicon.ico", express.static(__dirname + "/favicon.ico"));
 
 app.use("/", require("./microservices/auth/authRoutes"));
 app.use("/", require("./microservices/user/userRoutes"));
