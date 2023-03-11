@@ -8,8 +8,8 @@ import {
 import { querySetLike } from "../profile/likes/likesAPI";
 import {
 	queryGetProfile,
-	queryGetProfiles,
 	queryGetProfilesForLikes,
+	queryGetProfilesShort,
 	querySetProfile,
 } from "../profile/profile/profileAPI";
 import {
@@ -28,7 +28,7 @@ router.get("/api/profilesforlikes", [], queryGetProfilesForLikes);
 
 router.put("/api/profile", [], querySetProfile);
 router.get("/api/profile", [], queryGetProfile);
-router.get("/api/profiles", [], queryGetProfiles);
+router.get("/api/profilesshort", [], queryGetProfilesShort);
 
 router.put("/api/like", [], querySetLike);
 

@@ -41,6 +41,33 @@ export interface IProfile {
 	acctype: ACCTYPE;
 }
 
+export interface IProfileShort {
+	userid: string;
+	timecode: number;
+	name: string;
+	birthday: number;
+	monthofbirth: number;
+	yearofbirth: number;
+	gender: number;
+	photomain: number;
+	photolink: string[];
+	interests: string[];
+	rating: number;
+}
+
+export interface IProfileShortOutput {
+	userid: string;
+	timecode: number;
+	name: string;
+	birthday: number;
+	monthofbirth: number;
+	yearofbirth: number;
+	gender: number;
+	photolink: string;
+	interests: string[];
+	rating: number;
+}
+
 export interface IFilterUsers {
 	location: string;
 	agestart: number;
@@ -85,7 +112,7 @@ export interface IQuerySetProfile {
 	profile: IProfile;
 }
 
-export interface IProfileForDialog {
+export interface IProfileShortForDialog {
 	userid: string;
 	name: string;
 	birthday: number;

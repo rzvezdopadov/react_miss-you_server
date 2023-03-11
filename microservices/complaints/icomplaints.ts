@@ -19,8 +19,7 @@ export interface IComplaintOutput {
 	birthday: number;
 	monthofbirth: number;
 	yearofbirth: number;
-	photomain: number;
-	photolink: string[];
+	photolink: string;
 	status: COMPLAINTSTATUS;
 	messages: IMessage[];
 	complmessages: IMessage[];

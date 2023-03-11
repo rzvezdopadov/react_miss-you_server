@@ -6,13 +6,9 @@ import {
 } from "./iprofile";
 import { getSignZodiac } from "../../../utils/signzodiac";
 import { testToken } from "../../auth/token";
-import {
-	getProfileByIdFromDB,
-	getProfiles,
-	getProfilesForLikes,
-	setProfileByIdToDB,
-} from "./profileDB";
+import { getProfileByIdFromDB, setProfileByIdToDB } from "./profileDB";
 import { isBannedUser } from "../../../utils/banned";
+import { getProfilesShort, getProfilesShortForLikes } from "./profileUtils";
 
 export async function querySetProfile(req, res) {
 	try {
@@ -104,7 +100,7 @@ export async function queryGetProfile(req, res) {
 	}
 }
 
-export async function queryGetProfiles(req, res) {
+export async function queryGetProfilesShort(req, res) {
 	try {
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
@@ -140,7 +136,7 @@ export async function queryGetProfiles(req, res) {
 
 		getProfilesVal.userid = jwtDecode.userId;
 
-		const profiles = await getProfiles(getProfilesVal);
+		const profiles = await getProfilesShort(getProfilesVal);
 
 		return res.status(200).json(profiles);
 	} catch (e) {
@@ -174,7 +170,7 @@ export async function queryGetProfilesForLikes(req, res) {
 
 		getProfilesVal.userid = jwtDecode.userId;
 
-		const profiles = await getProfilesForLikes(getProfilesVal);
+		const profiles = await getProfilesShortForLikes(getProfilesVal);
 
 		return res.status(200).json(profiles);
 	} catch (e) {

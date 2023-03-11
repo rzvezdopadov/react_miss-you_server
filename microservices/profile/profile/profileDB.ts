@@ -1,5 +1,10 @@
 import { ACCTYPE } from "../../admin/iadmin";
-import { IGetProfiles, IProfile, IProfileForDialog } from "./iprofile";
+import {
+	IGetProfiles,
+	IProfile,
+	IProfileShort,
+	IProfileShortForDialog,
+} from "./iprofile";
 import { getYearFromAge } from "../../../utils/datetime";
 import { conditionStr } from "../../../utils/query";
 import { poolDB } from "../../../db/config";
@@ -30,9 +35,9 @@ export async function getProfileByIdFromDB(userid: string): Promise<IProfile> {
 export const fieldProfileShort =
 	"userid, timecode, name, birthday, monthofbirth, yearofbirth, gender, photomain, photolink, interests, rating";
 
-export async function getProfiles(
+export async function getProfilesShortFromDB(
 	QueryGetProfiles: IGetProfiles
-): Promise<IProfile[]> {
+): Promise<IProfileShort[]> {
 	const startPos = Number(QueryGetProfiles.startcount);
 	const endPos = startPos + Number(QueryGetProfiles.amount);
 	const { filters, users, userid } = QueryGetProfiles;
@@ -118,12 +123,12 @@ export async function getProfiles(
 
 		return profiles;
 	} catch (error) {
-		console.log("getProfiles", error);
+		console.log("getProfilesShortFromDB", error);
 		return [];
 	}
 }
 
-export async function getProfilesForLikes(
+export async function getProfilesShortForLikesFromDB(
 	QueryGetProfiles: IGetProfiles
 ): Promise<IProfile[]> {
 	const startPos = Number(QueryGetProfiles.startcount);
@@ -170,16 +175,16 @@ export async function getProfilesForLikes(
 
 		return profiles;
 	} catch (error) {
-		console.log("getProfilesForLikes", error);
+		console.log("getProfilesShortForLikesFromDB", error);
 		return [];
 	}
 }
 
-export async function getProfilesForDialogs(
+export async function getProfilesForDialogsFromDB(
 	users: Array<string>
-): Promise<IProfileForDialog[]> {
+): Promise<IProfileShortForDialog[]> {
 	try {
-		let answerDB: { rows: IProfileForDialog[] } = { rows: [] };
+		let answerDB: { rows: IProfileShortForDialog[] } = { rows: [] };
 
 		let queryStr =
 			"SELECT userid, name, birthday, monthofbirth, yearofbirth, photomain, photolink FROM users WHERE ";
@@ -200,7 +205,7 @@ export async function getProfilesForDialogs(
 
 		return answerDB.rows;
 	} catch (error) {
-		console.log("getProfilesForDialogs", error);
+		console.log("getProfilesForDialogsFromDB", error);
 		return [];
 	}
 }
@@ -244,7 +249,7 @@ export async function setProfileByIdToDB(
 			profile.idontlikecharacter,
 		]);
 	} catch (error) {
-		console.log("setProfileByIdToDB:", error);
+		console.log("setProfileByIdToDB", error);
 		return undefined;
 	}
 

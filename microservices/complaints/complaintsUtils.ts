@@ -1,6 +1,6 @@
 import { IComplaintOutput } from "./icomplaints";
-import { getProfilesForDialogs } from "../profile/profile/profileDB";
 import { getComplaintsByIdFromDB } from "./complaintsDB";
+import { getProfilesForDialogsFromDB } from "../profile/profile/profileDB";
 
 export const getComplaints = async (
 	ourId: string
@@ -12,7 +12,7 @@ export const getComplaints = async (
 
 		const idUsers = complaints.map((dialog) => dialog.userto);
 
-		const users = await getProfilesForDialogs(idUsers);
+		const users = await getProfilesForDialogsFromDB(idUsers);
 
 		complaints.sort((a, b) => {
 			const id1 = a.userto;
@@ -53,8 +53,7 @@ export const getComplaints = async (
 					birthday: users[index].birthday,
 					monthofbirth: users[index].monthofbirth,
 					yearofbirth: users[index].yearofbirth,
-					photomain: users[index].photomain,
-					photolink: users[index].photolink,
+					photolink: users[index].photolink[users[index].photomain],
 					status: complaint.status,
 					messages: complaint.messages,
 					complmessages: complaint.complmessages,

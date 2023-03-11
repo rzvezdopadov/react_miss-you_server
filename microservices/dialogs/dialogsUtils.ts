@@ -5,7 +5,7 @@ import {
 } from "./dialogsDB";
 import {
 	getProfileByIdFromDB,
-	getProfilesForDialogs,
+	getProfilesForDialogsFromDB,
 } from "../profile/profile/profileDB";
 import { getTimecodeNow } from "../../utils/datetime";
 import { IDialogBase, IDialogOutput, IMessage, MESSAGETYPE } from "./idialogs";
@@ -25,8 +25,7 @@ export const setDialog = async (
 		birthday: 0,
 		monthofbirth: 0,
 		yearofbirth: 0,
-		photomain: 0,
-		photolink: [],
+		photolink: "",
 		messages: [],
 	};
 
@@ -72,8 +71,7 @@ export const setDialog = async (
 		newDialog.birthday = profileUser.birthday;
 		newDialog.monthofbirth = profileUser.monthofbirth;
 		newDialog.yearofbirth = profileUser.yearofbirth;
-		newDialog.photomain = profileUser.photomain;
-		newDialog.photolink = profileUser.photolink;
+		newDialog.photolink = profileUser.photolink[profileUser.photomain];
 		newDialog.messages = updatesDialog.messages;
 
 		return newDialog;
@@ -94,8 +92,7 @@ export const getDialog = async (
 		birthday: 0,
 		monthofbirth: 0,
 		yearofbirth: 0,
-		photomain: 0,
-		photolink: [],
+		photolink: "",
 		messages: [],
 	};
 
@@ -110,8 +107,7 @@ export const getDialog = async (
 			birthday: profile.birthday,
 			monthofbirth: profile.monthofbirth,
 			yearofbirth: profile.yearofbirth,
-			photomain: profile.photomain,
-			photolink: profile.photolink,
+			photolink: profile.photolink[profile.photomain],
 			messages: (dialog && dialog.messages) || [],
 		};
 
@@ -132,7 +128,7 @@ export const getDialogs = async (ourId: string): Promise<IDialogOutput[]> => {
 			dialog.userid1 === ourId ? dialog.userid2 : dialog.userid1
 		);
 
-		const users = await getProfilesForDialogs(idUsers);
+		const users = await getProfilesForDialogsFromDB(idUsers);
 
 		dialogs.sort((a, b) => {
 			const id1 = a.userid1 === ourId ? a.userid2 : a.userid1;
@@ -176,8 +172,7 @@ export const getDialogs = async (ourId: string): Promise<IDialogOutput[]> => {
 					birthday: users[index].birthday,
 					monthofbirth: users[index].monthofbirth,
 					yearofbirth: users[index].yearofbirth,
-					photomain: users[index].photomain,
-					photolink: users[index].photolink,
+					photolink: users[index].photolink[users[index].photomain],
 					messages: dialogs[index].messages,
 				};
 

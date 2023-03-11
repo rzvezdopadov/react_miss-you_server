@@ -36,7 +36,6 @@ export interface IDialogOutput {
 	birthday: number;
 	monthofbirth: number;
 	yearofbirth: number;
-	photomain: number;
-	photolink: string[];
+	photolink: string;
 	messages: IMessage[];
 }
