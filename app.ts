@@ -28,8 +28,8 @@ app.use((req, res, next) => {
 		decodeURIComponent(req.path);
 		next();
 	} catch (e) {
-		console.log("error URI:", req.path);
-		res.status(404).sendFile(path.join(__dirname, "./err404.html"));
+		console.log(`error URI: ${req.path}, IP: ${req.ip.split(`:`).pop()}`);
+		res.status(404).json({ message: "pnf" });
 	}
 });
 
