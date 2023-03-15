@@ -28,7 +28,7 @@ linkAuthAdmin.forEach((way) =>
 linkNoAuth.forEach((way) => router.get(way, (_req, res) => answerIndex(res)));
 
 router.get("/*", function (_req, res) {
-	res.status(404).sendFile(path.join(__dirname, "./err404.html"));
+	res.status(404).json({ message: "pnf" });
 });
 
 module.exports = router;
