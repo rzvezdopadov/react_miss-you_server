@@ -19,13 +19,17 @@ const linkAuthAdmin = [
 ];
 
 // All
-const linkNoAuth = ["/about", "/partners", "/enter", "/settings", "/logout"];
+const linkNoAuth = ["/about", "/partners", "/login", "/settings", "/logout"];
 
 linkAuthUser.forEach((way) => router.get(way, (_req, res) => answerIndex(res)));
 linkAuthAdmin.forEach((way) =>
 	router.get(way, (_req, res) => answerIndex(res))
 );
 linkNoAuth.forEach((way) => router.get(way, (_req, res) => answerIndex(res)));
+
+router.get("/", function (_req, res) {
+	answerIndex(res);
+});
 
 router.get("/*", function (_req, res) {
 	res.status(404).json({ message: "pnf" });
