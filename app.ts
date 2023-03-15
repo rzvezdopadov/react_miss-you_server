@@ -2,6 +2,7 @@ import express from "express";
 import { socketHandler } from "./microservices/sockets/socketsAPI";
 import fileupload from "express-fileupload";
 import { initDB } from "./db/init";
+import path from "path";
 const config = require("config");
 const cookieParser = require("cookie-parser");
 
@@ -21,6 +22,16 @@ app.use(
 );
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use((req, res, next) => {
+	try {
+		decodeURIComponent(req.path);
+		next();
+	} catch (e) {
+		console.log("error URI:", req.path);
+		res.status(404).sendFile(path.join(__dirname, "./err404.html"));
+	}
+});
 
 app.use("/static", express.static(__dirname + "/static"));
 app.use("/favicon.ico", express.static(__dirname + "/favicon.ico"));
