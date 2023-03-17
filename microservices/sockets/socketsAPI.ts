@@ -28,13 +28,13 @@ const getUserIdFromSocketTable = (socketId) => {
 
 const sendToAllSocketsById = (
 	socketIO,
-	userid: string,
+	useridarr: string[],
 	nameCommand: string,
 	payload: object
 ) => {
-	arrOfSockets.forEach((value) => {
-		if (value.userid === userid)
-			socketIO.to(value.socketid).emit(nameCommand, payload);
+	arrOfSockets.forEach((socketuser) => {
+		if (useridarr.includes(socketuser.userid))
+			socketIO.to(socketuser.socketid).emit(nameCommand, payload);
 	});
 };
 
@@ -118,15 +118,21 @@ export const socketHandler = (socketIO, socket) => {
 				0
 			);
 
-			socketIO.to(socketId).emit("dialog", dialog);
+			// socketIO.to(socketId).emit("dialog", dialog);
 
 			const data = {
 				command: "add",
-				userid: ourId,
+				userid1: ourId,
+				userid2: socket.userid,
 				message: dialog.messages[dialog.messages.length - 1],
 			};
 
-			sendToAllSocketsById(socketIO, socket.userid, "message", data);
+			sendToAllSocketsById(
+				socketIO,
+				[ourId, socket.userid],
+				"message",
+				data
+			);
 		} catch (error) {
 			console.log("message error", error);
 		}
@@ -149,15 +155,21 @@ export const socketHandler = (socketIO, socket) => {
 				socket.stickerpos
 			);
 
-			socketIO.to(socketId).emit("dialog", dialog);
+			// socketIO.to(socketId).emit("dialog", dialog);
 
 			const data = {
 				command: "add",
-				userid: ourId,
+				userid1: ourId,
+				userid2: socket.userid,
 				message: dialog.messages[dialog.messages.length - 1],
 			};
 
-			sendToAllSocketsById(socketIO, socket.userid, "message", data);
+			sendToAllSocketsById(
+				socketIO,
+				[ourId, socket.userid],
+				"message",
+				data
+			);
 		} catch (error) {
 			console.log("message error", error);
 		}
@@ -178,7 +190,7 @@ export const socketHandler = (socketIO, socket) => {
 
 			if (likes.length) data.command = "add";
 
-			sendToAllSocketsById(socketIO, socket.userid, "get_like", data);
+			sendToAllSocketsById(socketIO, [socket.userid], "get_like", data);
 		} catch (error) {
 			console.log("set_like error", error);
 		}
