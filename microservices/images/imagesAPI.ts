@@ -95,6 +95,7 @@ export async function queryGetPhoto(req, res, next) {
 		let { url } = req;
 		const nameFile = url.replace("/api/photo/", "").replace(".jpg", "");
 
+		res.setHeader("Cache-Control", "public, max-age=31557600");
 		return res.sendFile(getWayPhoto(nameFile), {}, function (err) {
 			if (err) next();
 		});

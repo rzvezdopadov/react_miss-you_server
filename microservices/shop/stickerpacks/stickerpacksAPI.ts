@@ -39,6 +39,7 @@ export async function queryGetSticker(req, res, next) {
 		const { url } = req;
 		let nameFile: string = url.replace("/api/sticker/", "");
 
+		res.setHeader("Cache-Control", "public, max-age=31557600");
 		return res.sendFile(getWaySticker(nameFile), {}, function (err) {
 			if (err) next();
 		});
