@@ -1,8 +1,8 @@
 {
     "server": "test",
     "jwtSecret": "wrecsxa7",
-    "defaultPassAdmin": "myoA8412372",
-    "defaultPassFakeUser": "my47584129621",
+    "defaultPassAdmin": "a123456789",
+    "defaultPassFakeUser": "123456789",
     "countFakeUser": 500,
     "saltpass": 4,
     "httpPort": 5000,
