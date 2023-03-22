@@ -3,10 +3,11 @@ import { socketHandler } from "./microservices/sockets/socketsAPI";
 import fileupload from "express-fileupload";
 import { initDB } from "./db/init";
 import path from "path";
+import { getTimedateNow } from "./utils/datetime";
 const config = require("config");
 const cookieParser = require("cookie-parser");
 
-console.log("-------------------------------------------------------");
+console.log(`---------- Server reload ${getTimedateNow()} ----------`);
 
 const app = express();
 
@@ -28,7 +29,11 @@ app.use((req, res, next) => {
 		decodeURIComponent(req.path);
 		next();
 	} catch (error) {
-		console.log(`error URI: ${req.path}, IP: ${req.ip.split(`:`).pop()}`);
+		console.log(
+			`${getTimedateNow()}: "error URI": "${req.path}", IP: "${req.ip
+				.split(`:`)
+				.pop()}"`
+		);
 		res.status(404).json({ message: "pnf" });
 	}
 });
