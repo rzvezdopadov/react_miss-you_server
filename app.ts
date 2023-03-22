@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 	try {
 		decodeURIComponent(req.path);
 		next();
-	} catch (e) {
+	} catch (error) {
 		console.log(`error URI: ${req.path}, IP: ${req.ip.split(`:`).pop()}`);
 		res.status(404).json({ message: "pnf" });
 	}
@@ -59,8 +59,8 @@ async function startSocket() {
 		http.listen(socketPORT, () => {
 			console.log(`Socket started on port: "${socketPORT}"`);
 		});
-	} catch (e) {
-		console.log("Socket error with:", e.message);
+	} catch (error) {
+		console.log("Socket error with:", error.message);
 	}
 }
 
@@ -69,8 +69,8 @@ async function startServer() {
 		app.listen(httpPORT, () => {
 			console.log(`Server started on port: "${httpPORT}"`);
 		});
-	} catch (e) {
-		console.log("Server error with:", e.message);
+	} catch (error) {
+		console.log("Server error with:", error.message);
 	}
 }
 
