@@ -2,8 +2,14 @@ import path from "path";
 const express = require("express");
 const router = express.Router();
 
-function answerIndex(res: any) {
-	res.status(200).sendFile(path.join(__dirname, "./index.html"));
+function answerIndex(res: any, next: any) {
+	res.status(200).sendFile(
+		path.join(__dirname, "./index.html"),
+		{},
+		(error) => {
+			if (error) next();
+		}
+	);
 }
 
 // User
@@ -28,14 +34,18 @@ const linkNoAuth = [
 	"/logout",
 ];
 
-linkAuthUser.forEach((way) => router.get(way, (_req, res) => answerIndex(res)));
-linkAuthAdmin.forEach((way) =>
-	router.get(way, (_req, res) => answerIndex(res))
+linkAuthUser.forEach((way) =>
+	router.get(way, (_req, res, next) => answerIndex(res, next))
 );
-linkNoAuth.forEach((way) => router.get(way, (_req, res) => answerIndex(res)));
+linkAuthAdmin.forEach((way) =>
+	router.get(way, (_req, res, next) => answerIndex(res, next))
+);
+linkNoAuth.forEach((way) =>
+	router.get(way, (_req, res, next) => answerIndex(res, next))
+);
 
-router.get("/", function (_req, res) {
-	answerIndex(res);
+router.get("/", function (_req, res, next) {
+	answerIndex(res, next);
 });
 
 router.get("/*", function (_req, res) {

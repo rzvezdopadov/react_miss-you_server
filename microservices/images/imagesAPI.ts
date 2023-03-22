@@ -79,8 +79,8 @@ export async function queryGetPhoto(req, res, next) {
 		const nameFile = url.replace("/api/photo/", "").replace(".jpg", "");
 
 		res.setHeader("Cache-Control", "public, max-age=31557600");
-		return res.sendFile(getWayPhoto(nameFile), {}, function (err) {
-			if (err) next();
+		return res.sendFile(getWayPhoto(nameFile), {}, (error) => {
+			if (error) next();
 		});
 	} catch (error) {
 		return answerFailQTDB(res, error);

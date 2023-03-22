@@ -33,8 +33,9 @@ export async function queryGetSticker(req, res, next) {
 		let nameFile: string = url.replace("/api/sticker/", "");
 
 		res.setHeader("Cache-Control", "public, max-age=31557600");
-		return res.sendFile(getWaySticker(nameFile), {}, function (err) {
-			if (err) next();
+
+		return res.sendFile(getWaySticker(nameFile), {}, (error) => {
+			if (error) next();
 		});
 	} catch (error) {
 		return answerFailQTDB(res, error);
