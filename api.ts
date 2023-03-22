@@ -19,7 +19,14 @@ const linkAuthAdmin = [
 ];
 
 // All
-const linkNoAuth = ["/about", "/partners", "/login", "/settings", "/logout"];
+const linkNoAuth = [
+	"/login",
+	"/settings",
+	"/about",
+	"/partners",
+	"/agreement",
+	"/logout",
+];
 
 linkAuthUser.forEach((way) => router.get(way, (_req, res) => answerIndex(res)));
 linkAuthAdmin.forEach((way) =>
