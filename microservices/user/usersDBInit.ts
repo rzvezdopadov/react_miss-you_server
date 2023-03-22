@@ -19,7 +19,11 @@ import {
 import { ACCTYPE } from "../admin/iadmin";
 import { IProfileRegistration } from "../auth/iauth";
 import { poolDB } from "../../db/config";
-import { getTimecodeNow } from "../../utils/datetime";
+import {
+	TIMECODE_DAY,
+	TIMECODE_NONTH,
+	getTimecodeNow,
+} from "../../utils/datetime";
 import { getSignZodiac } from "../../utils/signzodiac";
 import { getRandomInteger, getUniqueIntegerArr } from "../../utils/random";
 import {
@@ -64,6 +68,7 @@ const fakeUsersGenerate = async (
 			name: "Служба поддержки",
 			location: data_location[0],
 			likes: [],
+			favoriteusers: [],
 			birthday: 30,
 			monthofbirth: 9,
 			yearofbirth: 1990,
@@ -112,14 +117,29 @@ const fakeUsersGenerate = async (
 			visit: [],
 			banned: { timecode: 0, whobanned: "", discription: "" },
 			paid: {
+				messagewrite: { enabled: false, timecode: 0 },
 				messageread: { enabled: false, timecode: 0 },
 				longfilters: { enabled: false, timecode: 0 },
-				userfavorite: { enabled: false, timecode: 0 },
-				photoall: { enabled: false, timecode: 0 },
+				filtersvapors: { enabled: false, timecode: 0 },
+				longfiltersvapors: { enabled: false, timecode: 0 },
+				filtersfavoriteusers: { enabled: false, timecode: 0 },
+				longfilterfavoriteusers: { enabled: false, timecode: 0 },
 				photofull: { enabled: false, timecode: 0 },
-				infinityinterests: { enabled: false, timecode: 0 },
-				infinitymessages: { enabled: false, timecode: 0 },
-				longfilterslikes: { enabled: false, timecode: 0 },
+				photoload10: { enabled: false, timecode: 0 },
+				photoload15: { enabled: false, timecode: 0 },
+				photoload20: { enabled: false, timecode: 0 },
+				photoload25: { enabled: false, timecode: 0 },
+				photoload30: { enabled: false, timecode: 0 },
+				interests20: { enabled: false, timecode: 0 },
+				interests30: { enabled: false, timecode: 0 },
+				historymessages20: { enabled: false, timecode: 0 },
+				historymessages40: { enabled: false, timecode: 0 },
+				historymessages60: { enabled: false, timecode: 0 },
+				historymessages80: { enabled: false, timecode: 0 },
+				historymessages100: { enabled: false, timecode: 0 },
+				historymessages150: { enabled: false, timecode: 0 },
+				historymessages200: { enabled: false, timecode: 0 },
+				historymessages300: { enabled: false, timecode: 0 },
 			},
 			stickerpacks: [],
 			referral: "",
@@ -132,7 +152,6 @@ const fakeUsersGenerate = async (
 		// added admin how is first user
 		arrFakeUsers.push(JSON.parse(JSON.stringify(fakePerson)));
 		// added more users
-		const dayTimecode = 24 * 60 * 60 * 1000;
 
 		fakePerson.password = hashedPasswordFakeUser;
 		fakePerson.acctype = ACCTYPE.user;
@@ -142,9 +161,10 @@ const fakeUsersGenerate = async (
 			fakePerson.userid = `${i}`;
 
 			fakePerson.registrationdate =
-				timecodeNow - getRandomInteger(dayTimecode, dayTimecode * 100);
+				timecodeNow -
+				getRandomInteger(TIMECODE_DAY, TIMECODE_DAY * 100);
 			fakePerson.timecode =
-				fakePerson.registrationdate + getRandomInteger(0, dayTimecode);
+				fakePerson.registrationdate + getRandomInteger(0, TIMECODE_DAY);
 
 			fakePerson.gender = getRandomInteger(0, data_gender.length - 1);
 
@@ -241,6 +261,10 @@ const fakeUsersGenerate = async (
 				getRandomInteger(1, fakeUserCount - 1)
 			);
 
+			fakePerson.paid.messagewrite.enabled = true;
+			fakePerson.paid.messagewrite.timecode =
+				fakePerson.registrationdate + TIMECODE_NONTH;
+
 			arrFakeUsers.push(JSON.parse(JSON.stringify(fakePerson)));
 		}
 	} catch (error) {
@@ -297,7 +321,7 @@ const fakeQueryStringUsersGenerate = async (
 				"INSERT INTO users (" +
 				"email, password, jwt, " +
 				"userid, coordinates, registrationdate, " +
-				"timecode, name, location, likes, " +
+				"timecode, name, location, likes, favoriteusers," +
 				"birthday, monthofbirth, yearofbirth, " +
 				"growth, weight, " +
 				"gender, gendervapor, " +
@@ -317,9 +341,10 @@ const fakeQueryStringUsersGenerate = async (
 				") VALUES (" +
 				`'${fakeUser.email}', '${fakeUser.password}', ARRAY [] :: JSON [], ` +
 				`'${fakeUser.userid}', ARRAY [] :: JSON[], ${fakeUser.registrationdate}, ` +
-				`${fakeUser.timecode}, '${fakeUser.name}', '${
-					fakeUser.location
-				}', ${arrQueryStr(fakeUser.likes)}, ` +
+				`${fakeUser.timecode}, '${fakeUser.name}', '${fakeUser.location}', ` +
+				`${arrQueryStr(fakeUser.likes)}, ${arrQueryStr(
+					fakeUser.favoriteusers
+				)}, ` +
 				`${fakeUser.birthday}, ${fakeUser.monthofbirth}, ${fakeUser.yearofbirth}, ` +
 				`${fakeUser.growth}, ${fakeUser.weight}, ` +
 				`${fakeUser.gender}, ${fakeUser.gendervapor}, ` +
@@ -367,6 +392,7 @@ export async function initDBUsers(): Promise<boolean> {
                 name TEXT,
                 location TEXT,
                 likes TEXT[],
+				favoriteusers TEXT[],
                 birthday INT,
                 monthofbirth INT,
                 yearofbirth INT,

@@ -18,6 +18,7 @@ export interface IProfileRegistration extends IProfile {
 	coordinates: ICoordinates[];
 	registrationdate: number;
 	likes: string[];
+	favoriteusers: string[];
 	visit: IStatVisit[];
 	banned: IAdminBanned;
 	referral: string;

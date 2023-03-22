@@ -15,7 +15,7 @@ import {
 	setPasswordByIdToDB,
 } from "./authDB";
 import { getSignZodiac } from "../../utils/signzodiac";
-import { getTimecodeNow } from "../../utils/datetime";
+import { TIMECODE_NONTH, getTimecodeNow } from "../../utils/datetime";
 import { getRandomString } from "../../utils/random";
 import { isHaveCaptcha } from "../images/captchaAPI";
 import { testToken } from "./token";
@@ -112,6 +112,7 @@ export async function queryRegistration(req, res) {
 			name: registration.name,
 			location: registration.location,
 			likes: [],
+			favoriteusers: [],
 			birthday: registration.birthday,
 			monthofbirth: registration.monthofbirth,
 			yearofbirth: registration.yearofbirth,
@@ -162,14 +163,32 @@ export async function queryRegistration(req, res) {
 			visit: [],
 			banned: { timecode: 0, whobanned: "", discription: "" },
 			paid: {
+				messagewrite: {
+					enabled: true,
+					timecode: timecode + TIMECODE_NONTH,
+				},
 				messageread: { enabled: false, timecode: 0 },
 				longfilters: { enabled: false, timecode: 0 },
-				userfavorite: { enabled: false, timecode: 0 },
-				photoall: { enabled: false, timecode: 0 },
+				filtersvapors: { enabled: false, timecode: 0 },
+				longfiltersvapors: { enabled: false, timecode: 0 },
+				filtersfavoriteusers: { enabled: false, timecode: 0 },
+				longfilterfavoriteusers: { enabled: false, timecode: 0 },
 				photofull: { enabled: false, timecode: 0 },
-				infinityinterests: { enabled: false, timecode: 0 },
-				infinitymessages: { enabled: false, timecode: 0 },
-				longfilterslikes: { enabled: false, timecode: 0 },
+				photoload10: { enabled: false, timecode: 0 },
+				photoload15: { enabled: false, timecode: 0 },
+				photoload20: { enabled: false, timecode: 0 },
+				photoload25: { enabled: false, timecode: 0 },
+				photoload30: { enabled: false, timecode: 0 },
+				interests20: { enabled: false, timecode: 0 },
+				interests30: { enabled: false, timecode: 0 },
+				historymessages20: { enabled: false, timecode: 0 },
+				historymessages40: { enabled: false, timecode: 0 },
+				historymessages60: { enabled: false, timecode: 0 },
+				historymessages80: { enabled: false, timecode: 0 },
+				historymessages100: { enabled: false, timecode: 0 },
+				historymessages150: { enabled: false, timecode: 0 },
+				historymessages200: { enabled: false, timecode: 0 },
+				historymessages300: { enabled: false, timecode: 0 },
 			},
 			stickerpacks: [],
 			referral: registration.referral,
