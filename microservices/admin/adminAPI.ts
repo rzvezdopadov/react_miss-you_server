@@ -22,6 +22,11 @@ import {
 	IQueryGetAdminProfiles,
 	IQuerySetAdminBanned,
 } from "./iadmin";
+import {
+	answerFailAccessDenied,
+	answerFailJWT,
+	answerFailQTDB,
+} from "../../utils/answerfail";
 
 export async function queryAdminGetProfiles(req, res) {
 	try {
@@ -30,20 +35,14 @@ export async function queryAdminGetProfiles(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return res.status(400).json({
-				message:
-					"У вас нет прав доступа на выполнение данной операции!",
-			});
+			return answerFailAccessDenied(res);
 
 		const QueryGetAdminProfiles: IQueryGetAdminProfiles = req.query;
 
@@ -64,10 +63,7 @@ export async function queryAdminGetProfiles(req, res) {
 
 		return res.status(200).json(profiles);
 	} catch (error) {
-		console.log(error);
-		return res.status(500).json({
-			message: "Что-то пошло не так при получении пользователей!",
-		});
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -78,20 +74,14 @@ export async function queryAdminGetVisit(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return res.status(400).json({
-				message:
-					"У вас нет прав доступа на выполнение данной операции!",
-			});
+			return answerFailAccessDenied(res);
 
 		let { userid } = req.body;
 		userid = String(userid);
@@ -100,10 +90,7 @@ export async function queryAdminGetVisit(req, res) {
 
 		return res.status(200).json(statVisit);
 	} catch (error) {
-		console.log(error);
-		return res.status(500).json({
-			message: "Что-то пошло не так при получении статистики посещений!",
-		});
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -114,20 +101,14 @@ export async function queryAdminSetAcctype(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return res.status(400).json({
-				message:
-					"У вас нет прав доступа на выполнение данной операции!",
-			});
+			return answerFailAccessDenied(res);
 
 		let { userid, acctype }: { userid: string; acctype: ACCTYPE } =
 			req.body;
@@ -141,10 +122,7 @@ export async function queryAdminSetAcctype(req, res) {
 
 		return res.status(200).json({ message: "Успешно выполненно!" });
 	} catch (error) {
-		console.log(error);
-		return res.status(500).json({
-			message: "Что-то пошло не так при переназначении типов!",
-		});
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -155,20 +133,14 @@ export async function queryAdminSetRaiting(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return res.status(400).json({
-				message:
-					"У вас нет прав доступа на выполнение данной операции!",
-			});
+			return answerFailAccessDenied(res);
 
 		let { userid, addrating }: { userid: string; addrating: number } =
 			req.body;
@@ -195,10 +167,7 @@ export async function queryAdminSetRaiting(req, res) {
 
 		return res.status(200).json(profile);
 	} catch (error) {
-		console.log(error);
-		return res.status(500).json({
-			message: "Что-то пошло не так при корректировке рейтинга!",
-		});
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -209,20 +178,14 @@ export async function queryAdminSetCash(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return res.status(400).json({
-				message:
-					"У вас нет прав доступа на выполнение данной операции!",
-			});
+			return answerFailAccessDenied(res);
 
 		let { userid, addcash }: { userid: string; addcash: number } = req.body;
 		userid = String(userid);
@@ -248,10 +211,7 @@ export async function queryAdminSetCash(req, res) {
 
 		return res.status(200).json(profile);
 	} catch (error) {
-		console.log(error);
-		return res.status(500).json({
-			message: "Что-то пошло не так при корректировке рейтинга!",
-		});
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -262,20 +222,14 @@ export async function queryAdminGetProfile(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return res.status(400).json({
-				message:
-					"У вас нет прав доступа на выполнение данной операции!",
-			});
+			return answerFailAccessDenied(res);
 
 		const QueryGetProfiles: IQueryGetProfile = req.query;
 		const userid = String(QueryGetProfiles.userid);
@@ -283,10 +237,8 @@ export async function queryAdminGetProfile(req, res) {
 		const profile = await getProfileByIdFromDB(userid);
 
 		return res.status(200).json(profile);
-	} catch (e) {
-		res.status(500).json({
-			message: "Ошибка QTDB!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -297,20 +249,14 @@ export async function queryAdminSetBanned(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return res.status(400).json({
-				message:
-					"У вас нет прав доступа на выполнение данной операции!",
-			});
+			return answerFailAccessDenied(res);
 
 		let { userid, discription, minute, hour, month }: IQuerySetAdminBanned =
 			req.body;
@@ -353,10 +299,7 @@ export async function queryAdminSetBanned(req, res) {
 			message: "Успешно выполненно!",
 		});
 	} catch (error) {
-		console.log(error);
-		return res.status(500).json({
-			message: "Что-то пошло не так при корректировке рейтинга!",
-		});
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -367,21 +310,14 @@ export async function queryAdminDeletePhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return res.status(400).json({
-				message:
-					"У вас нет прав доступа на выполнение данной операции!",
-			});
-
+			return answerFailAccessDenied(res);
 		let { userid, photoPos }: IQueryDeleteAdminPhoto = req.body;
 		userid = String(userid);
 		photoPos = Number(photoPos);
@@ -389,9 +325,7 @@ export async function queryAdminDeletePhoto(req, res) {
 		const photos = await deletePhoto(userid, photoPos);
 
 		return res.status(200).json(photos);
-	} catch (e) {
-		res.status(500).json({
-			message: "Ошибка QTDB!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }

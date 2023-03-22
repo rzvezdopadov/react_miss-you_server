@@ -1,6 +1,7 @@
 import { getDialog, getDialogs, setDialog } from "./dialogsUtils";
 import { testToken } from "../auth/token";
 import { MESSAGETYPE } from "./idialogs";
+import { answerFailJWT, answerFailQTDB } from "../../utils/answerfail";
 
 export async function querySetMessage(req, res) {
 	try {
@@ -13,10 +14,7 @@ export async function querySetMessage(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		if (!userId)
 			return res.status(400).json({
@@ -39,10 +37,8 @@ export async function querySetMessage(req, res) {
 				message: "Ошибка отправки сообщения!",
 			});
 		}
-	} catch (e) {
-		res.status(500).json({
-			message: "Ошибка QTDB!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -56,10 +52,7 @@ export async function queryGetDialog(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		if (!userId) {
 			return res
@@ -76,10 +69,8 @@ export async function queryGetDialog(req, res) {
 				message: "Ошибка отправки сообщения!",
 			});
 		}
-	} catch (e) {
-		res.status(500).json({
-			message: "Ошибка QTDB!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -90,17 +81,12 @@ export async function queryGetDialogs(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const dialogs = await getDialogs(jwtDecode.userId);
 
 		return res.status(200).json(dialogs);
-	} catch (e) {
-		res.status(500).json({
-			message: "Ошибка QTDB!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }

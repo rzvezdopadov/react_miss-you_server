@@ -1,3 +1,4 @@
+import { answerFailJWT, answerFailQTDB } from "../../../utils/answerfail";
 import { testToken } from "../../auth/token";
 import { setLikesById } from "./likesUtils";
 
@@ -11,17 +12,12 @@ export async function querySetLike(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const likes = await setLikesById(jwtDecode.userId, userid);
 
 		return res.status(200).json(likes);
-	} catch (e) {
-		res.status(500).json({
-			message: "Ошибка QTDB!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }

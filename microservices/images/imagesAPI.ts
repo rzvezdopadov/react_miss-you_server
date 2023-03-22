@@ -1,5 +1,6 @@
 import { addPhoto, checkPhoto, deletePhoto, getWayPhoto } from "./imagesUtils";
 import { testToken } from "../auth/token";
+import { answerFailJWT, answerFailQTDB } from "../../utils/answerfail";
 
 export async function queryLoadPhoto(req, res) {
 	try {
@@ -8,10 +9,7 @@ export async function queryLoadPhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		let { image } = req.files;
 
@@ -23,10 +21,8 @@ export async function queryLoadPhoto(req, res) {
 		const photos = await addPhoto(jwtDecode.userId, image);
 
 		return res.status(200).json(photos);
-	} catch (e) {
-		res.status(500).json({
-			message: "Ошибка QTDB!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -40,18 +36,13 @@ export async function queryDeletePhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const photos = await deletePhoto(jwtDecode.userId, photoPos);
 
 		return res.status(200).json(photos);
-	} catch (e) {
-		res.status(500).json({
-			message: "Ошибка QTDB!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -65,18 +56,13 @@ export async function queryCheckPhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const photos = await checkPhoto(jwtDecode.userId, photoPos);
 
 		return res.status(200).json(photos);
-	} catch (e) {
-		res.status(500).json({
-			message: "Ошибка QTDB!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -87,10 +73,7 @@ export async function queryGetPhoto(req, res, next) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		let { url } = req;
 		const nameFile = url.replace("/api/photo/", "").replace(".jpg", "");
@@ -99,9 +82,7 @@ export async function queryGetPhoto(req, res, next) {
 		return res.sendFile(getWayPhoto(nameFile), {}, function (err) {
 			if (err) next();
 		});
-	} catch (e) {
-		res.status(500).json({
-			message: "Ошибка QTDB!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }

@@ -29,6 +29,7 @@ import {
 	data_location,
 } from "../profile/profile/profileData";
 import { isBannedUser } from "../../utils/banned";
+import { answerFailJWT } from "../../utils/answerfail";
 
 const bcrypt = require("bcryptjs");
 const config = require("config");
@@ -182,10 +183,10 @@ export async function queryRegistration(req, res) {
 				.json({ message: "Пользователь успешно создан!" });
 
 		res.status(400).json({ message: "Возникла ошибка при регистрации!" });
-	} catch (e) {
+	} catch (error) {
+		console.log(error);
 		res.status(500).json({
 			message: "Что-то пошло не так при регистрации!",
-			messageOther: e.message,
 		});
 	}
 }
@@ -276,7 +277,8 @@ export async function queryLogin(req, res) {
 				message: "Ошибка QTDB!",
 			});
 		}
-	} catch (e) {
+	} catch (error) {
+		console.log(error);
 		res.status(500).json({
 			message: "Что-то пошло не так при аутентификации!",
 		});
@@ -309,10 +311,7 @@ export async function queryChangePass(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const pass = await getPasswordByIdFromDB(jwtDecode.userId);
 
@@ -387,7 +386,7 @@ export async function queryRecoveryPass(req, res) {
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({
-			message: "Что-то пошло не так при изменении пароля!",
+			message: "Что-то пошло не так при напоминании пароля!",
 		});
 	}
 }

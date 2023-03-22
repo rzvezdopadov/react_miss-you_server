@@ -1,5 +1,6 @@
 import { getComplaints } from "./complaintsUtils";
 import { testToken } from "../auth/token";
+import { answerFailJWT, answerFailQTDB } from "../../utils/answerfail";
 
 export async function queryGetComplaints(req, res) {
 	try {
@@ -8,17 +9,12 @@ export async function queryGetComplaints(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const complaints = await getComplaints(jwtDecode.userId);
 
 		return res.status(200).json(complaints);
-	} catch (e) {
-		res.status(500).json({
-			message: "Ошибка QTDB!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }

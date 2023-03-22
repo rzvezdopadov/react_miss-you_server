@@ -10,6 +10,7 @@ import {
 import { getRatingTariffs } from "./shopDB";
 import { testToken } from "../auth/token";
 import { getAllStickerpacks } from "./stickerpacks/stickerpacksDB";
+import { answerFailJWT, answerFailQTDB } from "../../utils/answerfail";
 
 export async function queryGetRatingTariffs(req, res) {
 	try {
@@ -18,18 +19,13 @@ export async function queryGetRatingTariffs(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const ratingtariffs = await getRatingTariffs();
 
 		return res.status(200).json(ratingtariffs);
-	} catch (e) {
-		res.status(500).json({
-			message: "Токен не валидный!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -40,10 +36,7 @@ export async function queryBuyRating(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		const { idrate } = req.body;
 		const ratingtariffs = await getRatingTariffs();
@@ -75,10 +68,8 @@ export async function queryBuyRating(req, res) {
 		const profile = await getProfileByIdFromDB(jwtDecode.userId);
 
 		return res.status(200).json(profile);
-	} catch (e) {
-		res.status(500).json({
-			message: "Токен не валидный!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -89,10 +80,7 @@ export async function queryAddStickerpack(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		let { idstickerpack }: { idstickerpack: string } = req.body;
 		idstickerpack = String(idstickerpack);
@@ -158,10 +146,8 @@ export async function queryAddStickerpack(req, res) {
 		const profile = await getProfileByIdFromDB(jwtDecode.userId);
 
 		return res.status(200).json(profile);
-	} catch (e) {
-		res.status(500).json({
-			message: "Токен не валидный!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }
 
@@ -172,10 +158,7 @@ export async function queryDeleteStickerpack(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode)
-			return res.status(400).json({
-				message: "Токен не валидный!",
-			});
+		if (!jwtDecode) return answerFailJWT(res);
 
 		let { idstickerpack }: { idstickerpack: string } = req.body;
 		idstickerpack = String(idstickerpack);
@@ -203,9 +186,7 @@ export async function queryDeleteStickerpack(req, res) {
 		const profile = await getProfileByIdFromDB(jwtDecode.userId);
 
 		return res.status(200).json(profile);
-	} catch (e) {
-		res.status(500).json({
-			message: "Токен не валидный!",
-		});
+	} catch (error) {
+		return answerFailQTDB(res, error);
 	}
 }
