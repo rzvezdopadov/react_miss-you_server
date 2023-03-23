@@ -1,4 +1,5 @@
 import { ACCTYPE } from "../../admin/iadmin";
+import { IPaid } from "../../shop/ipaid";
 
 export interface ICoordinates {
 	ipaddress: string;
@@ -12,6 +13,7 @@ export interface IProfile {
 	name: string;
 	location: string;
 	likes: string[];
+	favoriteusers: string[];
 	birthday: number;
 	monthofbirth: number;
 	yearofbirth: number;
@@ -39,6 +41,7 @@ export interface IProfile {
 	stickerpacks: string[];
 	cash: number;
 	acctype: ACCTYPE;
+	paid: IPaid;
 }
 
 export interface IProfileShort {

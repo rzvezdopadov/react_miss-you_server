@@ -14,15 +14,11 @@ export interface IProfileRegistration extends IProfile {
 	email: string;
 	password: string;
 	jwt: IJWT[];
-	userid: string;
 	coordinates: ICoordinates[];
 	registrationdate: number;
-	likes: string[];
-	favoriteusers: string[];
 	visit: IStatVisit[];
 	banned: IAdminBanned;
 	referral: string;
-	paid: IPaid;
 }
 
 export interface IRegistration {
