@@ -118,8 +118,6 @@ export const socketHandler = (socketIO, socket) => {
 				0
 			);
 
-			// socketIO.to(socketId).emit("dialog", dialog);
-
 			const data = {
 				command: "add",
 				userid1: ourId,
@@ -154,8 +152,6 @@ export const socketHandler = (socketIO, socket) => {
 				socket.stickerpackid,
 				socket.stickerpos
 			);
-
-			// socketIO.to(socketId).emit("dialog", dialog);
 
 			const data = {
 				command: "add",

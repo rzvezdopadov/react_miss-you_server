@@ -9,7 +9,11 @@ import { testToken } from "../../auth/token";
 import { getProfileByIdFromDB, setProfileByIdToDB } from "./profileDB";
 import { isBannedUser } from "../../../utils/banned";
 import { getProfilesShort, getProfilesShortForLikes } from "./profileUtils";
-import { answerFailJWT, answerFailQTDB } from "../../../utils/answerfail";
+import {
+	answerStatus400,
+	answerStatusJWT,
+	answerStatusQTDB,
+} from "../../../utils/answerstatus";
 
 export async function querySetProfile(req, res) {
 	try {
@@ -18,7 +22,7 @@ export async function querySetProfile(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const { profile } = req.body;
 		profile as IProfile;
@@ -30,14 +34,11 @@ export async function querySetProfile(req, res) {
 
 		const newProfile = await setProfileByIdToDB(jwtDecode.userId, profile);
 
-		if (!newProfile)
-			return res.status(400).json({
-				message: "Ошибка QTDB!",
-			});
+		if (!newProfile) return answerStatus400(res, "Ошибка QTDB!");
 
 		return res.status(200).json(newProfile);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -48,11 +49,11 @@ export async function queryGetProfile(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const isBanned = await isBannedUser(jwtDecode.userId);
 
-		if (isBanned) return answerFailJWT(res);
+		if (isBanned) return answerStatusJWT(res);
 
 		const QueryGetProfile: IQueryGetProfile = req.query;
 		const userid = String(QueryGetProfile.userid);
@@ -65,10 +66,7 @@ export async function queryGetProfile(req, res) {
 
 		const profile = await getProfileByIdFromDB(userIdNew);
 
-		if (!profile)
-			res.status(400).json({
-				message: "Ошибка QTDB!",
-			});
+		if (!profile) return answerStatus400(res, "Ошибка QTDB!");
 
 		if (userid !== "0") {
 			const posId = profile.likes.indexOf(jwtDecode.userId);
@@ -86,7 +84,7 @@ export async function queryGetProfile(req, res) {
 
 		return res.status(200).json(profile);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -97,7 +95,7 @@ export async function queryGetProfilesShort(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const QueryGetProfiles: IQueryGetProfiles = req.query;
 
@@ -127,7 +125,7 @@ export async function queryGetProfilesShort(req, res) {
 
 		return res.status(200).json(profiles);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -138,7 +136,7 @@ export async function queryGetProfilesForLikes(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const QueryGetProfiles: IQueryGetProfiles = req.query;
 
@@ -156,6 +154,6 @@ export async function queryGetProfilesForLikes(req, res) {
 
 		return res.status(200).json(profiles);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }

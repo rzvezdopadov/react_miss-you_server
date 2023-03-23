@@ -1,4 +1,4 @@
-import { answerFailJWT, answerFailQTDB } from "../../../utils/answerfail";
+import { answerStatusJWT, answerStatusQTDB } from "../../../utils/answerstatus";
 import { testToken } from "../../auth/token";
 import { getAllStickerpacks } from "./stickerpacksDB";
 import { getWaySticker } from "./stickerpacksUtils";
@@ -10,13 +10,13 @@ export async function queryGetAllStickerpacks(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const stickerpacks = await getAllStickerpacks();
 
 		return res.status(200).json(stickerpacks);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -27,7 +27,7 @@ export async function queryGetSticker(req, res, next) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const { url } = req;
 		let nameFile: string = url.replace("/api/sticker/", "");
@@ -38,6 +38,6 @@ export async function queryGetSticker(req, res, next) {
 			if (error) next();
 		});
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }

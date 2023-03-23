@@ -1,4 +1,4 @@
-import { answerFailJWT, answerFailQTDB } from "../../../utils/answerfail";
+import { answerStatusJWT, answerStatusQTDB } from "../../../utils/answerstatus";
 import { testToken } from "../../auth/token";
 import { setLikesById } from "./likesUtils";
 
@@ -12,12 +12,12 @@ export async function querySetLike(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const likes = await setLikesById(jwtDecode.userId, userid);
 
 		return res.status(200).json(likes);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }

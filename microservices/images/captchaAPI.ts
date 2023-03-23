@@ -1,3 +1,5 @@
+import { answerStatus500 } from "../../utils/answerstatus";
+
 const { createCanvas } = require("canvas");
 const { registerFont } = require("canvas");
 registerFont("assets/fonts/arial.ttf", { family: "Arial" });
@@ -77,9 +79,7 @@ export async function queryGetCaptcha(req, res) {
 		if (captchaArr.length > 10000000) captchaArr = [];
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({
-			message: "Что-то пошло не так при получении капчи!",
-		});
+		return answerStatus500(res, "Что-то пошло не так при получении капчи!");
 	}
 }
 

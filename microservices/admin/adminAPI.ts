@@ -23,10 +23,12 @@ import {
 	IQuerySetAdminBanned,
 } from "./iadmin";
 import {
-	answerFailAccessDenied,
-	answerFailJWT,
-	answerFailQTDB,
-} from "../../utils/answerfail";
+	answerStatus200,
+	answerStatus400,
+	answerStatusAccessDenied,
+	answerStatusJWT,
+	answerStatusQTDB,
+} from "../../utils/answerstatus";
 
 export async function queryAdminGetProfiles(req, res) {
 	try {
@@ -35,14 +37,14 @@ export async function queryAdminGetProfiles(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return answerFailAccessDenied(res);
+			return answerStatusAccessDenied(res);
 
 		const QueryGetAdminProfiles: IQueryGetAdminProfiles = req.query;
 
@@ -63,7 +65,7 @@ export async function queryAdminGetProfiles(req, res) {
 
 		return res.status(200).json(profiles);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -74,14 +76,14 @@ export async function queryAdminGetVisit(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return answerFailAccessDenied(res);
+			return answerStatusAccessDenied(res);
 
 		let { userid } = req.body;
 		userid = String(userid);
@@ -90,7 +92,7 @@ export async function queryAdminGetVisit(req, res) {
 
 		return res.status(200).json(statVisit);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -101,28 +103,25 @@ export async function queryAdminSetAcctype(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return answerFailAccessDenied(res);
+			return answerStatusAccessDenied(res);
 
 		let { userid, acctype }: { userid: string; acctype: ACCTYPE } =
 			req.body;
 		userid = String(userid);
 
 		const acctypeResult = await setAdminAcctypeByIdToDB(userid, acctype);
-		if (!acctypeResult)
-			return res.status(400).json({
-				message: "Данные не были записанны!",
-			});
+		if (!acctypeResult) answerStatus400(res, "Данные не были записанны!");
 
-		return res.status(200).json({ message: "Успешно выполненно!" });
+		return answerStatus200(res, "Успешно выполненно!");
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -133,14 +132,14 @@ export async function queryAdminSetRaiting(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return answerFailAccessDenied(res);
+			return answerStatusAccessDenied(res);
 
 		let { userid, addrating }: { userid: string; addrating: number } =
 			req.body;
@@ -167,7 +166,7 @@ export async function queryAdminSetRaiting(req, res) {
 
 		return res.status(200).json(profile);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -178,14 +177,14 @@ export async function queryAdminSetCash(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return answerFailAccessDenied(res);
+			return answerStatusAccessDenied(res);
 
 		let { userid, addcash }: { userid: string; addcash: number } = req.body;
 		userid = String(userid);
@@ -211,7 +210,7 @@ export async function queryAdminSetCash(req, res) {
 
 		return res.status(200).json(profile);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -222,14 +221,14 @@ export async function queryAdminGetProfile(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return answerFailAccessDenied(res);
+			return answerStatusAccessDenied(res);
 
 		const QueryGetProfiles: IQueryGetProfile = req.query;
 		const userid = String(QueryGetProfiles.userid);
@@ -238,7 +237,7 @@ export async function queryAdminGetProfile(req, res) {
 
 		return res.status(200).json(profile);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -249,14 +248,14 @@ export async function queryAdminSetBanned(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return answerFailAccessDenied(res);
+			return answerStatusAccessDenied(res);
 
 		let { userid, discription, minute, hour, month }: IQuerySetAdminBanned =
 			req.body;
@@ -299,7 +298,7 @@ export async function queryAdminSetBanned(req, res) {
 			message: "Успешно выполненно!",
 		});
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -310,14 +309,14 @@ export async function queryAdminDeletePhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
 		);
 
 		if (adminCandidate !== ACCTYPE.admin)
-			return answerFailAccessDenied(res);
+			return answerStatusAccessDenied(res);
 		let { userid, photoPos }: IQueryDeleteAdminPhoto = req.body;
 		userid = String(userid);
 		photoPos = Number(photoPos);
@@ -326,6 +325,6 @@ export async function queryAdminDeletePhoto(req, res) {
 
 		return res.status(200).json(photos);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }

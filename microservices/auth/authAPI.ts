@@ -15,7 +15,11 @@ import {
 	setPasswordByIdToDB,
 } from "./authDB";
 import { getSignZodiac } from "../../utils/signzodiac";
-import { TIMECODE_NONTH, getTimecodeNow } from "../../utils/datetime";
+import {
+	TIMECODE_NONTH,
+	TIMECODE_WEEK,
+	getTimecodeNow,
+} from "../../utils/datetime";
 import { getRandomString } from "../../utils/random";
 import { isHaveCaptcha } from "../images/captchaAPI";
 import { testToken } from "./token";
@@ -29,7 +33,12 @@ import {
 	data_location,
 } from "../profile/profile/profileData";
 import { isBannedUser } from "../../utils/banned";
-import { answerFailJWT } from "../../utils/answerfail";
+import {
+	answerStatus200,
+	answerStatus400,
+	answerStatus500,
+	answerStatusJWT,
+} from "../../utils/answerstatus";
 
 const bcrypt = require("bcryptjs");
 const config = require("config");
@@ -50,49 +59,34 @@ export async function queryRegistration(req, res) {
 
 		const candidate = await getIdByEmailFromDB(registration.email);
 
-		if (candidate !== "") {
-			return res
-				.status(400)
-				.json({ message: "Такой пользователь уже существует!" });
-		}
-		if (
-			registration.gender < 0 ||
-			registration.gender > data_gender.length
-		) {
-			return res
-				.status(400)
-				.json({ message: "Неверно задано поле 'Кто я?'!" });
-		}
+		if (candidate !== "")
+			return answerStatus400(res, "Такой пользователь уже существует!");
+
+		if (registration.gender < 0 || registration.gender > data_gender.length)
+			return answerStatus400(res, "Неверно задано поле 'Кто я?'!");
+
 		if (
 			registration.gendervapor < 0 ||
 			registration.gendervapor > data_genderVapor.length
-		) {
-			return res
-				.status(400)
-				.json({ message: "Неверно задано поле 'Кого ищу?'!" });
-		}
-		if (!data_location.includes(registration.location)) {
-			return res
-				.status(400)
-				.json({ message: "Неверно задано поле 'Локация'!" });
-		}
+		)
+			return answerStatus400(res, "Неверно задано поле 'Кого ищу?'!");
+
+		if (!data_location.includes(registration.location))
+			return answerStatus400(res, "Неверно задано поле 'Локация'!");
+
 		if (
 			registration.growth < data_growth[0] ||
 			registration.growth > data_growth[data_growth.length - 1]
-		) {
-			return res
-				.status(400)
-				.json({ message: "Неверно задано поле 'Рост'!" });
-		}
-		if (!registration.name) {
-			return res.status(400).json({ message: "Не указанно имя!" });
-		}
+		)
+			return answerStatus400(res, "Неверно задано поле 'Рост'!");
 
-		if (!isHaveCaptcha(registration.captcha)) {
-			return res.status(400).json({
-				message: "Код с картинки неверный или просрочен!",
-			});
-		}
+		if (!registration.name) return answerStatus400(res, "Не указанно имя!");
+
+		if (!isHaveCaptcha(registration.captcha))
+			return answerStatus400(
+				res,
+				"Код с картинки неверный или просрочен!"
+			);
 
 		const hashedPassword = await bcrypt.hash(
 			registration.password,
@@ -201,12 +195,10 @@ export async function queryRegistration(req, res) {
 				.status(201)
 				.json({ message: "Пользователь успешно создан!" });
 
-		res.status(400).json({ message: "Возникла ошибка при регистрации!" });
+		return answerStatus400(res, "Возникла ошибка при регистрации!");
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
-			message: "Что-то пошло не так при регистрации!",
-		});
+		return answerStatus500(res, "Что-то пошло не так при регистрации!");
 	}
 }
 
@@ -214,47 +206,38 @@ export async function queryLogin(req, res) {
 	try {
 		const errors = validationResult(req);
 
-		if (!errors.isEmpty()) {
-			return res.status(400).json({
-				message: "Некорректные данные при входе в систему!",
-			});
-		}
+		if (!errors.isEmpty())
+			return answerStatus400(
+				res,
+				"Некорректные данные при входе в систему!"
+			);
 
 		let params: ILogin = req.body;
 		params.email = String(params.email);
 		params.password = String(params.password);
 		params.captcha = String(params.captcha);
 
-		if (!isHaveCaptcha(params.captcha)) {
-			return res.status(400).json({
-				message: "Код с картинки неверный или просрочен!",
-			});
-		}
+		if (!isHaveCaptcha(params.captcha))
+			return answerStatus400(
+				res,
+				"Код с картинки неверный или просрочен!"
+			);
 
 		const ourId = await getIdByEmailFromDB(params.email);
 
-		if (ourId === "") {
-			return res
-				.status(400)
-				.json({ message: "Такой пользователь не существует!" });
-		}
+		if (ourId === "")
+			return answerStatus400(res, "Такой пользователь не существует!");
 
 		const pass = await getPasswordByIdFromDB(ourId);
 
 		const isMatch = await bcrypt.compare(params.password, pass);
 
-		if (!isMatch) {
-			return res.status(400).json({
-				message: "Неверный пароль, попробуйте снова!",
-			});
-		}
+		if (!isMatch)
+			return answerStatus400(res, "Неверный пароль, попробуйте снова!");
 
 		const isBanned = await isBannedUser(ourId);
 
-		if (isBanned)
-			return res.status(400).json({
-				message: isBanned,
-			});
+		if (isBanned) return answerStatus400(res, isBanned);
 
 		const token = await jwtToken.sign(
 			{ userId: ourId },
@@ -264,17 +247,12 @@ export async function queryLogin(req, res) {
 
 		const jwts = await getJWTFromDB(ourId);
 
-		if (!jwts)
-			return res.status(400).json({
-				message: "Ошибка QTDB!",
-			});
+		if (!jwts) return answerStatus400(res, "Ошибка QTDB!");
 
 		const timeNow = getTimecodeNow();
 
-		const timeAdd = 7 * 24 * 60 * 60 * 1000;
-
 		const newJWTs = jwts.filter((jwt) => {
-			if (jwt.timecode + timeAdd > timeNow) return true;
+			if (jwt.timecode + TIMECODE_WEEK > timeNow) return true;
 		});
 
 		newJWTs.push({
@@ -292,15 +270,11 @@ export async function queryLogin(req, res) {
 				message: "Вы успешно авторизовались!",
 			});
 		} else {
-			return res.status(400).json({
-				message: "Ошибка QTDB!",
-			});
+			return answerStatus400(res, "Ошибка QTDB!");
 		}
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
-			message: "Что-то пошло не так при аутентификации!",
-		});
+		return answerStatus500(res, "Что-то пошло не так при аутентификации!");
 	}
 }
 
@@ -308,39 +282,36 @@ export async function queryChangePass(req, res) {
 	try {
 		const errors = validationResult(req);
 
-		if (!errors.isEmpty()) {
-			return res.status(400).json({
-				message: "Некорректные данные при изменении пароля!",
-			});
-		}
+		if (!errors.isEmpty())
+			return answerStatus400(
+				res,
+				"Некорректные данные при изменении пароля!"
+			);
 
 		let params: IChangePass = req.body;
 		params.passwordnow = String(params.passwordnow);
 		params.passwordnew = String(params.passwordnew);
 		params.captcha = String(params.captcha);
 
-		if (!isHaveCaptcha(params.captcha)) {
-			return res.status(400).json({
-				message: "Код с картинки неверный или просрочен!",
-			});
-		}
+		if (!isHaveCaptcha(params.captcha))
+			return answerStatus400(
+				res,
+				"Код с картинки неверный или просрочен!"
+			);
 
 		let { jwt } = req.cookies;
 		jwt = String(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const pass = await getPasswordByIdFromDB(jwtDecode.userId);
 
 		const isMatch = await bcrypt.compare(params.passwordnow, pass);
 
-		if (!isMatch) {
-			return res.status(400).json({
-				message: "Неверный пароль, попробуйте снова!",
-			});
-		}
+		if (!isMatch)
+			return answerStatus400(res, "Неверный пароль, попробуйте снова!");
 
 		const hashedPassword = await bcrypt.hash(
 			params.passwordnew,
@@ -352,20 +323,13 @@ export async function queryChangePass(req, res) {
 			hashedPassword
 		);
 
-		if (!isSaveNewPassword) {
-			return res.status(400).json({
-				message: "Ошибка при изменении пароля!",
-			});
-		}
+		if (!isSaveNewPassword)
+			return answerStatus400(res, "Ошибка при изменении пароля!");
 
-		return res.status(200).json({
-			message: "Пароль успешно изменен!",
-		});
+		return answerStatus200(res, "Пароль успешно изменен!");
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
-			message: "Что-то пошло не так при изменении пароля!",
-		});
+		answerStatus500(res, "Что-то пошло не так при изменении пароля!");
 	}
 }
 
@@ -373,39 +337,38 @@ export async function queryRecoveryPass(req, res) {
 	try {
 		const errors = validationResult(req);
 
-		if (!errors.isEmpty()) {
-			return res.status(400).json({
-				message: "Некорректные данные при изменении пароля!",
-			});
-		}
+		if (!errors.isEmpty())
+			return answerStatus400(
+				res,
+				"Некорректные данные при изменении пароля!"
+			);
 
 		let params: IRecoveryPass = req.body;
 		params.email = String(params.email);
 		params.captcha = String(params.captcha);
 
-		if (!isHaveCaptcha(params.captcha)) {
-			return res.status(400).json({
-				message: "Код с картинки неверный или просрочен!",
-			});
-		}
+		if (!isHaveCaptcha(params.captcha))
+			return answerStatus400(
+				res,
+				"Код с картинки неверный или просрочен!"
+			);
 
 		const ourId = await getIdByEmailFromDB(params.email);
 
-		if (ourId === "") {
-			return res
-				.status(400)
-				.json({ message: "Такой пользователь не существует!" });
-		}
+		if (ourId === "")
+			return answerStatus400(res, "Такой пользователь не существует!");
 
 		await sendMessageToEmail(getRandomString(20), params.email);
 
-		return res.status(200).json({
-			message: "Инструкции по восстановлению высланы на e-mail!",
-		});
+		return answerStatus200(
+			res,
+			"Инструкции по восстановлению высланы на e-mail!"
+		);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
-			message: "Что-то пошло не так при напоминании пароля!",
-		});
+		return answerStatus500(
+			res,
+			"Что-то пошло не так при напоминании пароля!"
+		);
 	}
 }

@@ -1,7 +1,11 @@
 import { getDialog, getDialogs, setDialog } from "./dialogsUtils";
 import { testToken } from "../auth/token";
 import { MESSAGETYPE } from "./idialogs";
-import { answerFailJWT, answerFailQTDB } from "../../utils/answerfail";
+import {
+	answerStatus400,
+	answerStatusJWT,
+	answerStatusQTDB,
+} from "../../utils/answerstatus";
 
 export async function querySetMessage(req, res) {
 	try {
@@ -14,12 +18,13 @@ export async function querySetMessage(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		if (!userId)
-			return res.status(400).json({
-				message: "Чтобы отправить сообщение, выберите пользователя!",
-			});
+			return answerStatus400(
+				res,
+				"Чтобы отправить сообщение, выберите пользователя!"
+			);
 
 		const newDialog = await setDialog(
 			jwtDecode.userId,
@@ -33,12 +38,10 @@ export async function querySetMessage(req, res) {
 		if (newDialog.messages.length) {
 			return res.status(200).json(newDialog);
 		} else {
-			return res.status(400).json({
-				message: "Ошибка отправки сообщения!",
-			});
+			return answerStatus400(res, "Ошибка отправки сообщения!");
 		}
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -52,25 +55,19 @@ export async function queryGetDialog(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
-		if (!userId) {
-			return res
-				.status(400)
-				.json({ message: "Нужно выбрать пользователя!" });
-		}
+		if (!userId) return answerStatus400(res, "Нужно выбрать пользователя!");
 
 		const dialog = await getDialog(jwtDecode.userId, userId);
 
 		if (dialog.userid) {
 			return res.status(200).json(dialog);
 		} else {
-			return res.status(400).json({
-				message: "Ошибка отправки сообщения!",
-			});
+			return answerStatus400(res, "Ошибка отправки сообщения!");
 		}
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -81,12 +78,12 @@ export async function queryGetDialogs(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const dialogs = await getDialogs(jwtDecode.userId);
 
 		return res.status(200).json(dialogs);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }

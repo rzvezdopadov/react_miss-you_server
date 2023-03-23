@@ -1,6 +1,10 @@
 import { addPhoto, checkPhoto, deletePhoto, getWayPhoto } from "./imagesUtils";
 import { testToken } from "../auth/token";
-import { answerFailJWT, answerFailQTDB } from "../../utils/answerfail";
+import {
+	answerStatus400,
+	answerStatusJWT,
+	answerStatusQTDB,
+} from "../../utils/answerstatus";
 
 export async function queryLoadPhoto(req, res) {
 	try {
@@ -9,20 +13,17 @@ export async function queryLoadPhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		let { image } = req.files;
 
-		if (!image)
-			return res.status(400).json({
-				message: "Изображение не распознано!",
-			});
+		if (!image) return answerStatus400(res, "Изображение не распознано!");
 
 		const photos = await addPhoto(jwtDecode.userId, image);
 
 		return res.status(200).json(photos);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -36,13 +37,13 @@ export async function queryDeletePhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const photos = await deletePhoto(jwtDecode.userId, photoPos);
 
 		return res.status(200).json(photos);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -56,13 +57,13 @@ export async function queryCheckPhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const photos = await checkPhoto(jwtDecode.userId, photoPos);
 
 		return res.status(200).json(photos);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -73,7 +74,7 @@ export async function queryGetPhoto(req, res, next) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		let { url } = req;
 		const nameFile = url.replace("/api/photo/", "").replace(".jpg", "");
@@ -83,6 +84,6 @@ export async function queryGetPhoto(req, res, next) {
 			if (error) next();
 		});
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }

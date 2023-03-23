@@ -10,7 +10,11 @@ import {
 import { getRatingTariffs } from "./shopDB";
 import { testToken } from "../auth/token";
 import { getAllStickerpacks } from "./stickerpacks/stickerpacksDB";
-import { answerFailJWT, answerFailQTDB } from "../../utils/answerfail";
+import {
+	answerStatus400,
+	answerStatusJWT,
+	answerStatusQTDB,
+} from "../../utils/answerstatus";
 
 export async function queryGetRatingTariffs(req, res) {
 	try {
@@ -19,13 +23,13 @@ export async function queryGetRatingTariffs(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const ratingtariffs = await getRatingTariffs();
 
 		return res.status(200).json(ratingtariffs);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -36,7 +40,7 @@ export async function queryBuyRating(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		const { idrate } = req.body;
 		const ratingtariffs = await getRatingTariffs();
@@ -45,17 +49,15 @@ export async function queryBuyRating(req, res) {
 		);
 
 		if (posTariff === -1)
-			return res.status(400).json({
-				message: "Такого тарифа не существует!",
-			});
+			return answerStatus400(res, "Такого тарифа не существует!");
 
 		let cash = await getProfileCashByIdFromDB(jwtDecode.userId);
 
 		if (cash - ratingtariffs[posTariff].price < 0)
-			return res.status(400).json({
-				message:
-					"Недостаточно MY-баллов для покупки, пополните балланс!",
-			});
+			return answerStatus400(
+				res,
+				"Недостаточно MY-баллов для покупки, пополните балланс!"
+			);
 
 		let rating = await getProfileRatingByIdFromDB(jwtDecode.userId);
 
@@ -69,7 +71,7 @@ export async function queryBuyRating(req, res) {
 
 		return res.status(200).json(profile);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -80,7 +82,7 @@ export async function queryAddStickerpack(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		let { idstickerpack }: { idstickerpack: string } = req.body;
 		idstickerpack = String(idstickerpack);
@@ -90,9 +92,7 @@ export async function queryAddStickerpack(req, res) {
 		);
 
 		if (profileStickerpacks.includes(idstickerpack))
-			return res.status(400).json({
-				message: "У вас уже есть данный стикерпак!",
-			});
+			return answerStatus400(res, "У вас уже есть данный стикерпак!");
 
 		const stickerpacks = await getAllStickerpacks();
 		const stickerpackIndex = stickerpacks.findIndex(
@@ -100,9 +100,7 @@ export async function queryAddStickerpack(req, res) {
 		);
 
 		if (stickerpackIndex === -1)
-			return res.status(400).json({
-				message: "Данного стикерпака не существует!",
-			});
+			return answerStatus400(res, "Данного стикерпака не существует!");
 
 		const priceStickerpack = stickerpacks[stickerpackIndex].price;
 
@@ -115,17 +113,18 @@ export async function queryAddStickerpack(req, res) {
 			);
 
 			if (!answerAddStickerpack)
-				return res.status(400).json({
-					message: "Произошла ошибка добавления стикерпака!",
-				});
+				return answerStatus400(
+					res,
+					"Произошла ошибка добавления стикерпака!"
+				);
 		} else {
 			let cash = await getProfileCashByIdFromDB(jwtDecode.userId);
 
 			if (cash - priceStickerpack < 0)
-				return res.status(400).json({
-					message:
-						"Недостаточно MY-баллов для покупки, пополните балланс!",
-				});
+				return answerStatus400(
+					res,
+					"Недостаточно MY-баллов для покупки, пополните балланс!"
+				);
 
 			profileStickerpacks.unshift(idstickerpack);
 
@@ -136,9 +135,10 @@ export async function queryAddStickerpack(req, res) {
 			);
 
 			if (!answerAddStickerpack)
-				return res.status(400).json({
-					message: "Произошла ошибка добавления стикерпака!",
-				});
+				return answerStatus400(
+					res,
+					"Произошла ошибка добавления стикерпака!"
+				);
 
 			await setProfileCashByIdToDB(jwtDecode.userId, cash);
 		}
@@ -147,7 +147,7 @@ export async function queryAddStickerpack(req, res) {
 
 		return res.status(200).json(profile);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
 
@@ -158,7 +158,7 @@ export async function queryDeleteStickerpack(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerFailJWT(res);
+		if (!jwtDecode) return answerStatusJWT(res);
 
 		let { idstickerpack }: { idstickerpack: string } = req.body;
 		idstickerpack = String(idstickerpack);
@@ -172,9 +172,7 @@ export async function queryDeleteStickerpack(req, res) {
 		);
 
 		if (profileStickerpackIndex === -1)
-			return res.status(400).json({
-				message: "У вас нет такого стикерпака!",
-			});
+			return answerStatus400(res, "У вас нет такого стикерпака!");
 
 		profileStickerpacks.splice(profileStickerpackIndex, 1);
 
@@ -187,6 +185,6 @@ export async function queryDeleteStickerpack(req, res) {
 
 		return res.status(200).json(profile);
 	} catch (error) {
-		return answerFailQTDB(res, error);
+		return answerStatusQTDB(res, error);
 	}
 }
