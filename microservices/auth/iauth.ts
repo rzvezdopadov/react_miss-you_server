@@ -1,6 +1,5 @@
 import { IAdminBanned } from "../admin/iadmin";
-import { IPaid } from "../shop/ipaid";
-import { ICoordinates, IProfile } from "../profile/profile/iprofile";
+import { ICoordinates, IProfile } from "../profile/iprofile";
 import { IStatVisit } from "../statistics/istatistics";
 
 export interface IJWT {

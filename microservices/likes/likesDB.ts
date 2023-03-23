@@ -1,4 +1,4 @@
-import { poolDB } from "../../../db/config";
+import { poolDB } from "../../db/config";
 
 export async function getLikesByIdFromDB(userId: string): Promise<string[]> {
 	try {

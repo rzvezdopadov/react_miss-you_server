@@ -4,16 +4,16 @@ import {
 	IQueryGetProfile,
 	IQueryGetProfiles,
 } from "./iprofile";
-import { getSignZodiac } from "../../../utils/signzodiac";
-import { testToken } from "../../auth/token";
+import { getSignZodiac } from "../../utils/signzodiac";
+import { testToken } from "../auth/token";
 import { getProfileByIdFromDB, setProfileByIdToDB } from "./profileDB";
-import { isBannedUser } from "../../../utils/banned";
+import { isBannedUser } from "../../utils/banned";
 import { getProfilesShort, getProfilesShortForLikes } from "./profileUtils";
 import {
 	answerStatus400,
 	answerStatusJWT,
 	answerStatusQTDB,
-} from "../../../utils/answerstatus";
+} from "../../utils/answerstatus";
 
 export async function querySetProfile(req, res) {
 	try {

@@ -1,6 +1,6 @@
 import { IComplaintOutput } from "./icomplaints";
 import { getComplaintsByIdFromDB } from "./complaintsDB";
-import { getProfilesForDialogsFromDB } from "../profile/profile/profileDB";
+import { getProfilesForDialogsFromDB } from "../profile/profileDB";
 
 export const getComplaints = async (
 	ourId: string

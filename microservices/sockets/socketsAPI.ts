@@ -1,20 +1,20 @@
 import { testToken } from "../auth/token";
 import { setTimecodeToDB } from "../auth/authDB";
-import { setLikesById } from "../profile/likes/likesUtils";
+import { setLikesById } from "../likes/likesUtils";
 import { setDialog } from "../dialogs/dialogsUtils";
 import { setVisitByIdToDB } from "../statistics/statisticsDB";
 import { botPhraseCensure, botPhraseSpam } from "../bots/botsUtils";
 import { setAdminBannedByIdToDB } from "../admin/adminDB";
 import { IQuerySendMessage, MESSAGETYPE } from "../dialogs/idialogs";
 import { IQuerySendSticker } from "../shop/stickerpacks/istickerpacks";
-import { IQueryLike } from "../profile/likes/ilikes";
+import { IQueryLike } from "../likes/ilikes";
 
 interface ISocketUser {
 	userid: string;
 	socketid: string;
 }
 
-const arrOfSockets: Array<ISocketUser> = [];
+const arrOfSockets: ISocketUser[] = [];
 
 const getUserIdFromSocketTable = (socketId) => {
 	for (let i = 0; i < arrOfSockets.length; i++) {

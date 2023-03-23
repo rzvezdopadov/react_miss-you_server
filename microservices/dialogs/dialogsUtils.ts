@@ -6,7 +6,7 @@ import {
 import {
 	getProfileByIdFromDB,
 	getProfilesForDialogsFromDB,
-} from "../profile/profile/profileDB";
+} from "../profile/profileDB";
 import { getTimecodeNow } from "../../utils/datetime";
 import { IDialogBase, IDialogOutput, IMessage, MESSAGETYPE } from "./idialogs";
 

@@ -1,5 +1,5 @@
-import { IRate } from "./ishop";
-import { poolDB } from "../../db/config";
+import { poolDB } from "../../../db/config";
+import { IRate } from "./irating";
 
 export async function getRatingTariffs(): Promise<IRate[]> {
 	try {

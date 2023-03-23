@@ -4,11 +4,11 @@ import {
 	IAdminStatVisit,
 	IQueryGetAdminProfiles,
 } from "./iadmin";
-import { IProfile } from "../profile/profile/iprofile";
+import { IProfile } from "../profile/iprofile";
 import { getYearFromAge } from "../../utils/datetime";
 import { conditionStr } from "../../utils/query";
 import { poolDB } from "../../db/config";
-import { fieldProfileShort } from "../profile/profile/profileDB";
+import { fieldProfileShort } from "../profile/profileDB";
 
 export async function getAdminAcctypeByIdFromDB(
 	userId: string

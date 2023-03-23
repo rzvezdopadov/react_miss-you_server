@@ -1,4 +1,4 @@
-import { IQueryGetProfile } from "../profile/profile/iprofile";
+import { IQueryGetProfile } from "../profile/iprofile";
 import {
 	getAdminAcctypeByIdFromDB,
 	getAdminProfiles,
@@ -12,7 +12,7 @@ import {
 	getProfileRatingByIdFromDB,
 	setProfileCashByIdToDB,
 	setProfileRatingByIdToDB,
-} from "../profile/profile/profileDB";
+} from "../profile/profileDB";
 import { getTimecodeNow } from "../../utils/datetime";
 import { deletePhoto } from "../images/imagesUtils";
 import { testToken } from "../auth/token";

@@ -1,5 +1,5 @@
-import { answerStatusJWT, answerStatusQTDB } from "../../../utils/answerstatus";
-import { testToken } from "../../auth/token";
+import { answerStatusJWT, answerStatusQTDB } from "../../utils/answerstatus";
+import { testToken } from "../auth/token";
 import { setLikesById } from "./likesUtils";
 
 export async function querySetLike(req, res) {

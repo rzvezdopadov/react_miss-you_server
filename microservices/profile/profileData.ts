@@ -1,5 +1,5 @@
-import { ACCTYPE } from "../../admin/iadmin";
-import { minage } from "../../../utils/globalconst";
+import { ACCTYPE } from "../admin/iadmin";
+import { minage } from "../../utils/globalconst";
 
 export const data_acctype = [ACCTYPE.user, ACCTYPE.admin];
 

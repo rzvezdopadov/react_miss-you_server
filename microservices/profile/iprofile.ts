@@ -1,5 +1,5 @@
-import { ACCTYPE } from "../../admin/iadmin";
-import { IPaid } from "../../shop/ipaid";
+import { ACCTYPE } from "../admin/iadmin";
+import { IPaid } from "../shop/ishop";
 
 export interface ICoordinates {
 	ipaddress: string;

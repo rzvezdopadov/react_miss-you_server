@@ -31,7 +31,7 @@ import {
 	data_genderVapor,
 	data_growth,
 	data_location,
-} from "../profile/profile/profileData";
+} from "../profile/profileData";
 import { isBannedUser } from "../../utils/banned";
 import {
 	answerStatus200,

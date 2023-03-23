@@ -15,7 +15,7 @@ import {
 	data_religion,
 	data_smoke,
 	data_weight,
-} from "../profile/profile/profileData";
+} from "../profile/profileData";
 import { ACCTYPE } from "../admin/iadmin";
 import { IProfileRegistration } from "../auth/iauth";
 import { poolDB } from "../../db/config";
