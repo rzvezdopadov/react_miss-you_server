@@ -4,8 +4,8 @@ interface IPaidContent {
 }
 
 export interface IPaid {
-	messagewrite: IPaidContent;
-	messageread: IPaidContent;
+	messageswrite: IPaidContent;
+	messagesread: IPaidContent;
 	longfilters: IPaidContent;
 	filtersvapors: IPaidContent;
 	longfiltersvapors: IPaidContent;
@@ -27,4 +27,11 @@ export interface IPaid {
 	historymessages150: IPaidContent;
 	historymessages200: IPaidContent;
 	historymessages300: IPaidContent;
+}
+
+export interface ITariff {
+	idTariff: string;
+	amountDay: number;
+	price: number;
+	discount: number;
 }

@@ -1,5 +1,5 @@
 import { ACCTYPE } from "../admin/iadmin";
-import { IPaid } from "../shop/ishop";
+import { IPaid } from "../shop/paid/ipaid";
 
 export interface ICoordinates {
 	ipaddress: string;
