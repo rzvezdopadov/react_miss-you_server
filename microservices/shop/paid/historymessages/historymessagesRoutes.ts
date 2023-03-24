@@ -1,6 +1,5 @@
 import {
 	queryBuyHistoryMessages100,
-	queryBuyHistoryMessages150,
 	queryBuyHistoryMessages20,
 	queryBuyHistoryMessages200,
 	queryBuyHistoryMessages300,
@@ -8,7 +7,6 @@ import {
 	queryBuyHistoryMessages60,
 	queryBuyHistoryMessages80,
 	queryGetHistoryMessages100Tariffs,
-	queryGetHistoryMessages150Tariffs,
 	queryGetHistoryMessages200Tariffs,
 	queryGetHistoryMessages20Tariffs,
 	queryGetHistoryMessages300Tariffs,
@@ -55,13 +53,6 @@ router.get(
 	queryGetHistoryMessages100Tariffs
 );
 router.post("/api/shop/buyhistorymessages100", [], queryBuyHistoryMessages100);
-
-router.get(
-	"/api/shop/historymessages150tariffs",
-	[],
-	queryGetHistoryMessages150Tariffs
-);
-router.post("/api/shop/buyhistorymessages150", [], queryBuyHistoryMessages150);
 
 router.get(
 	"/api/shop/historymessages200tariffs",

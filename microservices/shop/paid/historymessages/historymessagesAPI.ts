@@ -186,42 +186,6 @@ export async function queryBuyHistoryMessages100(req, res) {
 	}
 }
 
-export async function queryGetHistoryMessages150Tariffs(req, res) {
-	try {
-		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
-
-		const jwtDecode = await testToken(jwt);
-
-		if (!jwtDecode) return answerStatusFailJWT(res);
-
-		const historymessages150 = await getTariffsShopFromDB(
-			"historymessages150"
-		);
-
-		return res.status(200).json(historymessages150);
-	} catch (error) {
-		return answerStatusQTDB(res, error);
-	}
-}
-
-export async function queryBuyHistoryMessages150(req, res) {
-	try {
-		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
-
-		const jwtDecode = await testToken(jwt);
-
-		if (!jwtDecode) return answerStatusFailJWT(res);
-
-		const { idtariff } = req.body;
-
-		queryPaidNext(res, "historymessages150", idtariff, jwtDecode.userId);
-	} catch (error) {
-		return answerStatusQTDB(res, error);
-	}
-}
-
 export async function queryGetHistoryMessages200Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;

@@ -180,7 +180,6 @@ export async function queryRegistration(req, res) {
 				historymessages60: { enabled: false, timecode: 0 },
 				historymessages80: { enabled: false, timecode: 0 },
 				historymessages100: { enabled: false, timecode: 0 },
-				historymessages150: { enabled: false, timecode: 0 },
 				historymessages200: { enabled: false, timecode: 0 },
 				historymessages300: { enabled: false, timecode: 0 },
 			},

@@ -24,7 +24,6 @@ export interface IPaid {
 	historymessages60: IPaidContent;
 	historymessages80: IPaidContent;
 	historymessages100: IPaidContent;
-	historymessages150: IPaidContent;
 	historymessages200: IPaidContent;
 	historymessages300: IPaidContent;
 }
