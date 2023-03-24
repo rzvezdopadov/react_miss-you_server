@@ -41,7 +41,7 @@ export async function queryPaidNext(
 
 		paid[nameTariff].timecode =
 			getTimecodeNow() + tariff[posTariff].amountDay * TIMECODE_DAY;
-		paid[nameTariff] = paid[nameTariff].enabled = true;
+		paid[nameTariff].enabled = true;
 		cash -= tariff[posTariff].price;
 
 		await setPaidByIdToDB(userId, paid);
