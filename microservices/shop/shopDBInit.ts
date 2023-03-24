@@ -1,37 +1,29 @@
 import { poolDB } from "../../db/config";
-import { ratingTariffsData } from "./shopData";
-
-const shopRatingGenerate = (): string => {
-	let strTariffs = "";
-	ratingTariffsData.forEach((value) => {
-		strTariffs += `'${JSON.stringify(value)}' :: JSON, `;
-	});
-	strTariffs = strTariffs.slice(0, -2);
-
-	let str = `INSERT INTO public.shop(ratingtariffs) VALUES (ARRAY [${strTariffs}]);`;
-	return str;
-};
+import { initDBFilters } from "./paid/filters/filtersDBInit";
+import { initDBHistoryMessages } from "./paid/historymessages/historymessagesDBInit";
+import { initDBInterests } from "./paid/interests/interestsDBInit";
+import { initDBMessages } from "./paid/messages/messagesDBInit";
+import { initDBPhoto } from "./paid/photo/photoDBInit";
+import { initDBRating } from "./rating/ratingDBInit";
 
 export async function initDBShop(): Promise<boolean> {
 	try {
 		let queryStr = `
             CREATE TABLE IF NOT EXISTS shop (
                 id serial PRIMARY KEY,
-                ratingtariffs JSON[]
+				name TEXT, 
+                payload JSON[]
             );
         `;
 
 		await poolDB.query(queryStr);
 
-		queryStr = `SELECT ratingtariffs FROM shop`;
-
-		const answerDB = await poolDB.query(queryStr);
-
-		if (!answerDB.rows[0]) {
-			queryStr = shopRatingGenerate();
-
-			await poolDB.query(queryStr);
-		}
+		await initDBRating();
+		await initDBFilters();
+		await initDBInterests();
+		await initDBMessages();
+		await initDBPhoto();
+		await initDBHistoryMessages();
 
 		console.log("initDB Shop Ok!");
 		return true;
