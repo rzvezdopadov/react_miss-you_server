@@ -18,7 +18,7 @@ export function answerStatus500(res: any, message: string) {
 	return answerStatus(res, 500, message);
 }
 
-export function answerStatusJWT(res: any) {
+export function answerStatusFailJWT(res: any) {
 	return answerStatus400(res, "Токен не валидный!");
 }
 

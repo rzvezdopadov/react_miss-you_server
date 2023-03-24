@@ -21,7 +21,7 @@ import { IProfileRegistration } from "../auth/iauth";
 import { poolDB } from "../../db/config";
 import {
 	TIMECODE_DAY,
-	TIMECODE_NONTH,
+	TIMECODE_MONTH,
 	getTimecodeNow,
 } from "../../utils/datetime";
 import { getSignZodiac } from "../../utils/signzodiac";
@@ -117,8 +117,8 @@ const fakeUsersGenerate = async (
 			visit: [],
 			banned: { timecode: 0, whobanned: "", discription: "" },
 			paid: {
-				messagewrite: { enabled: false, timecode: 0 },
-				messageread: { enabled: false, timecode: 0 },
+				messageswrite: { enabled: false, timecode: 0 },
+				messagesread: { enabled: false, timecode: 0 },
 				longfilters: { enabled: false, timecode: 0 },
 				filtersvapors: { enabled: false, timecode: 0 },
 				longfiltersvapors: { enabled: false, timecode: 0 },
@@ -261,9 +261,9 @@ const fakeUsersGenerate = async (
 				getRandomInteger(1, fakeUserCount - 1)
 			);
 
-			fakePerson.paid.messagewrite.enabled = true;
-			fakePerson.paid.messagewrite.timecode =
-				fakePerson.registrationdate + TIMECODE_NONTH;
+			fakePerson.paid.messageswrite.enabled = true;
+			fakePerson.paid.messageswrite.timecode =
+				fakePerson.registrationdate + TIMECODE_MONTH;
 
 			arrFakeUsers.push(JSON.parse(JSON.stringify(fakePerson)));
 		}

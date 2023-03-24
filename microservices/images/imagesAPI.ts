@@ -2,7 +2,7 @@ import { addPhoto, checkPhoto, deletePhoto, getWayPhoto } from "./imagesUtils";
 import { testToken } from "../auth/token";
 import {
 	answerStatus400,
-	answerStatusJWT,
+	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../utils/answerstatus";
 
@@ -13,7 +13,7 @@ export async function queryLoadPhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		let { image } = req.files;
 
@@ -37,7 +37,7 @@ export async function queryDeletePhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const photos = await deletePhoto(jwtDecode.userId, photoPos);
 
@@ -57,7 +57,7 @@ export async function queryCheckPhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const photos = await checkPhoto(jwtDecode.userId, photoPos);
 
@@ -74,7 +74,7 @@ export async function queryGetPhoto(req, res, next) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		let { url } = req;
 		const nameFile = url.replace("/api/photo/", "").replace(".jpg", "");

@@ -3,7 +3,7 @@ import { testToken } from "../auth/token";
 import { MESSAGETYPE } from "./idialogs";
 import {
 	answerStatus400,
-	answerStatusJWT,
+	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../utils/answerstatus";
 
@@ -18,7 +18,7 @@ export async function querySetMessage(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		if (!userId)
 			return answerStatus400(
@@ -55,7 +55,7 @@ export async function queryGetDialog(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		if (!userId) return answerStatus400(res, "Нужно выбрать пользователя!");
 
@@ -78,7 +78,7 @@ export async function queryGetDialogs(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const dialogs = await getDialogs(jwtDecode.userId);
 

@@ -26,7 +26,7 @@ import {
 	answerStatus200,
 	answerStatus400,
 	answerStatusAccessDenied,
-	answerStatusJWT,
+	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../utils/answerstatus";
 
@@ -37,7 +37,7 @@ export async function queryAdminGetProfiles(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
@@ -76,7 +76,7 @@ export async function queryAdminGetVisit(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
@@ -103,7 +103,7 @@ export async function queryAdminSetAcctype(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
@@ -132,7 +132,7 @@ export async function queryAdminSetRaiting(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
@@ -177,7 +177,7 @@ export async function queryAdminSetCash(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
@@ -221,7 +221,7 @@ export async function queryAdminGetProfile(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
@@ -248,7 +248,7 @@ export async function queryAdminSetBanned(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId
@@ -309,7 +309,7 @@ export async function queryAdminDeletePhoto(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const adminCandidate = await getAdminAcctypeByIdFromDB(
 			jwtDecode.userId

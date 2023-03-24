@@ -16,7 +16,7 @@ import {
 } from "./authDB";
 import { getSignZodiac } from "../../utils/signzodiac";
 import {
-	TIMECODE_NONTH,
+	TIMECODE_MONTH,
 	TIMECODE_WEEK,
 	getTimecodeNow,
 } from "../../utils/datetime";
@@ -37,7 +37,7 @@ import {
 	answerStatus200,
 	answerStatus400,
 	answerStatus500,
-	answerStatusJWT,
+	answerStatusFailJWT,
 } from "../../utils/answerstatus";
 
 const bcrypt = require("bcryptjs");
@@ -157,11 +157,11 @@ export async function queryRegistration(req, res) {
 			visit: [],
 			banned: { timecode: 0, whobanned: "", discription: "" },
 			paid: {
-				messagewrite: {
+				messageswrite: {
 					enabled: true,
-					timecode: timecode + TIMECODE_NONTH,
+					timecode: timecode + TIMECODE_MONTH,
 				},
-				messageread: { enabled: false, timecode: 0 },
+				messagesread: { enabled: false, timecode: 0 },
 				longfilters: { enabled: false, timecode: 0 },
 				filtersvapors: { enabled: false, timecode: 0 },
 				longfiltersvapors: { enabled: false, timecode: 0 },
@@ -304,7 +304,7 @@ export async function queryChangePass(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const pass = await getPasswordByIdFromDB(jwtDecode.userId);
 

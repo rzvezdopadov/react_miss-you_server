@@ -11,7 +11,7 @@ import { isBannedUser } from "../../utils/banned";
 import { getProfilesShort, getProfilesShortForLikes } from "./profileUtils";
 import {
 	answerStatus400,
-	answerStatusJWT,
+	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../utils/answerstatus";
 
@@ -22,7 +22,7 @@ export async function querySetProfile(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const { profile } = req.body;
 		profile as IProfile;
@@ -49,11 +49,11 @@ export async function queryGetProfile(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const isBanned = await isBannedUser(jwtDecode.userId);
 
-		if (isBanned) return answerStatusJWT(res);
+		if (isBanned) return answerStatusFailJWT(res);
 
 		const QueryGetProfile: IQueryGetProfile = req.query;
 		const userid = String(QueryGetProfile.userid);
@@ -95,7 +95,7 @@ export async function queryGetProfilesShort(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const QueryGetProfiles: IQueryGetProfiles = req.query;
 
@@ -136,7 +136,7 @@ export async function queryGetProfilesForLikes(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const QueryGetProfiles: IQueryGetProfiles = req.query;
 

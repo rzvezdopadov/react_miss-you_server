@@ -1,6 +1,6 @@
 import {
 	answerStatus400,
-	answerStatusJWT,
+	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../../utils/answerstatus";
 import { testToken } from "../../auth/token";
@@ -21,7 +21,7 @@ export async function queryGetAllStickerpacks(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const stickerpacks = await getAllStickerpacks();
 
@@ -38,7 +38,7 @@ export async function queryGetSticker(req, res, next) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const { url } = req;
 		let nameFile: string = url.replace("/api/sticker/", "");
@@ -60,7 +60,7 @@ export async function queryAddStickerpack(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		let { idstickerpack }: { idstickerpack: string } = req.body;
 		idstickerpack = String(idstickerpack);
@@ -136,7 +136,7 @@ export async function queryDeleteStickerpack(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		let { idstickerpack }: { idstickerpack: string } = req.body;
 		idstickerpack = String(idstickerpack);

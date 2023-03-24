@@ -1,5 +1,5 @@
 import { ICoordinates, IFilterUsers } from "../profile/iprofile";
-import { IPaid } from "../shop/ishop";
+import { IPaid } from "../shop/paid/ipaid";
 import { IStatVisit } from "../statistics/istatistics";
 
 export enum ACCTYPE {
