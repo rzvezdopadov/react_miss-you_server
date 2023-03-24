@@ -5,13 +5,14 @@ import {
 	setProfileCashByIdToDB,
 	setProfileRatingByIdToDB,
 } from "../../profile/profileDB";
-import { getRatingTariffs } from "./ratingDB";
 import { testToken } from "../../auth/token";
 import {
 	answerStatus400,
-	answerStatusJWT,
+	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../../utils/answerstatus";
+import { getTariffsShopFromDB } from "../shopDB";
+import { IRate } from "./irating";
 
 export async function queryGetRatingTariffs(req, res) {
 	try {
@@ -20,9 +21,9 @@ export async function queryGetRatingTariffs(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const ratingtariffs = await getRatingTariffs();
+		const ratingtariffs = await getTariffsShopFromDB("ratingtariffs");
 
 		return res.status(200).json(ratingtariffs);
 	} catch (error) {
@@ -37,12 +38,14 @@ export async function queryBuyRating(req, res) {
 
 		const jwtDecode = await testToken(jwt);
 
-		if (!jwtDecode) return answerStatusJWT(res);
+		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const { idrate } = req.body;
-		const ratingtariffs = await getRatingTariffs();
+		const { idtariff } = req.body;
+		const ratingtariffs: IRate[] = await getTariffsShopFromDB(
+			"ratingtariffs"
+		);
 		const posTariff = ratingtariffs.findIndex(
-			(value) => value.idRate === idrate
+			(value) => value.idTariff === idtariff
 		);
 
 		if (posTariff === -1)
