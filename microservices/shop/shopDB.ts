@@ -4,7 +4,7 @@ import { getUniQueryFromDB } from "../../db/uniquery";
 export async function getTariffsShopFromDB(name: string): Promise<any[]> {
 	try {
 		const answerDB: any[] = (
-			await getUniQueryFromDB("shop", ["payload"], [`name = ${name}`])
+			await getUniQueryFromDB("shop", ["payload"], [`name = '${name}'`])
 		)[0].payload;
 
 		return answerDB;
