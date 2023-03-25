@@ -5,6 +5,9 @@ import {
 	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../utils/answerstatus";
+import { getPhotosByIdFromDB } from "./imagesDB";
+import { getPaidByIdFromDB } from "../shop/paid/paidDB";
+import { getTimecodeNow } from "../../utils/datetime";
 
 export async function queryLoadPhoto(req, res) {
 	try {
@@ -19,7 +22,43 @@ export async function queryLoadPhoto(req, res) {
 
 		if (!image) return answerStatus400(res, "Изображение не распознано!");
 
-		const photos = await addPhoto(jwtDecode.userId, image);
+		let photos = await getPhotosByIdFromDB(jwtDecode.userId);
+		const userIdPaid = await getPaidByIdFromDB(jwtDecode.userId);
+		const timecode = getTimecodeNow();
+
+		const overflowPhotoPhrase =
+			"Больше фото загрузить нельзя, купите дополнительные опции!";
+
+		if (
+			userIdPaid.photoload30.timecode > timecode &&
+			photos.photolink.length + 1 > 30
+		) {
+			return answerStatus400(res, "Больше фото загрузить нельзя!");
+		} else if (
+			userIdPaid.photoload25.timecode > timecode &&
+			photos.photolink.length + 1 > 25
+		) {
+			return answerStatus400(res, overflowPhotoPhrase);
+		} else if (
+			userIdPaid.photoload20.timecode > timecode &&
+			photos.photolink.length + 1 > 20
+		) {
+			return answerStatus400(res, overflowPhotoPhrase);
+		} else if (
+			userIdPaid.photoload15.timecode > timecode &&
+			photos.photolink.length + 1 > 15
+		) {
+			return answerStatus400(res, overflowPhotoPhrase);
+		} else if (
+			userIdPaid.photoload10.timecode > timecode &&
+			photos.photolink.length + 1 > 10
+		) {
+			return answerStatus400(res, overflowPhotoPhrase);
+		} else if (photos.photolink.length + 1 > 5) {
+			return answerStatus400(res, overflowPhotoPhrase);
+		}
+
+		photos = await addPhoto(jwtDecode.userId, image);
 
 		return res.status(200).json(photos);
 	} catch (error) {

@@ -14,6 +14,8 @@ import {
 	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../utils/answerstatus";
+import { getPaidByIdFromDB } from "../shop/paid/paidDB";
+import { getTimecodeNow } from "../../utils/datetime";
 
 export async function querySetProfile(req, res) {
 	try {
@@ -24,13 +26,29 @@ export async function querySetProfile(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const { profile } = req.body;
-		profile as IProfile;
+		const { profile }: { profile: IProfile } = req.body;
 
 		profile.signzodiac = getSignZodiac(
 			profile.birthday,
 			profile.monthofbirth
 		);
+
+		const userIdPaid = await getPaidByIdFromDB(jwtDecode.userId);
+		const timecode = getTimecodeNow();
+
+		if (
+			userIdPaid.interests30.timecode > timecode &&
+			profile.interests.length > 30
+		) {
+			profile.interests.splice(30);
+		} else if (
+			userIdPaid.interests20.timecode > timecode &&
+			profile.interests.length > 20
+		) {
+			profile.interests.splice(20);
+		} else if (profile.interests.length > 10) {
+			profile.interests.splice(10);
+		}
 
 		const newProfile = await setProfileByIdToDB(jwtDecode.userId, profile);
 

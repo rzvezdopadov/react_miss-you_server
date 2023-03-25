@@ -9,6 +9,7 @@ import {
 } from "../profile/profileDB";
 import { getTimecodeNow } from "../../utils/datetime";
 import { IDialogBase, IDialogOutput, IMessage, MESSAGETYPE } from "./idialogs";
+import { getPaidByIdFromDB } from "../shop/paid/paidDB";
 
 export const setDialog = async (
 	ourId: string,
@@ -29,12 +30,14 @@ export const setDialog = async (
 		messages: [],
 	};
 
+	const timecode = getTimecodeNow();
+
 	try {
 		let dialog = await getDialogByIdFromDB(ourId, userId);
 
 		const newMessageObj: IMessage = {
 			userid: ourId,
-			timecode: getTimecodeNow(),
+			timecode: timecode,
 			type: type,
 			userid1del: false,
 			userid2del: false,
@@ -46,7 +49,7 @@ export const setDialog = async (
 		};
 
 		if (dialog && Object.keys(dialog).length) {
-			dialog.messages.push(newMessageObj);
+			dialog.messages.unshift(newMessageObj);
 		} else {
 			const newDialogBase: IDialogBase = {
 				userid1: ourId,
@@ -56,8 +59,57 @@ export const setDialog = async (
 				messages: [],
 			};
 
-			newDialogBase.messages.push(newMessageObj);
+			newDialogBase.messages.unshift(newMessageObj);
 			dialog = newDialogBase;
+		}
+
+		const userId1Paid = await getPaidByIdFromDB(ourId);
+		const userId2Paid = await getPaidByIdFromDB(userId);
+
+		if (
+			(userId1Paid.historymessages300.timecode > timecode ||
+				userId2Paid.historymessages300.timecode > timecode) &&
+			dialog.messages.length > 300
+		) {
+			dialog.messages.splice(300);
+		} else if (
+			(userId1Paid.historymessages200.timecode > timecode ||
+				userId2Paid.historymessages200.timecode > timecode) &&
+			dialog.messages.length > 200
+		) {
+			dialog.messages.splice(200);
+		} else if (
+			(userId1Paid.historymessages100.timecode > timecode ||
+				userId2Paid.historymessages100.timecode > timecode) &&
+			dialog.messages.length > 100
+		) {
+			dialog.messages.splice(100);
+		} else if (
+			(userId1Paid.historymessages80.timecode > timecode ||
+				userId2Paid.historymessages80.timecode > timecode) &&
+			dialog.messages.length > 80
+		) {
+			dialog.messages.splice(80);
+		} else if (
+			(userId1Paid.historymessages60.timecode > timecode ||
+				userId2Paid.historymessages60.timecode > timecode) &&
+			dialog.messages.length > 60
+		) {
+			dialog.messages.splice(60);
+		} else if (
+			(userId1Paid.historymessages40.timecode > timecode ||
+				userId2Paid.historymessages40.timecode > timecode) &&
+			dialog.messages.length > 40
+		) {
+			dialog.messages.splice(40);
+		} else if (
+			(userId1Paid.historymessages20.timecode > timecode ||
+				userId2Paid.historymessages20.timecode > timecode) &&
+			dialog.messages.length > 20
+		) {
+			dialog.messages.splice(20);
+		} else if (dialog.messages.length > 10) {
+			dialog.messages.splice(10);
 		}
 
 		await setDialogByIdToDB(dialog);
