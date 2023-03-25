@@ -11,12 +11,12 @@ import { poolDB } from "../../db/config";
 
 const fieldProfile =
 	"userid, timecode, name, location, " +
-	"likes, birthday, monthofbirth, yearofbirth, growth, weight, " +
+	"likes, favoriteusers, birthday, monthofbirth, yearofbirth, growth, weight, " +
 	"gender, gendervapor, photomain, photolink, signzodiac, " +
 	"education, fieldofactivity, maritalstatus, children, religion, " +
 	"smoke, alcohol, discription, profit, interests, " +
 	"ilikeCharacter, idontlikeCharacter, rating, stickerpacks, cash," +
-	"acctype, filters";
+	"acctype, filters, paid";
 
 export async function getProfileByIdFromDB(userid: string): Promise<IProfile> {
 	try {
