@@ -1,8 +1,7 @@
 import express from "express";
-import { socketHandler } from "./microservices/sockets/socketsAPI";
+import { socketHandler } from "./microservices/sockets/socketRoutes";
 import fileupload from "express-fileupload";
 import { initDB } from "./db/init";
-import path from "path";
 import { getTimedateNow } from "./utils/datetime";
 const config = require("config");
 const cookieParser = require("cookie-parser");
@@ -41,14 +40,24 @@ app.use((req, res, next) => {
 app.use("/static", express.static(__dirname + "/static"));
 app.use("/favicon.ico", express.static(__dirname + "/favicon.ico"));
 
-app.use("/", require("./microservices/auth/authRoutes"));
-app.use("/", require("./microservices/user/userRoutes"));
-app.use("/", require("./microservices/images/imagesRoutes"));
-// app.use("/", require("./microservices/shop/shopRoutes"));
-// app.use("/", require("./microservices/guest/guestRoutes"));
-// app.use("/", require("./microservices/complaints/complaintsRoutes"));
-// app.use("/", require("./microservices/service/serviceRoutes"));
 app.use("/", require("./microservices/admin/adminRoutes"));
+app.use("/", require("./microservices/auth/authRoutes"));
+app.use("/", require("./microservices/complaints/complaintsRoutes"));
+app.use("/", require("./microservices/dialogs/dialogsRoutes"));
+app.use("/", require("./microservices/images/imagesRoutes"));
+app.use("/", require("./microservices/likes/likesRoutes"));
+app.use("/", require("./microservices/profile/profileRoutes"));
+app.use("/", require("./microservices/shop/rating/ratingRoutes"));
+app.use("/", require("./microservices/shop/paid/filters/filtersRoutes"));
+app.use(
+	"/",
+	require("./microservices/shop/paid/historymessages/historymessagesRoutes")
+);
+app.use("/", require("./microservices/shop/paid/interests/interestsRoutes"));
+app.use("/", require("./microservices/shop/paid/messages/messagesRoutes"));
+app.use("/", require("./microservices/shop/paid/photo/photoRoutes"));
+app.use("/", require("./microservices/shop/stickerpacks/stickerpacksRoutes"));
+
 app.use("/", require("./api"));
 
 const httpPORT = config.get("httpPort") || 5000;
