@@ -2,12 +2,12 @@ import { testToken } from "../auth/token";
 import { setTimecodeToDB } from "../auth/authDB";
 import { setLikesById } from "../likes/likesUtils";
 import { setDialog } from "../dialogs/dialogsUtils";
-import { setVisitByIdToDB } from "../statistics/statisticsDB";
 import { botPhraseCensure, botPhraseSpam } from "../bots/botsUtils";
 import { setAdminBannedByIdToDB } from "../admin/adminDB";
 import { IQuerySendMessage, MESSAGETYPE } from "../dialogs/idialogs";
 import { IQuerySendSticker } from "../shop/stickerpacks/istickerpacks";
 import { IQueryLike } from "../likes/ilikes";
+import { setVisitById } from "../statistics/statisticsUtils";
 
 interface ISocketUser {
 	userid: string;
@@ -72,7 +72,7 @@ export const socketHandler = (socketIO, socket) => {
 
 			arrOfSockets.push(socketUser);
 
-			setVisitByIdToDB(socketId, tokenDecode.userId, "open");
+			setVisitById(socketId, tokenDecode.userId, SOCKET_TYPE_OC.open);
 		} catch (error) {
 			console.log("get_jwt error", error);
 		}
@@ -203,7 +203,11 @@ export const socketHandler = (socketIO, socket) => {
 
 		if (userIndex === -1) return;
 
-		setVisitByIdToDB(socketId, arrOfSockets[userIndex].userid, "closed");
+		setVisitById(
+			socketId,
+			arrOfSockets[userIndex].userid,
+			SOCKET_TYPE_OC.closed
+		);
 
 		arrOfSockets.splice(userIndex, 1);
 	});
