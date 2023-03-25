@@ -44,22 +44,6 @@ export async function setPasswordByIdToDB(
 	}
 }
 
-export async function setTimecodeToDB(ourId: string): Promise<number> {
-	const date = new Date();
-	const timecode = date.getTime();
-
-	try {
-		const answerDB = await poolDB.query(
-			`UPDATE users SET timecode = ${timecode} WHERE userid = '${ourId}'`
-		);
-
-		return timecode;
-	} catch (error) {
-		console.log("setTimecodeToDB:", error);
-		return 0;
-	}
-}
-
 export async function getJWTFromDB(ourId: string): Promise<IJWT[]> {
 	try {
 		const answerDB = await poolDB.query(

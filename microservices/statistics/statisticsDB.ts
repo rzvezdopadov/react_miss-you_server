@@ -1,4 +1,5 @@
 import { poolDB } from "../../db/config";
+import { getTimecodeNow } from "../../utils/datetime";
 import { IStatVisit, IStatisticsVisit } from "./istatistics";
 
 export async function setVisitByIdToDB(
@@ -35,5 +36,20 @@ export async function getVisitByIdFromDB(
 		console.log("getVisitByIdFromDB", error);
 
 		return undefined;
+	}
+}
+
+export async function setTimecodeToDB(ourId: string): Promise<number> {
+	const timecode = getTimecodeNow();
+
+	try {
+		const answerDB = await poolDB.query(
+			`UPDATE users SET timecode = ${timecode} WHERE userid = '${ourId}'`
+		);
+
+		return timecode;
+	} catch (error) {
+		console.log("setTimecodeToDB:", error);
+		return 0;
 	}
 }
