@@ -78,20 +78,18 @@ export const addPhoto = async (ourId: string, image: any): Promise<IPhotos> => {
 	try {
 		photos = await getPhotosByIdFromDB(ourId);
 
-		if (photos.photolink.length < 10) {
-			const strRand = getRandomString(30);
+		const strRand = getRandomString(30);
 
-			if (photos.photomain === -1) photos.photomain = 0;
+		if (photos.photomain === -1) photos.photomain = 0;
 
-			photos.photolink.push(strRand + ".jpg");
-			const setPhotoAnswer = await setPhotosByIdToDB(ourId, photos);
+		photos.photolink.push(strRand + ".jpg");
+		const setPhotoAnswer = await setPhotosByIdToDB(ourId, photos);
 
-			if (!setPhotoAnswer) return undefined;
+		if (!setPhotoAnswer) return undefined;
 
-			image.mv(process.cwd() + "/photos/" + strRand + ".jpg");
+		image.mv(process.cwd() + "/photos/" + strRand + ".jpg");
 
-			photos = await getPhotosByIdFromDB(ourId);
-		}
+		photos = await getPhotosByIdFromDB(ourId);
 
 		return photos;
 	} catch (error) {
