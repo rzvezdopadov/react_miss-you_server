@@ -23,7 +23,7 @@ export async function queryGetRatingTariffs(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const ratingtariffs = await getTariffsShopFromDB("ratingtariffs");
+		const ratingtariffs = await getTariffsShopFromDB("rating");
 
 		return res.status(200).json(ratingtariffs);
 	} catch (error) {
@@ -41,9 +41,7 @@ export async function queryBuyRating(req, res) {
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const { idtariff } = req.body;
-		const ratingtariffs: IRate[] = await getTariffsShopFromDB(
-			"ratingtariffs"
-		);
+		const ratingtariffs: IRate[] = await getTariffsShopFromDB("rating");
 		const posTariff = ratingtariffs.findIndex(
 			(value) => value.idTariff === idtariff
 		);
