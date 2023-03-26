@@ -80,9 +80,15 @@ export async function queryPaidNext(
 		}
 
 		let paid = await getPaidByIdFromDB(userId);
+		const timetariff = tariff[posTariff].amountDay * TIMECODE_DAY;
+		const timecode = getTimecodeNow();
 
-		paid[nameTariff].timecode =
-			getTimecodeNow() + tariff[posTariff].amountDay * TIMECODE_DAY;
+		if (timecode < paid[nameTariff].timecode) {
+			paid[nameTariff].timecode += timetariff;
+		} else {
+			paid[nameTariff].timecode = timecode + timetariff;
+		}
+
 		paid[nameTariff].enabled = true;
 		cash -= tariff[posTariff].price;
 
