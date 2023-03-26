@@ -40,7 +40,7 @@ router.post(
 );
 
 router.get(
-	"/api/shop/longfilterfavoriteuserstariffs",
+	"/api/shop/longfiltersfavoriteuserstariffs",
 	[],
 	queryGetLongFiltersFavoriteUsersTariffs
 );
