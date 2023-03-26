@@ -23,8 +23,8 @@ export function testPaidOnOverflow(paid: IPaid): IPaid {
 		paid.longfiltersvapors.enabled = false;
 	if (paid.filtersfavoriteusers.timecode < timecode)
 		paid.filtersfavoriteusers.enabled = false;
-	if (paid.longfilterfavoriteusers.timecode < timecode)
-		paid.longfilterfavoriteusers.enabled = false;
+	if (paid.longfiltersfavoriteusers.timecode < timecode)
+		paid.longfiltersfavoriteusers.enabled = false;
 	if (paid.photofull.timecode < timecode) paid.photofull.enabled = false;
 	if (paid.photoload10.timecode < timecode) paid.photoload10.enabled = false;
 	if (paid.photoload15.timecode < timecode) paid.photoload15.enabled = false;

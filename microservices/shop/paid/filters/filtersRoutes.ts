@@ -1,12 +1,12 @@
 import {
 	queryBuyFiltersFavoriteUsers,
 	queryBuyFiltersVapors,
-	queryBuyLongFilterFavoriteUsers,
+	queryBuyLongFiltersFavoriteUsers,
 	queryBuyLongFilters,
 	queryBuyLongFiltersVapors,
 	queryGetFiltersFavoriteUsersTariffs,
 	queryGetFiltersVaporsTariffs,
-	queryGetLongFilterFavoriteUsersTariffs,
+	queryGetLongFiltersFavoriteUsersTariffs,
 	queryGetLongFiltersTariffs,
 	queryGetLongFiltersVaporsTariffs,
 } from "./filtersAPI";
@@ -42,12 +42,12 @@ router.post(
 router.get(
 	"/api/shop/longfilterfavoriteuserstariffs",
 	[],
-	queryGetLongFilterFavoriteUsersTariffs
+	queryGetLongFiltersFavoriteUsersTariffs
 );
 router.post(
-	"/api/shop/buylongfilterfavoriteusers",
+	"/api/shop/buylongfiltersfavoriteusers",
 	[],
-	queryBuyLongFilterFavoriteUsers
+	queryBuyLongFiltersFavoriteUsers
 );
 
 module.exports = router;

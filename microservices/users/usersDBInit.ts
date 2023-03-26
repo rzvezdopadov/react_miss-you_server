@@ -123,7 +123,7 @@ const fakeUsersGenerate = async (
 				filtersvapors: { enabled: false, timecode: 0 },
 				longfiltersvapors: { enabled: false, timecode: 0 },
 				filtersfavoriteusers: { enabled: false, timecode: 0 },
-				longfilterfavoriteusers: { enabled: false, timecode: 0 },
+				longfiltersfavoriteusers: { enabled: false, timecode: 0 },
 				photofull: { enabled: false, timecode: 0 },
 				photoload10: { enabled: false, timecode: 0 },
 				photoload15: { enabled: false, timecode: 0 },

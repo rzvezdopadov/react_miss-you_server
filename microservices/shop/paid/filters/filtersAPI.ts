@@ -146,7 +146,7 @@ export async function queryBuyFiltersFavoriteUsers(req, res) {
 	}
 }
 
-export async function queryGetLongFilterFavoriteUsersTariffs(req, res) {
+export async function queryGetLongFiltersFavoriteUsersTariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
 		jwt = String(jwt);
@@ -156,7 +156,7 @@ export async function queryGetLongFilterFavoriteUsersTariffs(req, res) {
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const longfilterfavoriteusers = await getTariffsShopFromDB(
-			"longfilterfavoriteusers"
+			"longfiltersfavoriteusers"
 		);
 
 		return res.status(200).json(longfilterfavoriteusers);
@@ -165,7 +165,7 @@ export async function queryGetLongFilterFavoriteUsersTariffs(req, res) {
 	}
 }
 
-export async function queryBuyLongFilterFavoriteUsers(req, res) {
+export async function queryBuyLongFiltersFavoriteUsers(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
 		jwt = String(jwt);
@@ -178,7 +178,7 @@ export async function queryBuyLongFilterFavoriteUsers(req, res) {
 
 		queryPaidNext(
 			res,
-			"longfilterfavoriteusers",
+			"longfiltersfavoriteusers",
 			idtariff,
 			jwtDecode.userId
 		);

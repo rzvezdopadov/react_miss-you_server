@@ -10,7 +10,7 @@ export interface IPaid {
 	filtersvapors: IPaidContent;
 	longfiltersvapors: IPaidContent;
 	filtersfavoriteusers: IPaidContent;
-	longfilterfavoriteusers: IPaidContent;
+	longfiltersfavoriteusers: IPaidContent;
 	photofull: IPaidContent;
 	photoload10: IPaidContent;
 	photoload15: IPaidContent;
