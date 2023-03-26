@@ -67,47 +67,40 @@ export const setDialog = async (
 		const userId2Paid = await getPaidByIdFromDB(userId);
 
 		if (
-			(userId1Paid.historymessages300.timecode > timecode ||
-				userId2Paid.historymessages300.timecode > timecode) &&
-			dialog.messages.length > 300
+			userId1Paid.historymessages300.timecode > timecode ||
+			userId2Paid.historymessages300.timecode > timecode
 		) {
-			dialog.messages.splice(300);
+			if (dialog.messages.length > 300) dialog.messages.splice(300);
 		} else if (
-			(userId1Paid.historymessages200.timecode > timecode ||
-				userId2Paid.historymessages200.timecode > timecode) &&
-			dialog.messages.length > 200
+			userId1Paid.historymessages200.timecode > timecode ||
+			userId2Paid.historymessages200.timecode > timecode
 		) {
-			dialog.messages.splice(200);
+			if (dialog.messages.length > 200) dialog.messages.splice(200);
 		} else if (
-			(userId1Paid.historymessages100.timecode > timecode ||
-				userId2Paid.historymessages100.timecode > timecode) &&
-			dialog.messages.length > 100
+			userId1Paid.historymessages100.timecode > timecode ||
+			userId2Paid.historymessages100.timecode > timecode
 		) {
-			dialog.messages.splice(100);
+			if (dialog.messages.length > 100) dialog.messages.splice(100);
 		} else if (
-			(userId1Paid.historymessages80.timecode > timecode ||
-				userId2Paid.historymessages80.timecode > timecode) &&
-			dialog.messages.length > 80
+			userId1Paid.historymessages80.timecode > timecode ||
+			userId2Paid.historymessages80.timecode > timecode
 		) {
-			dialog.messages.splice(80);
+			if (dialog.messages.length > 80) dialog.messages.splice(80);
 		} else if (
-			(userId1Paid.historymessages60.timecode > timecode ||
-				userId2Paid.historymessages60.timecode > timecode) &&
-			dialog.messages.length > 60
+			userId1Paid.historymessages60.timecode > timecode ||
+			userId2Paid.historymessages60.timecode > timecode
 		) {
-			dialog.messages.splice(60);
+			if (dialog.messages.length > 60) dialog.messages.splice(60);
 		} else if (
-			(userId1Paid.historymessages40.timecode > timecode ||
-				userId2Paid.historymessages40.timecode > timecode) &&
-			dialog.messages.length > 40
+			userId1Paid.historymessages40.timecode > timecode ||
+			userId2Paid.historymessages40.timecode > timecode
 		) {
-			dialog.messages.splice(40);
+			if (dialog.messages.length > 40) dialog.messages.splice(40);
 		} else if (
-			(userId1Paid.historymessages20.timecode > timecode ||
-				userId2Paid.historymessages20.timecode > timecode) &&
-			dialog.messages.length > 20
+			userId1Paid.historymessages20.timecode > timecode ||
+			userId2Paid.historymessages20.timecode > timecode
 		) {
-			dialog.messages.splice(20);
+			if (dialog.messages.length > 20) dialog.messages.splice(20);
 		} else if (dialog.messages.length > 10) {
 			dialog.messages.splice(10);
 		}

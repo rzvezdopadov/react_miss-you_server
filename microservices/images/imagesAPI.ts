@@ -29,31 +29,21 @@ export async function queryLoadPhoto(req, res) {
 		const overflowPhotoPhrase =
 			"Больше фото загрузить нельзя, купите дополнительные опции!";
 
-		if (
-			userIdPaid.photoload30.timecode > timecode &&
-			photos.photolink.length + 1 > 30
-		) {
-			return answerStatus400(res, "Больше фото загрузить нельзя!");
-		} else if (
-			userIdPaid.photoload25.timecode > timecode &&
-			photos.photolink.length + 1 > 25
-		) {
-			return answerStatus400(res, overflowPhotoPhrase);
-		} else if (
-			userIdPaid.photoload20.timecode > timecode &&
-			photos.photolink.length + 1 > 20
-		) {
-			return answerStatus400(res, overflowPhotoPhrase);
-		} else if (
-			userIdPaid.photoload15.timecode > timecode &&
-			photos.photolink.length + 1 > 15
-		) {
-			return answerStatus400(res, overflowPhotoPhrase);
-		} else if (
-			userIdPaid.photoload10.timecode > timecode &&
-			photos.photolink.length + 1 > 10
-		) {
-			return answerStatus400(res, overflowPhotoPhrase);
+		if (userIdPaid.photoload30.timecode > timecode) {
+			if (photos.photolink.length + 1 > 30)
+				return answerStatus400(res, "Больше фото загрузить нельзя!");
+		} else if (userIdPaid.photoload25.timecode > timecode) {
+			if (photos.photolink.length + 1 > 25)
+				return answerStatus400(res, overflowPhotoPhrase);
+		} else if (userIdPaid.photoload20.timecode > timecode) {
+			if (photos.photolink.length + 1 > 20)
+				return answerStatus400(res, overflowPhotoPhrase);
+		} else if (userIdPaid.photoload15.timecode > timecode) {
+			if (photos.photolink.length + 1 > 15)
+				return answerStatus400(res, overflowPhotoPhrase);
+		} else if (userIdPaid.photoload10.timecode > timecode) {
+			if (photos.photolink.length + 1 > 10)
+				return answerStatus400(res, overflowPhotoPhrase);
 		} else if (photos.photolink.length + 1 > 5) {
 			return answerStatus400(res, overflowPhotoPhrase);
 		}
