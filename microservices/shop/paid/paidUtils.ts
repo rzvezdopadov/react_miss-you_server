@@ -12,40 +12,40 @@ import { getPaidByIdFromDB, setPaidByIdToDB } from "./paidDB";
 export function testPaidOnOverflow(paid: IPaid): IPaid {
 	const timecode = getTimecodeNow();
 
-	if (paid.messageswrite.timecode < timecode)
+	if (paid.messageswrite?.timecode < timecode)
 		paid.messageswrite.enabled = false;
-	if (paid.messagesread.timecode < timecode)
+	if (paid.messagesread?.timecode < timecode)
 		paid.messagesread.enabled = false;
-	if (paid.longfilters.timecode < timecode) paid.longfilters.enabled = false;
-	if (paid.filtersvapors.timecode < timecode)
+	if (paid.longfilters?.timecode < timecode) paid.longfilters.enabled = false;
+	if (paid.filtersvapors?.timecode < timecode)
 		paid.filtersvapors.enabled = false;
-	if (paid.longfiltersvapors.timecode < timecode)
+	if (paid.longfiltersvapors?.timecode < timecode)
 		paid.longfiltersvapors.enabled = false;
-	if (paid.filtersfavoriteusers.timecode < timecode)
+	if (paid.filtersfavoriteusers?.timecode < timecode)
 		paid.filtersfavoriteusers.enabled = false;
-	if (paid.longfiltersfavoriteusers.timecode < timecode)
+	if (paid.longfiltersfavoriteusers?.timecode < timecode)
 		paid.longfiltersfavoriteusers.enabled = false;
-	if (paid.photofull.timecode < timecode) paid.photofull.enabled = false;
-	if (paid.photoload10.timecode < timecode) paid.photoload10.enabled = false;
-	if (paid.photoload15.timecode < timecode) paid.photoload15.enabled = false;
-	if (paid.photoload20.timecode < timecode) paid.photoload20.enabled = false;
-	if (paid.photoload25.timecode < timecode) paid.photoload25.enabled = false;
-	if (paid.photoload30.timecode < timecode) paid.photoload30.enabled = false;
-	if (paid.interests20.timecode < timecode) paid.interests20.enabled = false;
-	if (paid.interests30.timecode < timecode) paid.interests30.enabled = false;
-	if (paid.historymessages20.timecode < timecode)
+	if (paid.photofull?.timecode < timecode) paid.photofull.enabled = false;
+	if (paid.photoload10?.timecode < timecode) paid.photoload10.enabled = false;
+	if (paid.photoload15?.timecode < timecode) paid.photoload15.enabled = false;
+	if (paid.photoload20?.timecode < timecode) paid.photoload20.enabled = false;
+	if (paid.photoload25?.timecode < timecode) paid.photoload25.enabled = false;
+	if (paid.photoload30?.timecode < timecode) paid.photoload30.enabled = false;
+	if (paid.interests20?.timecode < timecode) paid.interests20.enabled = false;
+	if (paid.interests30?.timecode < timecode) paid.interests30.enabled = false;
+	if (paid.historymessages20?.timecode < timecode)
 		paid.historymessages20.enabled = false;
-	if (paid.historymessages40.timecode < timecode)
+	if (paid.historymessages40?.timecode < timecode)
 		paid.historymessages40.enabled = false;
-	if (paid.historymessages60.timecode < timecode)
+	if (paid.historymessages60?.timecode < timecode)
 		paid.historymessages60.enabled = false;
-	if (paid.historymessages80.timecode < timecode)
+	if (paid.historymessages80?.timecode < timecode)
 		paid.historymessages80.enabled = false;
-	if (paid.historymessages100.timecode < timecode)
+	if (paid.historymessages100?.timecode < timecode)
 		paid.historymessages100.enabled = false;
-	if (paid.historymessages200.timecode < timecode)
+	if (paid.historymessages200?.timecode < timecode)
 		paid.historymessages200.enabled = false;
-	if (paid.historymessages300.timecode < timecode)
+	if (paid.historymessages300?.timecode < timecode)
 		paid.historymessages300.enabled = false;
 
 	return paid;
