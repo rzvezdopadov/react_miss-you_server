@@ -10,7 +10,7 @@ export async function getPaidByIdFromDB(ourId: string): Promise<IPaid> {
 
 		return answerDB;
 	} catch (error) {
-		console.log("getPaidFromDB", error);
+		console.log("getPaidByIdFromDB", error);
 		return undefined;
 	}
 }
@@ -20,13 +20,13 @@ export async function setPaidByIdToDB(
 	paid: IPaid
 ): Promise<number> {
 	try {
-		let queryStr = `UPDATE users SET paid = ${paid} ::json[] WHERE userid = ${ourId}`;
+		let queryStr = `UPDATE users SET paid = $1 WHERE userid = '${ourId}'`;
 
-		const answerDB = await poolDB.query(queryStr);
+		const answerDB = await poolDB.query(queryStr, [paid]);
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setPaidToDB", error);
+		console.log("setPaidByIdToDB", error);
 		return 0;
 	}
 }
