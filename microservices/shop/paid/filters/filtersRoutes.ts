@@ -16,7 +16,7 @@ const router = express.Router();
 
 // Users rout
 router.get("/api/shop/longfilterstariffs", [], queryGetLongFiltersTariffs);
-router.post("/api/shop/buymessageswrite", [], queryBuyLongFilters);
+router.post("/api/shop/buylongfilters", [], queryBuyLongFilters);
 
 router.get("/api/shop/filtersvaporstariffs", [], queryGetFiltersVaporsTariffs);
 router.post("/api/shop/buyfiltersvapors", [], queryBuyFiltersVapors);
@@ -40,7 +40,7 @@ router.post(
 );
 
 router.get(
-	"/api/shop/filterslongfilterfavoriteuserstariffs",
+	"/api/shop/longfilterfavoriteuserstariffs",
 	[],
 	queryGetLongFilterFavoriteUsersTariffs
 );
