@@ -20,7 +20,7 @@ export async function initDBFilters() {
 			filtersFavoriteUsersTariffsData
 		);
 		await insertPaidTariffToDB(
-			"longfilterfavoriteusers",
+			"longfiltersfavoriteusers",
 			longFilterFavoriteUsersTariffsData
 		);
 	} catch (error) {
