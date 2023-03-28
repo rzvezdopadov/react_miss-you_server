@@ -1,3 +1,4 @@
+import { PAID_PROPERTY } from "../ipaid";
 import { insertPaidTariffToDB } from "../paidDB";
 import {
 	interests20TariffsData,
@@ -6,8 +7,14 @@ import {
 
 export async function initDBInterests() {
 	try {
-		await insertPaidTariffToDB("interests20", interests20TariffsData);
-		await insertPaidTariffToDB("interests30", interests30TariffsData);
+		await insertPaidTariffToDB(
+			PAID_PROPERTY.interests20,
+			interests20TariffsData
+		);
+		await insertPaidTariffToDB(
+			PAID_PROPERTY.interests30,
+			interests30TariffsData
+		);
 	} catch (error) {
 		console.log(error);
 	}

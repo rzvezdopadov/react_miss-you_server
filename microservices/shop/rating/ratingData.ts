@@ -1,6 +1,6 @@
-import { IRate } from "./irating";
+import { ITariff } from "../paid/ipaid";
 
-export const ratingTariffsData: IRate[] = [
+export const ratingTariffsData: ITariff[] = [
 	{
 		idTariff: "rating1",
 		amountRate: 1,

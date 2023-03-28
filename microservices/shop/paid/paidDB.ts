@@ -1,6 +1,6 @@
 import { poolDB } from "../../../db/config";
 import { getUniQueryFromDB } from "../../../db/uniquery";
-import { IPaid, ITariff } from "./ipaid";
+import { IPaid, ITariff, PAID_PROPERTY } from "./ipaid";
 
 export async function getPaidByIdFromDB(ourId: string): Promise<IPaid> {
 	try {
@@ -32,7 +32,7 @@ export async function setPaidByIdToDB(
 }
 
 export async function insertPaidTariffToDB(
-	paidname: string,
+	paidname: PAID_PROPERTY,
 	paidtariff: ITariff[]
 ): Promise<number> {
 	try {

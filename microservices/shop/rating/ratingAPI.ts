@@ -12,7 +12,8 @@ import {
 	answerStatusQTDB,
 } from "../../../utils/answerstatus";
 import { getTariffsShopFromDB } from "../shopDB";
-import { IRate } from "./irating";
+import { SHOP_TARIFFS } from "../ishop";
+import { ITariff } from "../paid/ipaid";
 
 export async function queryGetRatingTariffs(req, res) {
 	try {
@@ -23,7 +24,7 @@ export async function queryGetRatingTariffs(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const ratingtariffs = await getTariffsShopFromDB("rating");
+		const ratingtariffs = await getTariffsShopFromDB(SHOP_TARIFFS.rating);
 
 		return res.status(200).json(ratingtariffs);
 	} catch (error) {
@@ -41,7 +42,9 @@ export async function queryBuyRating(req, res) {
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		const { idtariff } = req.body;
-		const ratingtariffs: IRate[] = await getTariffsShopFromDB("rating");
+		const ratingtariffs: ITariff[] = await getTariffsShopFromDB(
+			SHOP_TARIFFS.rating
+		);
 		const posTariff = ratingtariffs.findIndex(
 			(value) => value.idTariff === idtariff
 		);

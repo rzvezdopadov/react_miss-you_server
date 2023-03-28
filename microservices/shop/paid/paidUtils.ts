@@ -6,7 +6,7 @@ import {
 	setProfileCashByIdToDB,
 } from "../../profile/profileDB";
 import { getTariffsShopFromDB } from "../shopDB";
-import { IPaid, ITariff } from "./ipaid";
+import { IPaid, ITariff, PAID_PROPERTY } from "./ipaid";
 import { getPaidByIdFromDB, setPaidByIdToDB } from "./paidDB";
 
 export function testPaidOnOverflow(paid: IPaid): IPaid {
@@ -53,7 +53,7 @@ export function testPaidOnOverflow(paid: IPaid): IPaid {
 
 export async function queryPaidNext(
 	res: any,
-	nameTariff: string,
+	nameTariff: PAID_PROPERTY,
 	idTariff: string,
 	userId: string
 ) {

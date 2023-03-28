@@ -1,3 +1,4 @@
+import { PAID_PROPERTY } from "../ipaid";
 import { insertPaidTariffToDB } from "../paidDB";
 import {
 	filtersFavoriteUsersTariffsData,
@@ -9,18 +10,24 @@ import {
 
 export async function initDBFilters() {
 	try {
-		await insertPaidTariffToDB("longfilters", longFiltersTariffsData);
-		await insertPaidTariffToDB("filtersvapors", filtersVaporsTariffsData);
 		await insertPaidTariffToDB(
-			"longfiltersvapors",
+			PAID_PROPERTY.longfilters,
+			longFiltersTariffsData
+		);
+		await insertPaidTariffToDB(
+			PAID_PROPERTY.filtersvapors,
+			filtersVaporsTariffsData
+		);
+		await insertPaidTariffToDB(
+			PAID_PROPERTY.longfiltersvapors,
 			longFiltersVaporsTariffsData
 		);
 		await insertPaidTariffToDB(
-			"filtersfavoriteusers",
+			PAID_PROPERTY.filtersfavoriteusers,
 			filtersFavoriteUsersTariffsData
 		);
 		await insertPaidTariffToDB(
-			"longfiltersfavoriteusers",
+			PAID_PROPERTY.longfiltersfavoriteusers,
 			longFilterFavoriteUsersTariffsData
 		);
 	} catch (error) {

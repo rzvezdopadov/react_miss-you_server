@@ -1,7 +1,11 @@
 import { poolDB } from "../../db/config";
 import { getUniQueryFromDB } from "../../db/uniquery";
+import { SHOP_TARIFFS } from "./ishop";
+import { ITariff, PAID_PROPERTY } from "./paid/ipaid";
 
-export async function getTariffsShopFromDB(name: string): Promise<any[]> {
+export async function getTariffsShopFromDB(
+	name: PAID_PROPERTY | SHOP_TARIFFS
+): Promise<ITariff[]> {
 	try {
 		const answerDB: any[] = (
 			await getUniQueryFromDB("shop", ["payload"], [`name = '${name}'`])
@@ -15,8 +19,8 @@ export async function getTariffsShopFromDB(name: string): Promise<any[]> {
 }
 
 export async function setTariffsShopToDB(
-	name: string,
-	payload: any[]
+	name: PAID_PROPERTY | SHOP_TARIFFS,
+	payload: ITariff[]
 ): Promise<number> {
 	try {
 		let answerDB = { rowCount: 0 };

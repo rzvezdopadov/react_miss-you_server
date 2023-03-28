@@ -1,3 +1,4 @@
+import { PAID_PROPERTY } from "../ipaid";
 import { insertPaidTariffToDB } from "../paidDB";
 import {
 	photoload10TariffsData,
@@ -9,11 +10,26 @@ import {
 
 export async function initDBPhoto() {
 	try {
-		await insertPaidTariffToDB("photoload10", photoload10TariffsData);
-		await insertPaidTariffToDB("photoload15", photoload15TariffsData);
-		await insertPaidTariffToDB("photoload20", photoload20TariffsData);
-		await insertPaidTariffToDB("photoload25", photoload25TariffsData);
-		await insertPaidTariffToDB("photoload30", photoload30TariffsData);
+		await insertPaidTariffToDB(
+			PAID_PROPERTY.photoload10,
+			photoload10TariffsData
+		);
+		await insertPaidTariffToDB(
+			PAID_PROPERTY.photoload15,
+			photoload15TariffsData
+		);
+		await insertPaidTariffToDB(
+			PAID_PROPERTY.photoload20,
+			photoload20TariffsData
+		);
+		await insertPaidTariffToDB(
+			PAID_PROPERTY.photoload25,
+			photoload25TariffsData
+		);
+		await insertPaidTariffToDB(
+			PAID_PROPERTY.photoload30,
+			photoload30TariffsData
+		);
 	} catch (error) {
 		console.log(error);
 	}

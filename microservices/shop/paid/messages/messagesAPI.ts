@@ -5,6 +5,7 @@ import {
 } from "../../../../utils/answerstatus";
 import { getTariffsShopFromDB } from "../../shopDB";
 import { queryPaidNext } from "../paidUtils";
+import { PAID_PROPERTY } from "../ipaid";
 
 export async function queryGetMessagesWriteTariffs(req, res) {
 	try {
@@ -15,7 +16,9 @@ export async function queryGetMessagesWriteTariffs(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const messageswrite = await getTariffsShopFromDB("messageswrite");
+		const messageswrite = await getTariffsShopFromDB(
+			PAID_PROPERTY.messageswrite
+		);
 
 		return res.status(200).json(messageswrite);
 	} catch (error) {
@@ -34,7 +37,12 @@ export async function queryBuyMessagesWrite(req, res) {
 
 		const { idtariff } = req.body;
 
-		queryPaidNext(res, "messageswrite", idtariff, jwtDecode.userId);
+		queryPaidNext(
+			res,
+			PAID_PROPERTY.messageswrite,
+			idtariff,
+			jwtDecode.userId
+		);
 	} catch (error) {
 		return answerStatusQTDB(res, error);
 	}
@@ -49,7 +57,9 @@ export async function queryGetMessagesReadTariffs(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const messagesread = await getTariffsShopFromDB("messagesread");
+		const messagesread = await getTariffsShopFromDB(
+			PAID_PROPERTY.messagesread
+		);
 
 		return res.status(200).json(messagesread);
 	} catch (error) {
@@ -68,7 +78,12 @@ export async function queryBuyMessagesRead(req, res) {
 
 		const { idtariff } = req.body;
 
-		queryPaidNext(res, "messagesread", idtariff, jwtDecode.userId);
+		queryPaidNext(
+			res,
+			PAID_PROPERTY.messagesread,
+			idtariff,
+			jwtDecode.userId
+		);
 	} catch (error) {
 		return answerStatusQTDB(res, error);
 	}

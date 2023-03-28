@@ -5,6 +5,7 @@ import {
 } from "../../../../utils/answerstatus";
 import { getTariffsShopFromDB } from "../../shopDB";
 import { queryPaidNext } from "../paidUtils";
+import { PAID_PROPERTY } from "../ipaid";
 
 export async function queryGetPhotoFullTariffs(req, res) {
 	try {
@@ -15,7 +16,7 @@ export async function queryGetPhotoFullTariffs(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const photofull = await getTariffsShopFromDB("photofull");
+		const photofull = await getTariffsShopFromDB(PAID_PROPERTY.photofull);
 
 		return res.status(200).json(photofull);
 	} catch (error) {
@@ -34,7 +35,7 @@ export async function queryBuyPhotoFull(req, res) {
 
 		const { idtariff } = req.body;
 
-		queryPaidNext(res, "photofull", idtariff, jwtDecode.userId);
+		queryPaidNext(res, PAID_PROPERTY.photofull, idtariff, jwtDecode.userId);
 	} catch (error) {
 		return answerStatusQTDB(res, error);
 	}
@@ -49,7 +50,9 @@ export async function queryGetPhotoLoad10Tariffs(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const photoload10 = await getTariffsShopFromDB("photoload10");
+		const photoload10 = await getTariffsShopFromDB(
+			PAID_PROPERTY.photoload10
+		);
 
 		return res.status(200).json(photoload10);
 	} catch (error) {
@@ -68,7 +71,12 @@ export async function queryBuyPhotoLoad10(req, res) {
 
 		const { idtariff } = req.body;
 
-		queryPaidNext(res, "photoload10", idtariff, jwtDecode.userId);
+		queryPaidNext(
+			res,
+			PAID_PROPERTY.photoload10,
+			idtariff,
+			jwtDecode.userId
+		);
 	} catch (error) {
 		return answerStatusQTDB(res, error);
 	}
@@ -83,7 +91,9 @@ export async function queryGetPhotoLoad15Tariffs(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const photoload15 = await getTariffsShopFromDB("photoload15");
+		const photoload15 = await getTariffsShopFromDB(
+			PAID_PROPERTY.photoload15
+		);
 
 		return res.status(200).json(photoload15);
 	} catch (error) {
@@ -102,7 +112,12 @@ export async function queryBuyPhotoLoad15(req, res) {
 
 		const { idtariff } = req.body;
 
-		queryPaidNext(res, "photoload15", idtariff, jwtDecode.userId);
+		queryPaidNext(
+			res,
+			PAID_PROPERTY.photoload15,
+			idtariff,
+			jwtDecode.userId
+		);
 	} catch (error) {
 		return answerStatusQTDB(res, error);
 	}
@@ -117,7 +132,9 @@ export async function queryGetPhotoLoad20Tariffs(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const photoload20 = await getTariffsShopFromDB("photoload20");
+		const photoload20 = await getTariffsShopFromDB(
+			PAID_PROPERTY.photoload20
+		);
 
 		return res.status(200).json(photoload20);
 	} catch (error) {
@@ -136,7 +153,12 @@ export async function queryBuyPhotoLoad20(req, res) {
 
 		const { idtariff } = req.body;
 
-		queryPaidNext(res, "photoload20", idtariff, jwtDecode.userId);
+		queryPaidNext(
+			res,
+			PAID_PROPERTY.photoload20,
+			idtariff,
+			jwtDecode.userId
+		);
 	} catch (error) {
 		return answerStatusQTDB(res, error);
 	}
@@ -151,7 +173,9 @@ export async function queryGetPhotoLoad25Tariffs(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const photoload25 = await getTariffsShopFromDB("photoload25");
+		const photoload25 = await getTariffsShopFromDB(
+			PAID_PROPERTY.photoload25
+		);
 
 		return res.status(200).json(photoload25);
 	} catch (error) {
@@ -170,7 +194,12 @@ export async function queryBuyPhotoLoad25(req, res) {
 
 		const { idtariff } = req.body;
 
-		queryPaidNext(res, "photoload25", idtariff, jwtDecode.userId);
+		queryPaidNext(
+			res,
+			PAID_PROPERTY.photoload25,
+			idtariff,
+			jwtDecode.userId
+		);
 	} catch (error) {
 		return answerStatusQTDB(res, error);
 	}
@@ -185,7 +214,9 @@ export async function queryGetPhotoLoad30Tariffs(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const photoload30 = await getTariffsShopFromDB("photoload30");
+		const photoload30 = await getTariffsShopFromDB(
+			PAID_PROPERTY.photoload30
+		);
 
 		return res.status(200).json(photoload30);
 	} catch (error) {
@@ -204,7 +235,12 @@ export async function queryBuyPhotoLoad30(req, res) {
 
 		const { idtariff } = req.body;
 
-		queryPaidNext(res, "photoload30", idtariff, jwtDecode.userId);
+		queryPaidNext(
+			res,
+			PAID_PROPERTY.photoload30,
+			idtariff,
+			jwtDecode.userId
+		);
 	} catch (error) {
 		return answerStatusQTDB(res, error);
 	}

@@ -1,3 +1,4 @@
+import { PAID_PROPERTY } from "../ipaid";
 import { insertPaidTariffToDB } from "../paidDB";
 import {
 	historymessages100TariffsData,
@@ -12,31 +13,31 @@ import {
 export async function initDBHistoryMessages() {
 	try {
 		await insertPaidTariffToDB(
-			"historymessages20",
+			PAID_PROPERTY.historymessages20,
 			historymessages20TariffsData
 		);
 		await insertPaidTariffToDB(
-			"historymessages40",
+			PAID_PROPERTY.historymessages40,
 			historymessages40TariffsData
 		);
 		await insertPaidTariffToDB(
-			"historymessages60",
+			PAID_PROPERTY.historymessages60,
 			historymessages60TariffsData
 		);
 		await insertPaidTariffToDB(
-			"historymessages80",
+			PAID_PROPERTY.historymessages80,
 			historymessages80TariffsData
 		);
 		await insertPaidTariffToDB(
-			"historymessages100",
+			PAID_PROPERTY.historymessages100,
 			historymessages100TariffsData
 		);
 		await insertPaidTariffToDB(
-			"historymessages200",
+			PAID_PROPERTY.historymessages200,
 			historymessages200TariffsData
 		);
 		await insertPaidTariffToDB(
-			"historymessages300",
+			PAID_PROPERTY.historymessages300,
 			historymessages300TariffsData
 		);
 	} catch (error) {
