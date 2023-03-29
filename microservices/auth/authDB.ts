@@ -101,7 +101,7 @@ export async function createProfileToDB(
 			"stickerpacks, " +
 			"rating, cash, acctype, " +
 			"banned, " +
-			"visit, paid" +
+			"visit, paid, deleteacc" +
 			") VALUES (" +
 			`'${profile.email}', '${profile.password}', ARRAY [] :: JSON [], ` +
 			`'${profile.userid}', ARRAY [] :: JSON[], ${profile.registrationdate}, ` +
@@ -121,8 +121,10 @@ export async function createProfileToDB(
 			`ARRAY [] :: TEXT [], ` +
 			`${profile.rating}, ${profile.cash}, '${profile.acctype}', ` +
 			`'${JSON.stringify(profile.banned)}' :: JSON, ` +
-			`ARRAY [] :: JSON [], '${JSON.stringify(profile.paid)}' :: JSON` +
-			")";
+			`ARRAY [] :: JSON [], '${JSON.stringify(profile.paid)}' :: JSON, ${
+				profile.deleteacc
+			}`;
+		(")");
 
 		answerDB = await poolDB.query(queryStr);
 

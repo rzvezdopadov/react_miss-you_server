@@ -98,6 +98,7 @@ export async function queryGetProfile(req, res) {
 			profile.cash = 0;
 			profile.favoriteusers = [];
 			profile.paid = undefined;
+			profile.deleteacc = 0;
 		}
 
 		return res.status(200).json(profile);

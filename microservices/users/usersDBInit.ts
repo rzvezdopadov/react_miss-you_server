@@ -142,6 +142,7 @@ const fakeUsersGenerate = async (
 			},
 			stickerpacks: [],
 			referral: "",
+			deleteacc: 0,
 		};
 
 		fakePerson.signzodiac = getSignZodiac(
@@ -336,7 +337,7 @@ const fakeQueryStringUsersGenerate = async (
 				"stickerpacks, " +
 				"rating, cash, acctype, " +
 				"banned, " +
-				"visit, paid, referral" +
+				"visit, paid, referral, deleteacc" +
 				") VALUES (" +
 				`'${fakeUser.email}', '${fakeUser.password}', ARRAY [] :: JSON [], ` +
 				`'${fakeUser.userid}', ARRAY [] :: JSON[], ${fakeUser.registrationdate}, ` +
@@ -364,7 +365,7 @@ const fakeQueryStringUsersGenerate = async (
 				`ARRAY [] :: JSON [], '${JSON.stringify(
 					fakeUser.paid
 				)}' :: JSON, ` +
-				`'${fakeUser.referral}'` +
+				`'${fakeUser.referral}', ${fakeUser.deleteacc}` +
 				")";
 
 			return strQuery;
@@ -422,7 +423,8 @@ export async function initDBUsers(): Promise<boolean> {
                 banned JSON, 
                 visit JSON[],
                 paid JSON,
-				referral TEXT
+				referral TEXT,
+				deleteacc INT
             );
         `;
 

@@ -42,6 +42,7 @@ export interface IProfile {
 	cash: number;
 	acctype: ACCTYPE;
 	paid: IPaid;
+	deleteacc: number;
 }
 
 export interface IProfileShort {

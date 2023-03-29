@@ -185,6 +185,7 @@ export async function queryRegistration(req, res) {
 			},
 			stickerpacks: [],
 			referral: registration.referral,
+			deleteacc: 0,
 		};
 
 		const isReg = await createProfileToDB(profile);

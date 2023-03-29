@@ -16,7 +16,7 @@ const fieldProfile =
 	"education, fieldofactivity, maritalstatus, children, religion, " +
 	"smoke, alcohol, discription, profit, interests, " +
 	"ilikeCharacter, idontlikeCharacter, rating, stickerpacks, cash," +
-	"acctype, filters, paid";
+	"acctype, filters, paid, deleteacc";
 
 export async function getProfileByIdFromDB(userid: string): Promise<IProfile> {
 	try {
