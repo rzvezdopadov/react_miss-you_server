@@ -3,6 +3,7 @@ import {
 	socketGetJWTHandler,
 	socketMessageHandler,
 	socketPingHandler,
+	socketSetFavoriteUserHandler,
 	socketSetLikeHandler,
 	socketStickerHandler,
 } from "./socketAPI";
@@ -28,6 +29,10 @@ export const socketHandler = (socketIO, socket) => {
 
 	socket.on("set_like", (socket) =>
 		socketSetLikeHandler(socketIO, socket, socketId)
+	);
+
+	socket.on("set_favoriteusers", (socket) =>
+		socketSetFavoriteUserHandler(socketIO, socket, socketId)
 	);
 
 	socket.on("get_likes", function (socket) {

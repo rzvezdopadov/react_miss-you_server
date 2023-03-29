@@ -8,7 +8,11 @@ import { getSignZodiac } from "../../utils/signzodiac";
 import { testToken } from "../auth/token";
 import { getProfileByIdFromDB, setProfileByIdToDB } from "./profileDB";
 import { isBannedUser } from "../../utils/banned";
-import { getProfilesShort, getProfilesShortForLikes } from "./profileUtils";
+import {
+	getProfilesShort,
+	getProfilesShortForFavoriteUsers,
+	getProfilesShortForLikes,
+} from "./profileUtils";
 import {
 	answerStatus400,
 	answerStatusFailJWT,
@@ -170,6 +174,35 @@ export async function queryGetProfilesForLikes(req, res) {
 		getProfilesVal.userid = jwtDecode.userId;
 
 		const profiles = await getProfilesShortForLikes(getProfilesVal);
+
+		return res.status(200).json(profiles);
+	} catch (error) {
+		return answerStatusQTDB(res, error);
+	}
+}
+
+export async function queryGetProfilesForFavoriteUsers(req, res) {
+	try {
+		let { jwt } = req.cookies;
+		jwt = String(jwt);
+
+		const jwtDecode = await testToken(jwt);
+
+		if (!jwtDecode) return answerStatusFailJWT(res);
+
+		const QueryGetProfiles: IQueryGetProfiles = req.query;
+
+		const getProfilesVal: IGetProfiles = {
+			userid: QueryGetProfiles.userid,
+			startcount: QueryGetProfiles.startcount,
+			amount: QueryGetProfiles.amount,
+			filters: QueryGetProfiles.filters,
+			users: [],
+		};
+
+		getProfilesVal.userid = jwtDecode.userId;
+
+		const profiles = await getProfilesShortForFavoriteUsers(getProfilesVal);
 
 		return res.status(200).json(profiles);
 	} catch (error) {

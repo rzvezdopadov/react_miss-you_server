@@ -180,6 +180,58 @@ export async function getProfilesShortForLikesFromDB(
 	}
 }
 
+export async function getProfilesShortForFavoriteUsersFromDB(
+	QueryGetProfiles: IGetProfiles
+): Promise<IProfile[]> {
+	const startPos = Number(QueryGetProfiles.startcount);
+	const endPos = startPos + Number(QueryGetProfiles.amount);
+
+	try {
+		let answerDB: { rows: IProfile[] } = { rows: [] };
+
+		let queryStr = `SELECT favoriteusers FROM users WHERE userid = '${QueryGetProfiles.userid}'`;
+
+		answerDB = await poolDB.query(queryStr);
+
+		if (answerDB.rows.length === 0) {
+			return [];
+		}
+
+		const { favoriteusers } = answerDB.rows[0];
+
+		queryStr = `SELECT ${fieldProfileShort} FROM users WHERE `;
+
+		if (favoriteusers.length === 0) {
+			return [];
+		} else {
+			favoriteusers.forEach((value) => {
+				queryStr += `(userid = '${value}' :: TEXT) OR `;
+			});
+		}
+
+		queryStr = queryStr.slice(0, -3);
+
+		answerDB = await poolDB.query(queryStr);
+
+		let profiles = answerDB.rows;
+
+		if (profiles.length > 1) {
+			let newProfiles = profiles.sort((a, b) => b.rating - a.rating);
+
+			if (startPos - endPos) {
+				newProfiles = newProfiles.slice(startPos, endPos);
+			}
+
+			profiles = newProfiles;
+		}
+
+		return profiles;
+	} catch (error) {
+		console.log("getProfilesShortForFavoriteUsersFromDB", error);
+		return [];
+	}
+}
+
 export async function getProfilesForDialogsFromDB(
 	users: Array<string>
 ): Promise<IProfileShortForDialog[]> {

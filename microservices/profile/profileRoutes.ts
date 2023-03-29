@@ -1,5 +1,6 @@
 import {
 	queryGetProfile,
+	queryGetProfilesForFavoriteUsers,
 	queryGetProfilesForLikes,
 	queryGetProfilesShort,
 	querySetProfile,
@@ -10,6 +11,11 @@ const router = express.Router();
 
 // Users routs
 router.get("/api/profilesforlikes", [], queryGetProfilesForLikes);
+router.get(
+	"/api/profilesforfavoriteusers",
+	[],
+	queryGetProfilesForFavoriteUsers
+);
 
 router.put("/api/profile", [], querySetProfile);
 router.get("/api/profile", [], queryGetProfile);

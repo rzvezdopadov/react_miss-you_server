@@ -4,6 +4,8 @@ import { testToken } from "../auth/token";
 import { botPhraseCensure, botPhraseSpam } from "../bots/botsUtils";
 import { setDialog } from "../dialogs/dialogsUtils";
 import { IQuerySendMessage, MESSAGETYPE } from "../dialogs/idialogs";
+import { setFavoriteUsersById } from "../favoriteusers/favoriteusersUtils";
+import { IQueryFavoriteUser } from "../favoriteusers/ifavoriteusers";
 import { IQueryLike } from "../likes/ilikes";
 import { setLikesById } from "../likes/likesUtils";
 import { getPaidByIdFromDB } from "../shop/paid/paidDB";
@@ -196,6 +198,25 @@ export async function socketSetLikeHandler(
 		);
 	} catch (error) {
 		console.log("set_like error", error);
+	}
+}
+
+export async function socketSetFavoriteUserHandler(
+	socketIO: any,
+	socketPayload: IQueryFavoriteUser,
+	socketId: string
+) {
+	try {
+		const ourId = getUserIdFromSocketTable(sockets, socketId);
+
+		const favoriteusers = await setFavoriteUsersById(
+			ourId,
+			socketPayload.userid
+		);
+
+		socketIO.to(socketId).emit("set_favoriteusers", favoriteusers);
+	} catch (error) {
+		console.log("set_favoriteusers error", error);
 	}
 }
 
