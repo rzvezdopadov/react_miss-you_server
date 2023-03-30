@@ -94,6 +94,8 @@ export async function getProfilesShortFromDB(
 			queryStr += `(userid <> '${QueryGetProfiles.userid}') AND `;
 			queryStr += `(acctype = '${ACCTYPE.user}')`;
 
+			queryStr += " ORDER BY rating DESC";
+
 			answerDB = await poolDB.query(queryStr);
 		} else if (users) {
 			if (users.length === 0) {
@@ -106,19 +108,17 @@ export async function getProfilesShortFromDB(
 
 			queryStr = queryStr.slice(0, -3);
 
+			queryStr += " ORDER BY rating DESC";
+
 			answerDB = await poolDB.query(queryStr);
 		}
 
 		let profiles: IProfile[] = answerDB.rows;
 
 		if (profiles.length > 1) {
-			let newProfiles = profiles.sort((a, b) => b.rating - a.rating);
-
 			if (startPos - endPos) {
-				newProfiles = newProfiles.slice(startPos, endPos);
+				profiles = profiles.slice(startPos, endPos);
 			}
-
-			profiles = newProfiles;
 		}
 
 		return profiles;
@@ -159,18 +159,16 @@ export async function getProfilesShortForLikesFromDB(
 
 		queryStr = queryStr.slice(0, -3);
 
+		queryStr += " ORDER BY rating DESC";
+
 		answerDB = await poolDB.query(queryStr);
 
 		let profiles = answerDB.rows;
 
 		if (profiles.length > 1) {
-			let newProfiles = profiles.sort((a, b) => b.rating - a.rating);
-
 			if (startPos - endPos) {
-				newProfiles = newProfiles.slice(startPos, endPos);
+				profiles = profiles.slice(startPos, endPos);
 			}
-
-			profiles = newProfiles;
 		}
 
 		return profiles;
@@ -211,18 +209,16 @@ export async function getProfilesShortForFavoriteUsersFromDB(
 
 		queryStr = queryStr.slice(0, -3);
 
+		queryStr += " ORDER BY rating DESC";
+
 		answerDB = await poolDB.query(queryStr);
 
 		let profiles = answerDB.rows;
 
 		if (profiles.length > 1) {
-			let newProfiles = profiles.sort((a, b) => b.rating - a.rating);
-
 			if (startPos - endPos) {
-				newProfiles = newProfiles.slice(startPos, endPos);
+				profiles = profiles.slice(startPos, endPos);
 			}
-
-			profiles = newProfiles;
 		}
 
 		return profiles;
