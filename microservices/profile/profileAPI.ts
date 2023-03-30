@@ -111,6 +111,35 @@ export async function queryGetProfile(req, res) {
 	}
 }
 
+function profileQueryModifi(
+	QueryGetProfiles: IQueryGetProfiles,
+	userId: string
+): IGetProfiles {
+	const getProfilesVal: IGetProfiles = {
+		userid: QueryGetProfiles.userid,
+		startcount: QueryGetProfiles.startcount,
+		amount: QueryGetProfiles.amount,
+		filters: QueryGetProfiles.filters,
+		users: [],
+	};
+
+	const { filters, users } = QueryGetProfiles;
+
+	if (filters) {
+		const filtersParse = JSON.parse(filters as any);
+		getProfilesVal.filters = filtersParse;
+	}
+
+	if (users) {
+		const usersParse = JSON.parse(users);
+		getProfilesVal.users = usersParse;
+	}
+
+	getProfilesVal.userid = userId;
+
+	return getProfilesVal;
+}
+
 export async function queryGetProfilesShort(req, res) {
 	try {
 		let { jwt } = req.cookies;
@@ -122,27 +151,10 @@ export async function queryGetProfilesShort(req, res) {
 
 		const QueryGetProfiles: IQueryGetProfiles = req.query;
 
-		const getProfilesVal: IGetProfiles = {
-			userid: QueryGetProfiles.userid,
-			startcount: QueryGetProfiles.startcount,
-			amount: QueryGetProfiles.amount,
-			filters: QueryGetProfiles.filters,
-			users: [],
-		};
-
-		const { filters, users } = QueryGetProfiles;
-
-		if (filters) {
-			const filtersParse = JSON.parse(filters as any);
-			getProfilesVal.filters = filtersParse;
-		}
-
-		if (users) {
-			const usersParse = JSON.parse(users);
-			getProfilesVal.users = usersParse;
-		}
-
-		getProfilesVal.userid = jwtDecode.userId;
+		const getProfilesVal = profileQueryModifi(
+			QueryGetProfiles,
+			jwtDecode.userId
+		);
 
 		const profiles = await getProfilesShort(getProfilesVal);
 
@@ -163,15 +175,10 @@ export async function queryGetProfilesForLikes(req, res) {
 
 		const QueryGetProfiles: IQueryGetProfiles = req.query;
 
-		const getProfilesVal: IGetProfiles = {
-			userid: QueryGetProfiles.userid,
-			startcount: QueryGetProfiles.startcount,
-			amount: QueryGetProfiles.amount,
-			filters: QueryGetProfiles.filters,
-			users: [],
-		};
-
-		getProfilesVal.userid = jwtDecode.userId;
+		const getProfilesVal = profileQueryModifi(
+			QueryGetProfiles,
+			jwtDecode.userId
+		);
 
 		const profiles = await getProfilesShortForLikes(getProfilesVal);
 
@@ -192,15 +199,10 @@ export async function queryGetProfilesForFavoriteUsers(req, res) {
 
 		const QueryGetProfiles: IQueryGetProfiles = req.query;
 
-		const getProfilesVal: IGetProfiles = {
-			userid: QueryGetProfiles.userid,
-			startcount: QueryGetProfiles.startcount,
-			amount: QueryGetProfiles.amount,
-			filters: QueryGetProfiles.filters,
-			users: [],
-		};
-
-		getProfilesVal.userid = jwtDecode.userId;
+		const getProfilesVal = profileQueryModifi(
+			QueryGetProfiles,
+			jwtDecode.userId
+		);
 
 		const profiles = await getProfilesShortForFavoriteUsers(getProfilesVal);
 
