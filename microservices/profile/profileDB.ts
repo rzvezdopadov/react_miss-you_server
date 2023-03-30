@@ -1,13 +1,15 @@
 import { ACCTYPE } from "../admin/iadmin";
 import {
+	IFilterUsers,
 	IGetProfiles,
 	IProfile,
 	IProfileShort,
 	IProfileShortForDialog,
 } from "./iprofile";
-import { getYearFromAge } from "../../utils/datetime";
+import { getTimecodeNow, getYearFromAge } from "../../utils/datetime";
 import { conditionStr } from "../../utils/query";
 import { poolDB } from "../../db/config";
+import { getPaidByIdFromDB } from "../shop/paid/paidDB";
 
 const fieldProfile =
 	"userid, timecode, name, location, " +
@@ -35,34 +37,31 @@ export async function getProfileByIdFromDB(userid: string): Promise<IProfile> {
 export const fieldProfileShort =
 	"userid, timecode, name, birthday, monthofbirth, yearofbirth, gender, photomain, photolink, interests, rating";
 
-export async function getProfilesShortFromDB(
-	QueryGetProfiles: IGetProfiles
-): Promise<IProfileShort[]> {
-	const startPos = Number(QueryGetProfiles.startcount);
-	const endPos = startPos + Number(QueryGetProfiles.amount);
-	const { filters, users, userid } = QueryGetProfiles;
+async function createCondForSearchProfiles(
+	filters: IFilterUsers,
+	userid: string,
+	enabled: boolean,
+	longenabled: boolean
+): Promise<string> {
+	let queryStr = "(";
+	let queryStrFinal = `(userid <> '${userid}') AND `;
+	queryStrFinal += `(acctype = '${ACCTYPE.user}'))`;
 
 	try {
-		let answerDB = { rows: [] };
+		for (let key in filters) if (filters[key] === null) filters[key] = 0;
 
-		let queryStr = `SELECT ${fieldProfileShort} FROM users WHERE `;
+		const subAnswerDB = await poolDB.query(
+			`SELECT gendervapor FROM users WHERE userid = '${userid}'`
+		);
+		const { gendervapor } = subAnswerDB.rows[0];
 
-		if (filters) {
-			for (let key in filters)
-				if (filters[key] === null) filters[key] = 0;
-
-			const subAnswerDB = await poolDB.query(
-				`SELECT gendervapor FROM users WHERE userid = '${userid}'`
-			);
-			const { gendervapor } = subAnswerDB.rows[0];
-
+		if (enabled) {
 			queryStr += `(location = '${filters.location}') AND `;
 			queryStr += `(yearofbirth >= ${getYearFromAge(
 				filters.ageend
 			)}) AND (yearofbirth <= ${getYearFromAge(filters.agestart)}) AND `;
 			queryStr += `(growth >= ${filters.growthstart}) AND (growth <= ${filters.growthend}) AND `;
 			queryStr += conditionStr("weight", filters.weight);
-			queryStr += conditionStr("signzodiac", filters.signzodiac);
 
 			if (filters.gendervapor !== 2) {
 				if (gendervapor === 0) {
@@ -79,7 +78,12 @@ export async function getProfilesShortFromDB(
 			} else {
 				queryStr += `(gendervapor = '${2}') AND `;
 			}
+			queryStr += conditionStr("smoke", filters.smoke);
+			queryStr += conditionStr("alcohol", filters.alcohol);
+		}
 
+		if (enabled && longenabled) {
+			queryStr += conditionStr("signzodiac", filters.signzodiac);
 			queryStr += conditionStr("education", filters.education);
 			queryStr += conditionStr(
 				"fieldofactivity",
@@ -88,11 +92,38 @@ export async function getProfilesShortFromDB(
 			queryStr += conditionStr("maritalstatus", filters.maritalstatus);
 			queryStr += conditionStr("children", filters.children);
 			queryStr += conditionStr("religion", filters.religion);
-			queryStr += conditionStr("smoke", filters.smoke);
-			queryStr += conditionStr("alcohol", filters.alcohol);
 			queryStr += conditionStr("profit", filters.profit);
-			queryStr += `(userid <> '${QueryGetProfiles.userid}') AND `;
-			queryStr += `(acctype = '${ACCTYPE.user}')`;
+		}
+
+		return queryStr + queryStrFinal;
+	} catch (error) {
+		console.error("createCondForSearchProfile", error);
+		return queryStrFinal;
+	}
+}
+
+export async function getProfilesShortFromDB(
+	QueryGetProfiles: IGetProfiles
+): Promise<IProfileShort[]> {
+	const startPos = Number(QueryGetProfiles.startcount);
+	const endPos = startPos + Number(QueryGetProfiles.amount);
+	const { filters, users, userid } = QueryGetProfiles;
+
+	try {
+		let answerDB = { rows: [] };
+
+		let queryStr = `SELECT ${fieldProfileShort} FROM users WHERE `;
+
+		if (filters) {
+			const paid = await getPaidByIdFromDB(QueryGetProfiles.userid);
+			const timecode = getTimecodeNow();
+
+			queryStr += await createCondForSearchProfiles(
+				filters,
+				QueryGetProfiles.userid,
+				true,
+				paid.longfilters.timecode > timecode
+			);
 
 			queryStr += " ORDER BY rating DESC";
 
@@ -147,7 +178,7 @@ export async function getProfilesShortForLikesFromDB(
 
 		const { likes } = answerDB.rows[0];
 
-		queryStr = `SELECT ${fieldProfileShort} FROM users WHERE `;
+		queryStr = `SELECT ${fieldProfileShort} FROM users WHERE (`;
 
 		if (likes.length === 0) {
 			return [];
@@ -158,6 +189,17 @@ export async function getProfilesShortForLikesFromDB(
 		}
 
 		queryStr = queryStr.slice(0, -3);
+		queryStr += `) AND `;
+
+		const paid = await getPaidByIdFromDB(QueryGetProfiles.userid);
+		const timecode = getTimecodeNow();
+
+		queryStr += await createCondForSearchProfiles(
+			QueryGetProfiles.filters,
+			QueryGetProfiles.userid,
+			paid.filtersvapors.timecode > timecode,
+			paid.longfiltersvapors.timecode > timecode
+		);
 
 		queryStr += " ORDER BY rating DESC";
 
@@ -197,7 +239,7 @@ export async function getProfilesShortForFavoriteUsersFromDB(
 
 		const { favoriteusers } = answerDB.rows[0];
 
-		queryStr = `SELECT ${fieldProfileShort} FROM users WHERE `;
+		queryStr = `SELECT ${fieldProfileShort} FROM users WHERE (`;
 
 		if (favoriteusers.length === 0) {
 			return [];
@@ -208,6 +250,18 @@ export async function getProfilesShortForFavoriteUsersFromDB(
 		}
 
 		queryStr = queryStr.slice(0, -3);
+
+		queryStr += `) AND `;
+
+		const paid = await getPaidByIdFromDB(QueryGetProfiles.userid);
+		const timecode = getTimecodeNow();
+
+		queryStr += await createCondForSearchProfiles(
+			QueryGetProfiles.filters,
+			QueryGetProfiles.userid,
+			paid.filtersfavoriteusers.timecode > timecode,
+			paid.longfiltersfavoriteusers.timecode > timecode
+		);
 
 		queryStr += " ORDER BY rating DESC";
 
