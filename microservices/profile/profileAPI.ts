@@ -6,7 +6,12 @@ import {
 } from "./iprofile";
 import { getSignZodiac } from "../../utils/signzodiac";
 import { testToken } from "../auth/token";
-import { getProfileByIdFromDB, setProfileByIdToDB } from "./profileDB";
+import {
+	getProfileByIdFromDB,
+	getProfileDeleteAccByIdFromDB,
+	setProfileByIdToDB,
+	setProfileDeleteAccByIdToDB,
+} from "./profileDB";
 import { isBannedUser } from "../../utils/banned";
 import {
 	getProfilesShort,
@@ -19,7 +24,7 @@ import {
 	answerStatusQTDB,
 } from "../../utils/answerstatus";
 import { getPaidByIdFromDB } from "../shop/paid/paidDB";
-import { getTimecodeNow } from "../../utils/datetime";
+import { TIMECODE_MONTH, getTimecodeNow } from "../../utils/datetime";
 
 export async function querySetProfile(req, res) {
 	try {
@@ -207,6 +212,48 @@ export async function queryGetProfilesForFavoriteUsers(req, res) {
 		const profiles = await getProfilesShortForFavoriteUsers(getProfilesVal);
 
 		return res.status(200).json(profiles);
+	} catch (error) {
+		return answerStatusQTDB(res, error);
+	}
+}
+
+export async function queryDeleteAcc(req, res) {
+	try {
+		let { jwt } = req.cookies;
+		jwt = String(jwt);
+
+		const jwtDecode = await testToken(jwt);
+
+		if (!jwtDecode) return answerStatusFailJWT(res);
+
+		let deleteacc = await getProfileDeleteAccByIdFromDB(jwtDecode.userId);
+
+		deleteacc = getTimecodeNow() + TIMECODE_MONTH;
+
+		await setProfileDeleteAccByIdToDB(jwtDecode.userId, deleteacc);
+
+		const profile = await getProfileByIdFromDB(jwtDecode.userId);
+
+		return res.status(200).json(profile);
+	} catch (error) {
+		return answerStatusQTDB(res, error);
+	}
+}
+
+export async function queryDeleteAccCancel(req, res) {
+	try {
+		let { jwt } = req.cookies;
+		jwt = String(jwt);
+
+		const jwtDecode = await testToken(jwt);
+
+		if (!jwtDecode) return answerStatusFailJWT(res);
+
+		await setProfileDeleteAccByIdToDB(jwtDecode.userId, 0);
+
+		const profile = await getProfileByIdFromDB(jwtDecode.userId);
+
+		return res.status(200).json(profile);
 	} catch (error) {
 		return answerStatusQTDB(res, error);
 	}
