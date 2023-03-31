@@ -424,7 +424,7 @@ export async function initDBUsers(): Promise<boolean> {
                 visit JSON[],
                 paid JSON,
 				referral TEXT,
-				deleteacc INT
+				deleteacc BIGINT
             );
         `;
 
