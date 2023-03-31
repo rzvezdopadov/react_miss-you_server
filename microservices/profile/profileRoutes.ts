@@ -1,4 +1,6 @@
 import {
+	queryDeleteAcc,
+	queryDeleteAccCancel,
 	queryGetProfile,
 	queryGetProfilesForFavoriteUsers,
 	queryGetProfilesForLikes,
@@ -20,5 +22,8 @@ router.get(
 router.put("/api/profile", [], querySetProfile);
 router.get("/api/profile", [], queryGetProfile);
 router.get("/api/profilesshort", [], queryGetProfilesShort);
+
+router.delete("/api/deleteacc", [], queryDeleteAcc);
+router.put("/api/deleteacc", [], queryDeleteAccCancel);
 
 module.exports = router;
