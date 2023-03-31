@@ -456,3 +456,34 @@ export async function setProfileStickerpacksByIdToDB(
 		return 0;
 	}
 }
+
+export async function getProfileDeleteAccByIdFromDB(
+	userid: string
+): Promise<number> {
+	try {
+		let queryStr = `SELECT deleteacc FROM users WHERE userid = '${userid}'`;
+		const answerDB = await poolDB.query(queryStr);
+
+		const { deleteacc } = answerDB.rows[0];
+
+		return deleteacc;
+	} catch (error) {
+		console.log("getProfileDeleteAccByIdFromDB", error);
+		return 0;
+	}
+}
+
+export async function setProfileDeleteAccByIdToDB(
+	userid: string,
+	deleteacc: number
+): Promise<number> {
+	try {
+		let queryStr = `UPDATE users SET deleteacc = ${deleteacc} WHERE userid = '${userid}'`;
+		const answerDB = await poolDB.query(queryStr);
+
+		return answerDB.rowCount;
+	} catch (error) {
+		console.log("setProfileDeleteAccByIdToDB", error);
+		return 0;
+	}
+}
