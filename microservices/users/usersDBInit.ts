@@ -69,6 +69,7 @@ const fakeUsersGenerate = async (
 			location: data_location[0],
 			likes: [],
 			favoriteusers: [],
+			bannedusers: [],
 			birthday: 30,
 			monthofbirth: 9,
 			yearofbirth: 1990,
@@ -321,7 +322,7 @@ const fakeQueryStringUsersGenerate = async (
 				"INSERT INTO users (" +
 				"email, password, jwt, " +
 				"userid, coordinates, registrationdate, " +
-				"timecode, name, location, likes, favoriteusers," +
+				"timecode, name, location, likes, favoriteusers, bannedusers, " +
 				"birthday, monthofbirth, yearofbirth, " +
 				"growth, weight, " +
 				"gender, gendervapor, " +
@@ -344,7 +345,7 @@ const fakeQueryStringUsersGenerate = async (
 				`${fakeUser.timecode}, '${fakeUser.name}', '${fakeUser.location}', ` +
 				`${arrQueryStr(fakeUser.likes)}, ${arrQueryStr(
 					fakeUser.favoriteusers
-				)}, ` +
+				)}, ${arrQueryStr(fakeUser.bannedusers)}, ` +
 				`${fakeUser.birthday}, ${fakeUser.monthofbirth}, ${fakeUser.yearofbirth}, ` +
 				`${fakeUser.growth}, ${fakeUser.weight}, ` +
 				`${fakeUser.gender}, ${fakeUser.gendervapor}, ` +
@@ -393,6 +394,7 @@ export async function initDBUsers(): Promise<boolean> {
                 location TEXT,
                 likes TEXT[],
 				favoriteusers TEXT[],
+				bannedusers TEXT[],
                 birthday INT,
                 monthofbirth INT,
                 yearofbirth INT,

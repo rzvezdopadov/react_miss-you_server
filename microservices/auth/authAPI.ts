@@ -107,6 +107,7 @@ export async function queryRegistration(req, res) {
 			location: registration.location,
 			likes: [],
 			favoriteusers: [],
+			bannedusers: [],
 			birthday: registration.birthday,
 			monthofbirth: registration.monthofbirth,
 			yearofbirth: registration.yearofbirth,
