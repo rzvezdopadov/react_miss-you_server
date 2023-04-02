@@ -1,6 +1,9 @@
 import { getTimecodeNow } from "../../utils/datetime";
 import { setAdminBannedByIdToDB } from "../admin/adminDB";
 import { testToken } from "../auth/token";
+import { getBannedUsersByIdFromDB } from "../bannedusers/bannedusersDB";
+import { setBannedUsersById } from "../bannedusers/bannedusersUtils";
+import { IQueryBannedUser } from "../bannedusers/ibannedusers";
 import { botPhraseCensure, botPhraseSpam } from "../bots/botsUtils";
 import { setDialog } from "../dialogs/dialogsUtils";
 import { IQuerySendMessage, MESSAGETYPE } from "../dialogs/idialogs";
@@ -90,11 +93,22 @@ export async function socketMessageHandler(
 		}
 
 		const paid = await getPaidByIdFromDB(ourId);
-
 		if (paid.messageswrite.timecode < getTimecodeNow()) {
 			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
 				message:
 					"У вас закончилась возможность писать сообщения, приобретите данную опцию в магазине!",
+			});
+
+			return;
+		}
+
+		const bannedusers = await getBannedUsersByIdFromDB(
+			socketPayload.userid
+		);
+		if (bannedusers.includes(ourId)) {
+			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
+				message:
+					"Вы не можете написать данному пользователю, вы у него в бан листе!",
 			});
 
 			return;
@@ -141,6 +155,28 @@ export async function socketStickerHandler(
 		if (!(ourId && socketPayload.userid)) return;
 
 		if (ourId === socketPayload.userid) return;
+
+		const paid = await getPaidByIdFromDB(ourId);
+		if (paid.messageswrite.timecode < getTimecodeNow()) {
+			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
+				message:
+					"У вас закончилась возможность писать сообщения, приобретите данную опцию в магазине!",
+			});
+
+			return;
+		}
+
+		const bannedusers = await getBannedUsersByIdFromDB(
+			socketPayload.userid
+		);
+		if (bannedusers.includes(ourId)) {
+			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
+				message:
+					"Вы не можете написать данному пользователю, вы у него в бан листе!",
+			});
+
+			return;
+		}
 
 		const dialog = await setDialog(
 			ourId,
@@ -217,6 +253,25 @@ export async function socketSetFavoriteUserHandler(
 		socketIO.to(socketId).emit("set_favoriteusers", favoriteusers);
 	} catch (error) {
 		console.log("set_favoriteusers error", error);
+	}
+}
+
+export async function socketSetBannedUserHandler(
+	socketIO: any,
+	socketPayload: IQueryBannedUser,
+	socketId: string
+) {
+	try {
+		const ourId = getUserIdFromSocketTable(sockets, socketId);
+
+		const bannedusers = await setBannedUsersById(
+			ourId,
+			socketPayload.userid
+		);
+
+		socketIO.to(socketId).emit("set_bannedusers", bannedusers);
+	} catch (error) {
+		console.log("set_bannedusers error", error);
 	}
 }
 
