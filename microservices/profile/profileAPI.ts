@@ -25,6 +25,7 @@ import {
 } from "../../utils/answerstatus";
 import { getPaidByIdFromDB } from "../shop/paid/paidDB";
 import { TIMECODE_MONTH, getTimecodeNow } from "../../utils/datetime";
+import { testPaidOnOverflow } from "../shop/paid/paidUtils";
 
 export async function querySetProfile(req, res) {
 	try {
@@ -106,8 +107,16 @@ export async function queryGetProfile(req, res) {
 
 			profile.cash = 0;
 			profile.favoriteusers = [];
+
+			let bannedusers = [];
+			if (profile.bannedusers.includes(jwtDecode.userId))
+				bannedusers.push(jwtDecode.userId);
+			profile.bannedusers = bannedusers;
+
 			profile.paid = undefined;
 			profile.deleteacc = 0;
+		} else {
+			profile.paid = testPaidOnOverflow(profile.paid);
 		}
 
 		return res.status(200).json(profile);
