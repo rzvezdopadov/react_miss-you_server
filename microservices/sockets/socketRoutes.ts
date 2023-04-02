@@ -3,6 +3,7 @@ import {
 	socketGetJWTHandler,
 	socketMessageHandler,
 	socketPingHandler,
+	socketSetBannedUserHandler,
 	socketSetFavoriteUserHandler,
 	socketSetLikeHandler,
 	socketStickerHandler,
@@ -33,6 +34,10 @@ export const socketHandler = (socketIO, socket) => {
 
 	socket.on("set_favoriteusers", (socket) =>
 		socketSetFavoriteUserHandler(socketIO, socket, socketId)
+	);
+
+	socket.on("set_bannedusers", (socket) =>
+		socketSetBannedUserHandler(socketIO, socket, socketId)
 	);
 
 	socket.on("get_likes", function (socket) {
