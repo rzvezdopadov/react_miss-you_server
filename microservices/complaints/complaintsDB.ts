@@ -1,5 +1,4 @@
-import { COMPLAINTSTATUS } from "../admin/iadmin";
-import { IComplaintBase } from "./icomplaints";
+import { COMPLAINTSTATUS, IComplaintBase } from "./icomplaints";
 import { getTimecodeNow } from "../../utils/datetime";
 import { poolDB } from "../../db/config";
 

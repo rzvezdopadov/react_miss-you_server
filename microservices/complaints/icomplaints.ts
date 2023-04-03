@@ -1,10 +1,16 @@
-import { COMPLAINTSTATUS } from "../admin/iadmin";
 import { IMessage } from "../dialogs/idialogs";
+
+export enum COMPLAINTSTATUS {
+	open = "open",
+	inwork = "inwork",
+	close = "close",
+}
 
 export interface IComplaintBase {
 	userfrom: string;
 	userto: string;
 	timecode: number;
+	subject: string;
 	dck: string;
 	status: COMPLAINTSTATUS;
 	messages: IMessage[];
@@ -20,6 +26,7 @@ export interface IComplaintOutput {
 	monthofbirth: number;
 	yearofbirth: number;
 	photolink: string;
+	subject: string;
 	status: COMPLAINTSTATUS;
 	messages: IMessage[];
 	complmessages: IMessage[];

@@ -54,6 +54,7 @@ export const getComplaints = async (
 					monthofbirth: users[index].monthofbirth,
 					yearofbirth: users[index].yearofbirth,
 					photolink: users[index].photolink[users[index].photomain],
+					subject: complaint.subject,
 					status: complaint.status,
 					messages: complaint.messages,
 					complmessages: complaint.complmessages,
