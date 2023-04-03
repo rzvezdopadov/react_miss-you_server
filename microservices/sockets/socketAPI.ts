@@ -1,22 +1,22 @@
 import { getTimecodeNow } from "../../utils/datetime";
-import { setAdminBannedByIdToDB } from "../admin/adminDB";
-import { testToken } from "../auth/token";
-import { getBannedUsersByIdFromDB } from "../bannedusers/bannedusersDB";
-import { setBannedUsersById } from "../bannedusers/bannedusersUtils";
-import { IQueryBannedUser } from "../bannedusers/ibannedusers";
-import { botPhraseCensure, botPhraseSpam } from "../bots/botsUtils";
-import { setDialog } from "../dialogs/dialogsUtils";
-import { IQuerySendMessage, MESSAGETYPE } from "../dialogs/idialogs";
-import { setFavoriteUsersById } from "../favoriteusers/favoriteusersUtils";
-import { IQueryFavoriteUser } from "../favoriteusers/ifavoriteusers";
-import { IQueryLike } from "../likes/ilikes";
-import { setLikesById } from "../likes/likesUtils";
-import { getPaidByIdFromDB } from "../shop/paid/paidDB";
-import { IQuerySendSticker } from "../shop/stickerpacks/istickerpacks";
-import { setTimecodeToDB } from "../statistics/statisticsDB";
-import { setVisitById } from "../statistics/statisticsUtils";
+import { setAdminBannedByIdToDB } from "../admin/profile/profileDB";
+import { getBannedUsersByIdFromDB } from "../user/bannedusers/bannedusersDB";
+import { setBannedUsersById } from "../user/bannedusers/bannedusersUtils";
+import { IQueryBannedUser } from "../user/bannedusers/ibannedusers";
+import { botPhraseCensure, botPhraseSpam } from "../admin/bots/botsUtils";
+import { setDialog } from "../all/dialogs/dialogsUtils";
+import { IQuerySendMessage, MESSAGETYPE } from "../all/dialogs/idialogs";
+import { IQueryLike } from "../user/likes/ilikes";
+import { setLikesById } from "../user/likes/likesUtils";
+import { setTimecodeToDB } from "../admin/statistics/statisticsDB";
+import { setVisitById } from "../admin/statistics/statisticsUtils";
 import { ISocketUsers, SOCKET_TYPE_OC } from "./isocket";
 import { getUserIdFromSocketTable, sendToAllSocketsById } from "./socketUtils";
+import { testToken } from "../all/auth/token";
+import { setFavoriteUsersById } from "../user/favoriteusers/favoriteusersUtils";
+import { IQueryFavoriteUser } from "../user/favoriteusers/ifavoriteusers";
+import { getPaidByIdFromDB } from "../user/shop/paid/paidDB";
+import { IQuerySendSticker } from "../user/shop/stickerpacks/istickerpacks";
 
 const sockets: ISocketUsers[] = [];
 

@@ -1,8 +1,8 @@
-import { initDBShop } from "../microservices/shop/shopDBInit";
-import { initDBDialogs } from "../microservices/dialogs/dialogsDBInit";
-import { initDBStickerpacks } from "../microservices/shop/stickerpacks/stickerpacksDBInit";
-import { initDBUsers } from "../microservices/users/usersDBInit";
-import { initDBComplaints } from "../microservices/complaints/complaintsDBInit";
+import { initDBComplaints } from "../microservices/initdb/complaints/complaintsDBInit";
+import { initDBDialogs } from "../microservices/initdb/dialogs/dialogsDBInit";
+import { initDBShop } from "../microservices/initdb/shop/shopDBInit";
+import { initDBStickerpacks } from "../microservices/initdb/shop/stickerpacksDBInit";
+import { initDBUsers } from "../microservices/initdb/users/usersDBInit";
 
 export async function initDB(): Promise<boolean> {
 	try {
