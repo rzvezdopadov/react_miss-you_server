@@ -1,5 +1,4 @@
 import {
-	ACCTYPE,
 	IAdminBanned,
 	IAdminStatVisit,
 	IQueryGetAdminProfiles,
@@ -9,6 +8,7 @@ import { getYearFromAge } from "../../utils/datetime";
 import { conditionStr } from "../../utils/query";
 import { poolDB } from "../../db/config";
 import { fieldProfileShort } from "../profile/profileDB";
+import { ACCTYPE } from "../role/role";
 
 export async function getAdminAcctypeByIdFromDB(
 	userId: string

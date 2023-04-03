@@ -1,4 +1,4 @@
-import { ACCTYPE } from "../admin/iadmin";
+import { ACCTYPE } from "../role/role";
 import { IPaid } from "../shop/paid/ipaid";
 
 export interface ICoordinates {

@@ -24,7 +24,6 @@ import { getRandomString } from "../../utils/random";
 import { isHaveCaptcha } from "../images/captchaAPI";
 import { testToken } from "./token";
 import { sendMessageToEmail } from "../../utils/transporter";
-import { ACCTYPE } from "../admin/iadmin";
 import {
 	data_age,
 	data_gender,
@@ -39,6 +38,7 @@ import {
 	answerStatus500,
 	answerStatusFailJWT,
 } from "../../utils/answerstatus";
+import { ACCTYPE } from "../role/role";
 
 const bcrypt = require("bcryptjs");
 const config = require("config");

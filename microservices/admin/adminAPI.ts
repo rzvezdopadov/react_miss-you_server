@@ -17,7 +17,6 @@ import { getTimecodeNow } from "../../utils/datetime";
 import { deletePhoto } from "../images/imagesUtils";
 import { testToken } from "../auth/token";
 import {
-	ACCTYPE,
 	IQueryDeleteAdminPhoto,
 	IQueryGetAdminProfiles,
 	IQuerySetAdminBanned,
@@ -29,6 +28,7 @@ import {
 	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../utils/answerstatus";
+import { ACCTYPE } from "../role/role";
 
 export async function queryAdminGetProfiles(req, res) {
 	try {

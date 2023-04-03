@@ -1,17 +1,8 @@
 import { ICoordinates, IFilterUsers } from "../profile/iprofile";
+import { ACCTYPE } from "../role/role";
+
 import { IPaid } from "../shop/paid/ipaid";
 import { IStatVisit } from "../statistics/istatistics";
-
-export enum ACCTYPE {
-	user = "user",
-	admin = "admin",
-}
-
-export enum COMPLAINTSTATUS {
-	open = "open",
-	inwork = "inwork",
-	close = "close",
-}
 
 export interface IAdminStatVisit {
 	userid: string;

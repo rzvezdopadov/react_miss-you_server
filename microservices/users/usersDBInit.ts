@@ -16,7 +16,6 @@ import {
 	data_smoke,
 	data_weight,
 } from "../profile/profileData";
-import { ACCTYPE } from "../admin/iadmin";
 import { IProfileRegistration } from "../auth/iauth";
 import { poolDB } from "../../db/config";
 import {
@@ -35,6 +34,7 @@ import {
 	fakeUsersWoman,
 	interests,
 } from "./usersData";
+import { ACCTYPE } from "../role/role";
 
 const config = require("config");
 const bcrypt = require("bcryptjs");

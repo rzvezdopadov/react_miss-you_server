@@ -1,4 +1,3 @@
-import { ACCTYPE } from "../admin/iadmin";
 import {
 	IFilterUsers,
 	IGetProfiles,
@@ -10,6 +9,7 @@ import { getTimecodeNow, getYearFromAge } from "../../utils/datetime";
 import { conditionStr } from "../../utils/query";
 import { poolDB } from "../../db/config";
 import { getPaidByIdFromDB } from "../shop/paid/paidDB";
+import { ACCTYPE } from "../role/role";
 
 const fieldProfile =
 	"userid, timecode, name, location, " +
