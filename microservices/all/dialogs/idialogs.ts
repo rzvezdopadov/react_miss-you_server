@@ -21,6 +21,12 @@ export interface IQuerySendMessage {
 	message: string;
 }
 
+export interface IQuerySendSticker {
+	userid: string;
+	stickerpackid: string;
+	stickerpos: number;
+}
+
 export interface IDialogBase {
 	userid1: string;
 	userid2: string;

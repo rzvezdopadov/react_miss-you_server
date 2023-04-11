@@ -7,6 +7,20 @@ export interface ICoordinates {
 	longitude: number;
 }
 
+export interface IPresent {
+	fromuserid: string;
+	fromname: string;
+	presentid: string;
+	link: string;
+}
+
+export interface IAchivment {
+	id: string;
+	title: string;
+	discription: string;
+	link: string;
+}
+
 export interface IProfile {
 	userid: string;
 	timecode: number;
@@ -15,6 +29,8 @@ export interface IProfile {
 	likes: string[];
 	favoriteusers: string[];
 	bannedusers: string[];
+	presents: IPresent[];
+	achivments: IAchivment[];
 	birthday: number;
 	monthofbirth: number;
 	yearofbirth: number;
