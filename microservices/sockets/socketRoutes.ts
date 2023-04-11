@@ -1,5 +1,6 @@
 import {
 	socketClosedHandler,
+	socketComplaintProfileHandler,
 	socketGetJWTHandler,
 	socketMessageHandler,
 	socketPingHandler,
@@ -38,6 +39,10 @@ export const socketHandler = (socketIO, socket) => {
 
 	socket.on("set_bannedusers", (socket) =>
 		socketSetBannedUserHandler(socketIO, socket, socketId)
+	);
+
+	socket.on("set_complaint", (socket) =>
+		socketComplaintProfileHandler(socketIO, socket, socketId)
 	);
 
 	socket.on("get_likes", function (socket) {

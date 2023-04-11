@@ -5,7 +5,11 @@ import { setBannedUsersById } from "../user/bannedusers/bannedusersUtils";
 import { IQueryBannedUser } from "../user/bannedusers/ibannedusers";
 import { botPhraseCensure, botPhraseSpam } from "../admin/bots/botsUtils";
 import { setDialog } from "../all/dialogs/dialogsUtils";
-import { IQuerySendMessage, MESSAGETYPE } from "../all/dialogs/idialogs";
+import {
+	IQuerySendMessage,
+	IQuerySendSticker,
+	MESSAGETYPE,
+} from "../all/dialogs/idialogs";
 import { IQueryLike } from "../user/likes/ilikes";
 import { setLikesById } from "../user/likes/likesUtils";
 import { setTimecodeToDB } from "../admin/statistics/statisticsDB";
@@ -16,7 +20,12 @@ import { testToken } from "../all/auth/token";
 import { setFavoriteUsersById } from "../user/favoriteusers/favoriteusersUtils";
 import { IQueryFavoriteUser } from "../user/favoriteusers/ifavoriteusers";
 import { getPaidByIdFromDB } from "../user/shop/paid/paidDB";
-import { IQuerySendSticker } from "../user/shop/stickerpacks/istickerpacks";
+import {
+	COMPLAINTTYPE,
+	IComplaintBase,
+	IQuerySendComplaintMessage,
+} from "../all/complaints/icomplaints";
+import { setComplaint } from "../all/complaints/complaintsUtils";
 
 const sockets: ISocketUsers[] = [];
 
@@ -55,7 +64,7 @@ export async function socketGetJWTHandler(
 
 		setVisitById(socketId, tokenDecode.userId, SOCKET_TYPE_OC.open);
 	} catch (error) {
-		console.log("get_jwt error", error);
+		console.log("socketGetJWTHandler", error);
 	}
 }
 
@@ -140,7 +149,7 @@ export async function socketMessageHandler(
 			data
 		);
 	} catch (error) {
-		console.log("message error", error);
+		console.log("socketMessageHandler", error);
 	}
 }
 
@@ -202,7 +211,46 @@ export async function socketStickerHandler(
 			data
 		);
 	} catch (error) {
-		console.log("message error", error);
+		console.log("socketStickerHandler", error);
+	}
+}
+
+export async function socketComplaintProfileHandler(
+	socketIO: any,
+	socketPayload: IComplaintBase,
+	socketId: string
+) {
+	try {
+		const ourId = getUserIdFromSocketTable(sockets, socketId);
+
+		if (!(ourId && socketPayload.userto)) return;
+		if (ourId === socketPayload.userto) return;
+
+		if (!socketPayload.subject || !socketPayload.discription) {
+			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
+				message:
+					"Тема и описание должно быть обязательно указанно в жалобе!",
+			});
+			return;
+		}
+
+		socketPayload.userfrom = ourId;
+
+		const complaint = await setComplaint(socketPayload);
+
+		if (!complaint) {
+			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
+				message:
+					"К сожалению жалоба не отправленна, возможно запрос неверный!",
+			});
+			return;
+		}
+
+		sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
+			message: "Жалоба успешно отправленна!",
+		});
+	} catch (error) {
+		console.log("socketComplaintProfileMessageHandler", error);
 	}
 }
 
@@ -233,7 +281,7 @@ export async function socketSetLikeHandler(
 			data
 		);
 	} catch (error) {
-		console.log("set_like error", error);
+		console.log("socketSetLikeHandler", error);
 	}
 }
 
@@ -252,7 +300,7 @@ export async function socketSetFavoriteUserHandler(
 
 		socketIO.to(socketId).emit("set_favoriteusers", favoriteusers);
 	} catch (error) {
-		console.log("set_favoriteusers error", error);
+		console.log("socketSetFavoriteUserHandler", error);
 	}
 }
 
@@ -271,7 +319,7 @@ export async function socketSetBannedUserHandler(
 
 		socketIO.to(socketId).emit("set_bannedusers", bannedusers);
 	} catch (error) {
-		console.log("set_bannedusers error", error);
+		console.log("socketSetBannedUserHandler", error);
 	}
 }
 
