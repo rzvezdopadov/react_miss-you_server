@@ -70,6 +70,8 @@ const fakeUsersGenerate = async (
 			likes: [],
 			favoriteusers: [],
 			bannedusers: [],
+			presents: [],
+			achivments: [],
 			birthday: 30,
 			monthofbirth: 9,
 			yearofbirth: 1990,
@@ -322,7 +324,8 @@ const fakeQueryStringUsersGenerate = async (
 				"INSERT INTO users (" +
 				"email, password, jwt, " +
 				"userid, coordinates, registrationdate, " +
-				"timecode, name, location, likes, favoriteusers, bannedusers, " +
+				"timecode, name, location, likes, " +
+				"favoriteusers, bannedusers, presents, achivments, " +
 				"birthday, monthofbirth, yearofbirth, " +
 				"growth, weight, " +
 				"gender, gendervapor, " +
@@ -345,7 +348,9 @@ const fakeQueryStringUsersGenerate = async (
 				`${fakeUser.timecode}, '${fakeUser.name}', '${fakeUser.location}', ` +
 				`${arrQueryStr(fakeUser.likes)}, ${arrQueryStr(
 					fakeUser.favoriteusers
-				)}, ${arrQueryStr(fakeUser.bannedusers)}, ` +
+				)}, ${arrQueryStr(
+					fakeUser.bannedusers
+				)}, ARRAY [] :: JSON [], ARRAY [] :: JSON [], ` +
 				`${fakeUser.birthday}, ${fakeUser.monthofbirth}, ${fakeUser.yearofbirth}, ` +
 				`${fakeUser.growth}, ${fakeUser.weight}, ` +
 				`${fakeUser.gender}, ${fakeUser.gendervapor}, ` +
@@ -395,6 +400,8 @@ export async function initDBUsers(): Promise<boolean> {
                 likes TEXT[],
 				favoriteusers TEXT[],
 				bannedusers TEXT[],
+				presents JSON[], 
+				achivments JSON[], 
                 birthday INT,
                 monthofbirth INT,
                 yearofbirth INT,

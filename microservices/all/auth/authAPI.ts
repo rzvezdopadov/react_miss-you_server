@@ -108,6 +108,8 @@ export async function queryRegistration(req, res) {
 			likes: [],
 			favoriteusers: [],
 			bannedusers: [],
+			presents: [],
+			achivments: [],
 			birthday: registration.birthday,
 			monthofbirth: registration.monthofbirth,
 			yearofbirth: registration.yearofbirth,
