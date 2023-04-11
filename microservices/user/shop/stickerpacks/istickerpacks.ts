@@ -12,9 +12,3 @@ export interface IStickerpack {
 	author: string;
 	stickers: ISticker[];
 }
-
-export interface IQuerySendSticker {
-	userid: string;
-	stickerpackid: string;
-	stickerpos: number;
-}
