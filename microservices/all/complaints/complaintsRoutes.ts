@@ -1,4 +1,4 @@
-import { queryGetComplaints } from "../complaints/complaintsAPI";
+import { queryGetComplaints } from "./complaintsAPI";
 
 const express = require("express");
 const router = express.Router();

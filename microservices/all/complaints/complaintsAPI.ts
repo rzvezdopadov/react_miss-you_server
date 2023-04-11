@@ -2,7 +2,7 @@ import {
 	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../../utils/answerstatus";
-import { testToken } from "../../all/auth/token";
+import { testToken } from "../auth/token";
 import { getComplaints } from "./complaintsUtils";
 
 export async function queryGetComplaints(req, res) {
