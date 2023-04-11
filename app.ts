@@ -40,23 +40,28 @@ app.use((req, res, next) => {
 app.use("/static", express.static(__dirname + "/static"));
 app.use("/favicon.ico", express.static(__dirname + "/favicon.ico"));
 
-app.use("/", require("./microservices/admin/adminRoutes"));
-app.use("/", require("./microservices/auth/authRoutes"));
-app.use("/", require("./microservices/complaints/complaintsRoutes"));
-app.use("/", require("./microservices/dialogs/dialogsRoutes"));
-app.use("/", require("./microservices/images/imagesRoutes"));
-app.use("/", require("./microservices/likes/likesRoutes"));
-app.use("/", require("./microservices/profile/profileRoutes"));
-app.use("/", require("./microservices/shop/rating/ratingRoutes"));
-app.use("/", require("./microservices/shop/paid/filters/filtersRoutes"));
+app.use("/", require("./microservices/all/auth/authRoutes"));
+app.use("/", require("./microservices/all/complaints/complaintsRoutes"));
+app.use("/", require("./microservices/all/dialogs/dialogsRoutes"));
+app.use("/", require("./microservices/all/images/imagesRoutes"));
+app.use("/", require("./microservices/user/likes/likesRoutes"));
+app.use("/", require("./microservices/user/profile/profileRoutes"));
+app.use("/", require("./microservices/user/shop/rating/ratingRoutes"));
+app.use("/", require("./microservices/user/shop/paid/filters/filtersRoutes"));
 app.use(
 	"/",
-	require("./microservices/shop/paid/historymessages/historymessagesRoutes")
+	require("./microservices/user/shop/paid/historymessages/historymessagesRoutes")
 );
-app.use("/", require("./microservices/shop/paid/interests/interestsRoutes"));
-app.use("/", require("./microservices/shop/paid/messages/messagesRoutes"));
-app.use("/", require("./microservices/shop/paid/photo/photoRoutes"));
-app.use("/", require("./microservices/shop/stickerpacks/stickerpacksRoutes"));
+app.use(
+	"/",
+	require("./microservices/user/shop/paid/interests/interestsRoutes")
+);
+app.use("/", require("./microservices/user/shop/paid/messages/messagesRoutes"));
+app.use("/", require("./microservices/user/shop/paid/photo/photoRoutes"));
+app.use(
+	"/",
+	require("./microservices/user/shop/stickerpacks/stickerpacksRoutes")
+);
 
 app.use("/", require("./api"));
 
