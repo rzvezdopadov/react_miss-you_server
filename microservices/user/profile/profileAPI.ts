@@ -112,7 +112,8 @@ export async function queryGetProfile(req, res) {
 			if (profile.bannedusers.includes(jwtDecode.userId))
 				bannedusers.push(jwtDecode.userId);
 			profile.bannedusers = bannedusers;
-
+			profile.achivments = [];
+			profile.presents = [];
 			profile.paid = undefined;
 			profile.deleteacc = 0;
 		} else {
