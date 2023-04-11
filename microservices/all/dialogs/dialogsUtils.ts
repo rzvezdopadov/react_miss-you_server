@@ -54,7 +54,7 @@ export const setDialog = async (
 			const newDialogBase: IDialogBase = {
 				userid1: ourId,
 				userid2: userId,
-				timecode: 0,
+				timecode: timecode,
 				dck: "",
 				messages: [],
 			};
