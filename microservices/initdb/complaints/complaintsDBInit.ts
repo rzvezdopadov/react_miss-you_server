@@ -8,10 +8,13 @@ export async function initDBComplaints(): Promise<boolean> {
                 userfrom TEXT,
                 userto TEXT,
                 timecode BIGINT,
+                type TEXT,
+                subject TEXT,
+                discription TEXT,
+                cash INT,
                 dck TEXT,
                 status TEXT,
-                messages JSON[],
-                complmessages JSON[]
+                complmessage JSON
             );
         `;
 
