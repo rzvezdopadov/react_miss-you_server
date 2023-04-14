@@ -17,3 +17,15 @@ export function normalizeArrString(arr) {
 
 	return newArr;
 }
+
+export function normalizeNumber(num: number): number {
+	const type = typeof num;
+
+	if (!(type === "number" || type === "string")) return 0;
+
+	const newNum = Number(num);
+
+	if (Number.isNaN(newNum)) return 0;
+
+	return newNum;
+}
