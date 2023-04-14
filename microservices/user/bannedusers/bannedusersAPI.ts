@@ -2,16 +2,17 @@ import {
 	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../../utils/answerstatus";
+import { normalizeString } from "../../../utils/normalize";
 import { testToken } from "../../all/auth/token";
 import { setBannedUsersById } from "./bannedusersUtils";
 
 export async function queryBannedUsers(req, res) {
 	try {
 		let { userid } = req.body;
-		userid = String(userid);
+		userid = normalizeString(userid);
 
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 

@@ -6,11 +6,12 @@ import {
 	answerStatusQTDB,
 } from "../../../../../utils/answerstatus";
 import { testToken } from "../../../../all/auth/token";
+import { normalizeString } from "../../../../../utils/normalize";
 
 export async function queryGetLongFiltersTariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -29,7 +30,7 @@ export async function queryGetLongFiltersTariffs(req, res) {
 export async function queryBuyLongFilters(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -51,7 +52,7 @@ export async function queryBuyLongFilters(req, res) {
 export async function queryGetFiltersVaporsTariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -70,7 +71,7 @@ export async function queryGetFiltersVaporsTariffs(req, res) {
 export async function queryBuyFiltersVapors(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -92,7 +93,7 @@ export async function queryBuyFiltersVapors(req, res) {
 export async function queryGetLongFiltersVaporsTariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -111,7 +112,7 @@ export async function queryGetLongFiltersVaporsTariffs(req, res) {
 export async function queryBuyLongFiltersVapors(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -133,7 +134,7 @@ export async function queryBuyLongFiltersVapors(req, res) {
 export async function queryGetFiltersFavoriteUsersTariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -152,7 +153,7 @@ export async function queryGetFiltersFavoriteUsersTariffs(req, res) {
 export async function queryBuyFiltersFavoriteUsers(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -174,7 +175,7 @@ export async function queryBuyFiltersFavoriteUsers(req, res) {
 export async function queryGetLongFiltersFavoriteUsersTariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -193,7 +194,7 @@ export async function queryGetLongFiltersFavoriteUsersTariffs(req, res) {
 export async function queryBuyLongFiltersFavoriteUsers(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 

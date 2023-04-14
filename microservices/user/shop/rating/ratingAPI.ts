@@ -14,11 +14,12 @@ import {
 	answerStatus400,
 } from "../../../../utils/answerstatus";
 import { testToken } from "../../../all/auth/token";
+import { normalizeString } from "../../../../utils/normalize";
 
 export async function queryGetRatingTariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -35,7 +36,7 @@ export async function queryGetRatingTariffs(req, res) {
 export async function queryBuyRating(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 

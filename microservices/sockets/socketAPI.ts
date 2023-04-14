@@ -20,11 +20,7 @@ import { testToken } from "../all/auth/token";
 import { setFavoriteUsersById } from "../user/favoriteusers/favoriteusersUtils";
 import { IQueryFavoriteUser } from "../user/favoriteusers/ifavoriteusers";
 import { getPaidByIdFromDB } from "../user/shop/paid/paidDB";
-import {
-	COMPLAINTTYPE,
-	IComplaintBase,
-	IQuerySendComplaintMessage,
-} from "../all/complaints/icomplaints";
+import { IComplaintBase } from "../all/complaints/icomplaints";
 import { setComplaint } from "../all/complaints/complaintsUtils";
 
 const sockets: ISocketUsers[] = [];

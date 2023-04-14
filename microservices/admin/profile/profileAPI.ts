@@ -29,11 +29,12 @@ import {
 import { ACCTYPE } from "../../role/role";
 import { testToken } from "../../all/auth/token";
 import { deletePhoto } from "../../all/images/imagesUtils";
+import { normalizeString } from "../../../utils/normalize";
 
 export async function queryAdminGetProfiles(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -72,7 +73,7 @@ export async function queryAdminGetProfiles(req, res) {
 export async function queryAdminGetVisit(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -86,7 +87,7 @@ export async function queryAdminGetVisit(req, res) {
 			return answerStatusAccessDenied(res);
 
 		let { userid } = req.body;
-		userid = String(userid);
+		userid = normalizeString(userid);
 
 		const statVisit = await getAdminStatVisitByIdFromDB(userid);
 
@@ -99,7 +100,7 @@ export async function queryAdminGetVisit(req, res) {
 export async function queryAdminSetAcctype(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -114,7 +115,7 @@ export async function queryAdminSetAcctype(req, res) {
 
 		let { userid, acctype }: { userid: string; acctype: ACCTYPE } =
 			req.body;
-		userid = String(userid);
+		userid = normalizeString(userid);
 
 		const acctypeResult = await setAdminAcctypeByIdToDB(userid, acctype);
 		if (!acctypeResult) answerStatus400(res, "Данные не были записанны!");
@@ -128,7 +129,7 @@ export async function queryAdminSetAcctype(req, res) {
 export async function queryAdminSetRaiting(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -143,7 +144,7 @@ export async function queryAdminSetRaiting(req, res) {
 
 		let { userid, addrating }: { userid: string; addrating: number } =
 			req.body;
-		userid = String(userid);
+		userid = normalizeString(userid);
 		addrating = Math.floor(Number(addrating));
 
 		const diffRating = 5000;
@@ -173,7 +174,7 @@ export async function queryAdminSetRaiting(req, res) {
 export async function queryAdminSetCash(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -187,7 +188,7 @@ export async function queryAdminSetCash(req, res) {
 			return answerStatusAccessDenied(res);
 
 		let { userid, addcash }: { userid: string; addcash: number } = req.body;
-		userid = String(userid);
+		userid = normalizeString(userid);
 		addcash = Math.floor(Number(addcash));
 
 		const diffCash = 5000;
@@ -217,7 +218,7 @@ export async function queryAdminSetCash(req, res) {
 export async function queryAdminGetProfile(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -231,7 +232,7 @@ export async function queryAdminGetProfile(req, res) {
 			return answerStatusAccessDenied(res);
 
 		const QueryGetProfiles: IQueryGetProfile = req.query;
-		const userid = String(QueryGetProfiles.userid);
+		const userid = normalizeString(QueryGetProfiles.userid);
 
 		const profile = await getProfileByIdFromDB(userid);
 
@@ -244,7 +245,7 @@ export async function queryAdminGetProfile(req, res) {
 export async function queryAdminSetBanned(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -259,8 +260,8 @@ export async function queryAdminSetBanned(req, res) {
 
 		let { userid, discription, minute, hour, month }: IQuerySetAdminBanned =
 			req.body;
-		userid = String(userid);
-		discription = String(discription);
+		userid = normalizeString(userid);
+		discription = normalizeString(discription);
 		minute = Number(minute);
 		hour = Number(hour);
 		month = Number(month);
@@ -305,7 +306,7 @@ export async function queryAdminSetBanned(req, res) {
 export async function queryAdminDeletePhoto(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -318,7 +319,7 @@ export async function queryAdminDeletePhoto(req, res) {
 		if (adminCandidate !== ACCTYPE.admin)
 			return answerStatusAccessDenied(res);
 		let { userid, photoPos }: IQueryDeleteAdminPhoto = req.body;
-		userid = String(userid);
+		userid = normalizeString(userid);
 		photoPos = Number(photoPos);
 
 		const photos = await deletePhoto(userid, photoPos);

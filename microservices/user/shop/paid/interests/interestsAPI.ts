@@ -6,11 +6,12 @@ import {
 	answerStatusQTDB,
 } from "../../../../../utils/answerstatus";
 import { testToken } from "../../../../all/auth/token";
+import { normalizeString } from "../../../../../utils/normalize";
 
 export async function queryGetInterests20Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -29,7 +30,7 @@ export async function queryGetInterests20Tariffs(req, res) {
 export async function queryBuyInterests20(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -51,7 +52,7 @@ export async function queryBuyInterests20(req, res) {
 export async function queryGetInterests30Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -70,7 +71,7 @@ export async function queryGetInterests30Tariffs(req, res) {
 export async function queryBuyInterests30(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 

@@ -39,6 +39,7 @@ import {
 	data_growth,
 	data_age,
 } from "../../user/profile/profileData";
+import { normalizeString } from "../../../utils/normalize";
 
 const bcrypt = require("bcryptjs");
 const config = require("config");
@@ -216,9 +217,9 @@ export async function queryLogin(req, res) {
 			);
 
 		let params: ILogin = req.body;
-		params.email = String(params.email);
-		params.password = String(params.password);
-		params.captcha = String(params.captcha);
+		params.email = normalizeString(params.email);
+		params.password = normalizeString(params.password);
+		params.captcha = normalizeString(params.captcha);
 
 		if (!isHaveCaptcha(params.captcha))
 			return answerStatus400(
@@ -292,9 +293,9 @@ export async function queryChangePass(req, res) {
 			);
 
 		let params: IChangePass = req.body;
-		params.passwordnow = String(params.passwordnow);
-		params.passwordnew = String(params.passwordnew);
-		params.captcha = String(params.captcha);
+		params.passwordnow = normalizeString(params.passwordnow);
+		params.passwordnew = normalizeString(params.passwordnew);
+		params.captcha = normalizeString(params.captcha);
 
 		if (!isHaveCaptcha(params.captcha))
 			return answerStatus400(
@@ -347,8 +348,8 @@ export async function queryRecoveryPass(req, res) {
 			);
 
 		let params: IRecoveryPass = req.body;
-		params.email = String(params.email);
-		params.captcha = String(params.captcha);
+		params.email = normalizeString(params.email);
+		params.captcha = normalizeString(params.captcha);
 
 		if (!isHaveCaptcha(params.captcha))
 			return answerStatus400(

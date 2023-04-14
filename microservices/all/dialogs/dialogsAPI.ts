@@ -6,15 +6,16 @@ import {
 	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../../utils/answerstatus";
+import { normalizeString } from "../../../utils/normalize";
 
 export async function querySetMessage(req, res) {
 	try {
 		let { userid, message } = req.body;
-		const userId = String(userid);
-		message = String(message);
+		const userId = normalizeString(userid);
+		message = normalizeString(message);
 
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -48,10 +49,10 @@ export async function querySetMessage(req, res) {
 export async function queryGetDialog(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		let { userid } = req.query;
-		const userId = String(userid);
+		const userId = normalizeString(userid);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -74,7 +75,7 @@ export async function queryGetDialog(req, res) {
 export async function queryGetDialogs(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 

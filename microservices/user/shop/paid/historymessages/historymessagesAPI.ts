@@ -6,11 +6,12 @@ import {
 	answerStatusQTDB,
 } from "../../../../../utils/answerstatus";
 import { testToken } from "../../../../all/auth/token";
+import { normalizeString } from "../../../../../utils/normalize";
 
 export async function queryGetHistoryMessages20Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -29,7 +30,7 @@ export async function queryGetHistoryMessages20Tariffs(req, res) {
 export async function queryBuyHistoryMessages20(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -51,7 +52,7 @@ export async function queryBuyHistoryMessages20(req, res) {
 export async function queryGetHistoryMessages40Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -70,7 +71,7 @@ export async function queryGetHistoryMessages40Tariffs(req, res) {
 export async function queryBuyHistoryMessages40(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -92,7 +93,7 @@ export async function queryBuyHistoryMessages40(req, res) {
 export async function queryGetHistoryMessages60Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -111,7 +112,7 @@ export async function queryGetHistoryMessages60Tariffs(req, res) {
 export async function queryBuyHistoryMessages60(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -133,7 +134,7 @@ export async function queryBuyHistoryMessages60(req, res) {
 export async function queryGetHistoryMessages80Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -152,7 +153,7 @@ export async function queryGetHistoryMessages80Tariffs(req, res) {
 export async function queryBuyHistoryMessages80(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -174,7 +175,7 @@ export async function queryBuyHistoryMessages80(req, res) {
 export async function queryGetHistoryMessages100Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -193,7 +194,7 @@ export async function queryGetHistoryMessages100Tariffs(req, res) {
 export async function queryBuyHistoryMessages100(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -215,7 +216,7 @@ export async function queryBuyHistoryMessages100(req, res) {
 export async function queryGetHistoryMessages200Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -234,7 +235,7 @@ export async function queryGetHistoryMessages200Tariffs(req, res) {
 export async function queryBuyHistoryMessages200(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -256,7 +257,7 @@ export async function queryBuyHistoryMessages200(req, res) {
 export async function queryGetHistoryMessages300Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -275,7 +276,7 @@ export async function queryGetHistoryMessages300Tariffs(req, res) {
 export async function queryBuyHistoryMessages300(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 

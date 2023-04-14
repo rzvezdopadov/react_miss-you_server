@@ -2,13 +2,14 @@ import {
 	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../../utils/answerstatus";
+import { normalizeString } from "../../../utils/normalize";
 import { testToken } from "../auth/token";
 import { getComplaints } from "./complaintsUtils";
 
 export async function queryGetComplaints(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 

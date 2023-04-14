@@ -8,11 +8,12 @@ import {
 } from "../../../utils/answerstatus";
 import { getTimecodeNow } from "../../../utils/datetime";
 import { getPaidByIdFromDB } from "../../user/shop/paid/paidDB";
+import { normalizeString } from "../../../utils/normalize";
 
 export async function queryLoadPhoto(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -59,7 +60,7 @@ export async function queryLoadPhoto(req, res) {
 export async function queryDeletePhoto(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		let { photoPos } = req.body;
 		photoPos = Number(photoPos);
@@ -79,7 +80,7 @@ export async function queryDeletePhoto(req, res) {
 export async function queryCheckPhoto(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		let { photoPos } = req.body;
 		photoPos = Number(photoPos);
@@ -99,7 +100,7 @@ export async function queryCheckPhoto(req, res) {
 export async function queryGetPhoto(req, res, next) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 

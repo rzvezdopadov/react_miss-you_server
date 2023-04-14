@@ -26,11 +26,12 @@ import { TIMECODE_MONTH, getTimecodeNow } from "../../../utils/datetime";
 import { testToken } from "../../all/auth/token";
 import { getPaidByIdFromDB } from "../shop/paid/paidDB";
 import { testPaidOnOverflow } from "../shop/paid/paidUtils";
+import { normalizeString } from "../../../utils/normalize";
 
 export async function querySetProfile(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -73,7 +74,7 @@ export async function querySetProfile(req, res) {
 export async function queryGetProfile(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -84,7 +85,7 @@ export async function queryGetProfile(req, res) {
 		if (isBanned) return answerStatusFailJWT(res);
 
 		const QueryGetProfile: IQueryGetProfile = req.query;
-		const userid = String(QueryGetProfile.userid);
+		const userid = normalizeString(QueryGetProfile.userid);
 
 		let userIdNew = userid;
 
@@ -158,7 +159,7 @@ function profileQueryModifi(
 export async function queryGetProfilesShort(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -182,7 +183,7 @@ export async function queryGetProfilesShort(req, res) {
 export async function queryGetProfilesForLikes(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -206,7 +207,7 @@ export async function queryGetProfilesForLikes(req, res) {
 export async function queryGetProfilesForFavoriteUsers(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -230,7 +231,7 @@ export async function queryGetProfilesForFavoriteUsers(req, res) {
 export async function queryDeleteAcc(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -253,7 +254,7 @@ export async function queryDeleteAcc(req, res) {
 export async function queryDeleteAccCancel(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 

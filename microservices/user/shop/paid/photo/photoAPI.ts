@@ -6,11 +6,12 @@ import {
 	answerStatusQTDB,
 } from "../../../../../utils/answerstatus";
 import { testToken } from "../../../../all/auth/token";
+import { normalizeString } from "../../../../../utils/normalize";
 
 export async function queryGetPhotoFullTariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -27,7 +28,7 @@ export async function queryGetPhotoFullTariffs(req, res) {
 export async function queryBuyPhotoFull(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -44,7 +45,7 @@ export async function queryBuyPhotoFull(req, res) {
 export async function queryGetPhotoLoad10Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -63,7 +64,7 @@ export async function queryGetPhotoLoad10Tariffs(req, res) {
 export async function queryBuyPhotoLoad10(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -85,7 +86,7 @@ export async function queryBuyPhotoLoad10(req, res) {
 export async function queryGetPhotoLoad15Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -104,7 +105,7 @@ export async function queryGetPhotoLoad15Tariffs(req, res) {
 export async function queryBuyPhotoLoad15(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -126,7 +127,7 @@ export async function queryBuyPhotoLoad15(req, res) {
 export async function queryGetPhotoLoad20Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -145,7 +146,7 @@ export async function queryGetPhotoLoad20Tariffs(req, res) {
 export async function queryBuyPhotoLoad20(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -167,7 +168,7 @@ export async function queryBuyPhotoLoad20(req, res) {
 export async function queryGetPhotoLoad25Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -186,7 +187,7 @@ export async function queryGetPhotoLoad25Tariffs(req, res) {
 export async function queryBuyPhotoLoad25(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -208,7 +209,7 @@ export async function queryBuyPhotoLoad25(req, res) {
 export async function queryGetPhotoLoad30Tariffs(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -227,7 +228,7 @@ export async function queryGetPhotoLoad30Tariffs(req, res) {
 export async function queryBuyPhotoLoad30(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 

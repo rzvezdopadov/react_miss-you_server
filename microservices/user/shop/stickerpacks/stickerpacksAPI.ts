@@ -3,6 +3,7 @@ import {
 	answerStatusQTDB,
 	answerStatus400,
 } from "../../../../utils/answerstatus";
+import { normalizeString } from "../../../../utils/normalize";
 import { testToken } from "../../../all/auth/token";
 import {
 	getProfileStickerpacksByIdFromDB,
@@ -17,7 +18,7 @@ import { getWaySticker } from "./stickerpacksUtils";
 export async function queryGetAllStickerpacks(req, res) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -34,7 +35,7 @@ export async function queryGetAllStickerpacks(req, res) {
 export async function queryGetSticker(req, res, next) {
 	try {
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -56,14 +57,14 @@ export async function queryGetSticker(req, res, next) {
 export async function queryAddStickerpack(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		let { idstickerpack }: { idstickerpack: string } = req.body;
-		idstickerpack = String(idstickerpack);
+		idstickerpack = normalizeString(idstickerpack);
 
 		const profileStickerpacks = await getProfileStickerpacksByIdFromDB(
 			jwtDecode.userId
@@ -132,14 +133,14 @@ export async function queryAddStickerpack(req, res) {
 export async function queryDeleteStickerpack(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
 		let { idstickerpack }: { idstickerpack: string } = req.body;
-		idstickerpack = String(idstickerpack);
+		idstickerpack = normalizeString(idstickerpack);
 
 		const profileStickerpacks = await getProfileStickerpacksByIdFromDB(
 			jwtDecode.userId
