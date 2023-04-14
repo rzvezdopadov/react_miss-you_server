@@ -29,7 +29,8 @@ import {
 import { ACCTYPE } from "../../role/role";
 import { testToken } from "../../all/auth/token";
 import { deletePhoto } from "../../all/images/imagesUtils";
-import { normalizeString } from "../../../utils/normalize";
+import { normalizeNumber, normalizeString } from "../../../utils/normalize";
+import { isCandidateType } from "../../all/auth/authUtils";
 
 export async function queryAdminGetProfiles(req, res) {
 	try {
@@ -40,18 +41,14 @@ export async function queryAdminGetProfiles(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const adminCandidate = await getAdminAcctypeByIdFromDB(
-			jwtDecode.userId
-		);
-
-		if (adminCandidate !== ACCTYPE.admin)
-			return answerStatusAccessDenied(res);
+		if (!(await isCandidateType(res, jwtDecode.userId, ACCTYPE.admin)))
+			return;
 
 		const QueryGetAdminProfiles: IQueryGetAdminProfiles = req.query;
 
 		const getAdminProfilesVal: IQueryGetAdminProfiles = {
-			startcount: QueryGetAdminProfiles.startcount,
-			amount: QueryGetAdminProfiles.amount,
+			startcount: normalizeNumber(QueryGetAdminProfiles.startcount),
+			amount: normalizeNumber(QueryGetAdminProfiles.amount),
 			filters: QueryGetAdminProfiles.filters,
 		};
 
@@ -79,12 +76,8 @@ export async function queryAdminGetVisit(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const adminCandidate = await getAdminAcctypeByIdFromDB(
-			jwtDecode.userId
-		);
-
-		if (adminCandidate !== ACCTYPE.admin)
-			return answerStatusAccessDenied(res);
+		if (!(await isCandidateType(res, jwtDecode.userId, ACCTYPE.admin)))
+			return;
 
 		let { userid } = req.body;
 		userid = normalizeString(userid);
@@ -106,12 +99,8 @@ export async function queryAdminSetAcctype(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const adminCandidate = await getAdminAcctypeByIdFromDB(
-			jwtDecode.userId
-		);
-
-		if (adminCandidate !== ACCTYPE.admin)
-			return answerStatusAccessDenied(res);
+		if (!(await isCandidateType(res, jwtDecode.userId, ACCTYPE.admin)))
+			return;
 
 		let { userid, acctype }: { userid: string; acctype: ACCTYPE } =
 			req.body;
@@ -135,17 +124,13 @@ export async function queryAdminSetRaiting(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const adminCandidate = await getAdminAcctypeByIdFromDB(
-			jwtDecode.userId
-		);
-
-		if (adminCandidate !== ACCTYPE.admin)
-			return answerStatusAccessDenied(res);
+		if (!(await isCandidateType(res, jwtDecode.userId, ACCTYPE.admin)))
+			return;
 
 		let { userid, addrating }: { userid: string; addrating: number } =
 			req.body;
 		userid = normalizeString(userid);
-		addrating = Math.floor(Number(addrating));
+		addrating = Math.floor(normalizeNumber(addrating));
 
 		const diffRating = 5000;
 		if (addrating < -1 * diffRating || addrating > diffRating)
@@ -180,16 +165,12 @@ export async function queryAdminSetCash(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const adminCandidate = await getAdminAcctypeByIdFromDB(
-			jwtDecode.userId
-		);
-
-		if (adminCandidate !== ACCTYPE.admin)
-			return answerStatusAccessDenied(res);
+		if (!(await isCandidateType(res, jwtDecode.userId, ACCTYPE.admin)))
+			return;
 
 		let { userid, addcash }: { userid: string; addcash: number } = req.body;
 		userid = normalizeString(userid);
-		addcash = Math.floor(Number(addcash));
+		addcash = Math.floor(normalizeNumber(addcash));
 
 		const diffCash = 5000;
 		if (addcash < -1 * diffCash || addcash > diffCash)
@@ -224,12 +205,8 @@ export async function queryAdminGetProfile(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const adminCandidate = await getAdminAcctypeByIdFromDB(
-			jwtDecode.userId
-		);
-
-		if (adminCandidate !== ACCTYPE.admin)
-			return answerStatusAccessDenied(res);
+		if (!(await isCandidateType(res, jwtDecode.userId, ACCTYPE.admin)))
+			return;
 
 		const QueryGetProfiles: IQueryGetProfile = req.query;
 		const userid = normalizeString(QueryGetProfiles.userid);
@@ -251,20 +228,16 @@ export async function queryAdminSetBanned(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const adminCandidate = await getAdminAcctypeByIdFromDB(
-			jwtDecode.userId
-		);
-
-		if (adminCandidate !== ACCTYPE.admin)
-			return answerStatusAccessDenied(res);
+		if (!(await isCandidateType(res, jwtDecode.userId, ACCTYPE.admin)))
+			return;
 
 		let { userid, discription, minute, hour, month }: IQuerySetAdminBanned =
 			req.body;
 		userid = normalizeString(userid);
 		discription = normalizeString(discription);
-		minute = Number(minute);
-		hour = Number(hour);
-		month = Number(month);
+		minute = normalizeNumber(minute);
+		hour = normalizeNumber(hour);
+		month = normalizeNumber(month);
 
 		if (jwtDecode.userId === userid)
 			return res.status(400).json({
@@ -286,7 +259,7 @@ export async function queryAdminSetBanned(req, res) {
 
 		const answerDB = await setAdminBannedByIdToDB(userid, {
 			timecode: timecodeBanned,
-			whobanned: adminCandidate,
+			whobanned: ACCTYPE.admin,
 			discription: discription,
 		});
 
@@ -312,15 +285,12 @@ export async function queryAdminDeletePhoto(req, res) {
 
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		const adminCandidate = await getAdminAcctypeByIdFromDB(
-			jwtDecode.userId
-		);
+		if (!(await isCandidateType(res, jwtDecode.userId, ACCTYPE.admin)))
+			return;
 
-		if (adminCandidate !== ACCTYPE.admin)
-			return answerStatusAccessDenied(res);
 		let { userid, photoPos }: IQueryDeleteAdminPhoto = req.body;
 		userid = normalizeString(userid);
-		photoPos = Number(photoPos);
+		photoPos = normalizeNumber(photoPos);
 
 		const photos = await deletePhoto(userid, photoPos);
 
