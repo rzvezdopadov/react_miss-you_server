@@ -304,7 +304,7 @@ export async function queryChangePass(req, res) {
 			);
 
 		let { jwt } = req.cookies;
-		jwt = String(jwt);
+		jwt = normalizeString(jwt);
 
 		const jwtDecode = await testToken(jwt);
 

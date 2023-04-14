@@ -8,7 +8,7 @@ import {
 } from "../../../utils/answerstatus";
 import { getTimecodeNow } from "../../../utils/datetime";
 import { getPaidByIdFromDB } from "../../user/shop/paid/paidDB";
-import { normalizeString } from "../../../utils/normalize";
+import { normalizeNumber, normalizeString } from "../../../utils/normalize";
 
 export async function queryLoadPhoto(req, res) {
 	try {
@@ -63,7 +63,7 @@ export async function queryDeletePhoto(req, res) {
 		jwt = normalizeString(jwt);
 
 		let { photoPos } = req.body;
-		photoPos = Number(photoPos);
+		photoPos = normalizeNumber(photoPos);
 
 		const jwtDecode = await testToken(jwt);
 
@@ -83,7 +83,7 @@ export async function queryCheckPhoto(req, res) {
 		jwt = normalizeString(jwt);
 
 		let { photoPos } = req.body;
-		photoPos = Number(photoPos);
+		photoPos = normalizeNumber(photoPos);
 
 		const jwtDecode = await testToken(jwt);
 

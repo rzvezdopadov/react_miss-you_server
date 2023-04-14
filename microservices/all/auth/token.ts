@@ -1,3 +1,4 @@
+import { normalizeString } from "../../../utils/normalize";
 import { getJWTFromDB } from "./authDB";
 
 const config = require("config");
@@ -36,7 +37,7 @@ export const testToken = async (jwt: string) => {
 
 		for (let i = 0; i < token.length; i++) {
 			if (token[i].token === jwt) {
-				decode.userId = String(decode.userId);
+				decode.userId = normalizeString(decode.userId);
 
 				return decode;
 			}
@@ -44,6 +45,8 @@ export const testToken = async (jwt: string) => {
 
 		return false;
 	} catch (error) {
+		console.log("testToken", error);
+
 		return false;
 	}
 };
