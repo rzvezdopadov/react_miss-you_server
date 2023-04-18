@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "tsc && nodemon server/app.js",
-    "server": "nodemon server/app.js",
+    "build": "tsc",
+    "server": "tsc && node server/app.js",
     "test": "jest --watchAll"
   },
   "jest": {
