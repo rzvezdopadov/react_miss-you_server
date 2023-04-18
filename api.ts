@@ -13,7 +13,7 @@ function answerIndex(res: any, next: any) {
 }
 
 // User
-const linkAuthUser = ["/vapors", "/dialogs", "/searchvapors", "/shop"];
+const linkAuthUser = ["/vapors", "/dialogs", "/users", "/shop"];
 
 // Admin
 const linkAuthAdmin = [
