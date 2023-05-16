@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 app.use("/static", express.static(__dirname + "/static"));
 app.use("/favicon.ico", express.static(__dirname + "/favicon.ico"));
 
+app.use("/", require("./microservices/all/towns/townsRoutes"));
 app.use("/", require("./microservices/all/auth/authRoutes"));
 app.use("/", require("./microservices/all/complaints/complaintsRoutes"));
 app.use("/", require("./microservices/all/dialogs/dialogsRoutes"));
