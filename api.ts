@@ -13,34 +13,40 @@ function answerIndex(res: any, next: any) {
 }
 
 // User
-const linkAuthUser = ["/vapors", "/dialogs", "/users", "/shop"];
-
-// Admin
-const linkAuthAdmin = [
-	"/statistics",
+const linkAuthUser = [
+	"/registration",
+	"/login",
+	"/recoverypass",
+	"/about",
+	"/partners",
+	"/agreement",
+	"/vapors",
 	"/dialogs",
-	"/userprofiles",
+	"/users",
+	"/settings",
 	"/shop",
 	"/logout",
 ];
 
-// All
-const linkNoAuth = [
-	"/login",
-	"/settings",
-	"/about",
-	"/partners",
-	"/agreement",
-	"/logout",
+// Admin
+const linkAuthAdmin = [
+	"/aregistration",
+	"/alogin",
+	"/arecoverypass",
+	"/aabout",
+	"/apartners",
+	"/aagreement",
+	"/astatistics",
+	"/adialogs",
+	"/ausers",
+	"/asettings",
+	"/alogout",
 ];
 
 linkAuthUser.forEach((way) =>
 	router.get(way, (_req, res, next) => answerIndex(res, next))
 );
 linkAuthAdmin.forEach((way) =>
-	router.get(way, (_req, res, next) => answerIndex(res, next))
-);
-linkNoAuth.forEach((way) =>
 	router.get(way, (_req, res, next) => answerIndex(res, next))
 );
 
