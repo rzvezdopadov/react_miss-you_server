@@ -21,8 +21,6 @@ export const data_weight = [
 	"Пара лишних кило",
 ];
 
-export const data_location = ["Россия, Рязанская область, г.Рязань"];
-
 export const data_monthOfBirth = [
 	"Января",
 	"Февраля",
