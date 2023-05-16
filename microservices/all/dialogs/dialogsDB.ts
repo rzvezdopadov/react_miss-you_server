@@ -1,5 +1,5 @@
 import { IDialogBase } from "./idialogs";
-import { getTimecodeNow } from "../../../utils/datetime";
+import { getTimecodeNow, getTimedateNow } from "../../../utils/datetime";
 import { poolDB } from "../../../db/config";
 
 export async function getDialogByIdFromDB(
@@ -20,7 +20,7 @@ export async function getDialogByIdFromDB(
 
 		return answerDB.rows[0];
 	} catch (error) {
-		console.log("getDialogByIdFromDB", error);
+		console.log(`${getTimedateNow()} getDialogByIdFromDB: `, error);
 		return undefined;
 	}
 }
@@ -60,7 +60,7 @@ export async function setDialogByIdToDB(dialog: IDialogBase): Promise<number> {
 			return answerDB.rowCount;
 		}
 	} catch (error) {
-		console.log("setDialogByIdToDB", error);
+		console.log(`${getTimedateNow()} setDialogByIdToDB: `, error);
 		return 0;
 	}
 }
@@ -79,7 +79,7 @@ export async function getDialogsByIdFromDB(
 
 		return answerDB.rows;
 	} catch (error) {
-		console.log("getDialogsByIdFromDB", error);
+		console.log(`${getTimedateNow()} getDialogsByIdFromDB: `, error);
 		return [];
 	}
 }

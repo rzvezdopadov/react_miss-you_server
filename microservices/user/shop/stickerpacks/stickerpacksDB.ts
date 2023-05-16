@@ -1,4 +1,5 @@
 import { poolDB } from "../../../../db/config";
+import { getTimedateNow } from "../../../../utils/datetime";
 import { IStickerpack } from "./istickerpacks";
 
 export async function getAllStickerpacks(): Promise<IStickerpack[]> {
@@ -11,7 +12,7 @@ export async function getAllStickerpacks(): Promise<IStickerpack[]> {
 
 		return answerDB.rows;
 	} catch (error) {
-		console.log("getAllStickerpacks", error);
+		console.log(`${getTimedateNow()} getAllStickerpacks: `, error);
 		return undefined;
 	}
 }
@@ -19,15 +20,6 @@ export async function getAllStickerpacks(): Promise<IStickerpack[]> {
 export async function getStickerpackById(
 	idStickerpack: string
 ): Promise<IStickerpack> {
-	const stickerpack: IStickerpack = {
-		idstickerpack: "",
-		name: "",
-		discription: "",
-		price: 0,
-		author: "",
-		stickers: [],
-	};
-
 	try {
 		let queryStr =
 			`SELECT idstickerpack, name, discription, price, author, stickers ` +
@@ -38,7 +30,7 @@ export async function getStickerpackById(
 
 		return answerDB.rows[0];
 	} catch (error) {
-		console.log("getAllStickerpacks", error);
+		console.log(`${getTimedateNow()} getStickerpackById: `, error);
 		return undefined;
 	}
 }

@@ -1,4 +1,5 @@
 import { poolDB } from "../../../db/config";
+import { getTimedateNow } from "../../../utils/datetime";
 
 export async function getBannedUsersByIdFromDB(
 	userId: string
@@ -9,7 +10,7 @@ export async function getBannedUsersByIdFromDB(
 
 		return answerDB.rows[0].bannedusers;
 	} catch (error) {
-		console.log("getBannedUsersByIdFromDB", error);
+		console.log(`${getTimedateNow()} getBannedUsersByIdFromDB: `, error);
 		return [];
 	}
 }
@@ -25,7 +26,7 @@ export async function setBannedUsersByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setBannedUsersByIdToDB", error);
+		console.log(`${getTimedateNow()} setBannedUsersByIdToDB: `, error);
 		return 0;
 	}
 }

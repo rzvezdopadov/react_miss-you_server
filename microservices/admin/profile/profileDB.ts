@@ -4,7 +4,7 @@ import {
 	IQueryGetAdminProfiles,
 } from "./iprofile";
 import { IProfile } from "../../user/profile/iprofile";
-import { getYearFromAge } from "../../../utils/datetime";
+import { getTimedateNow, getYearFromAge } from "../../../utils/datetime";
 import { conditionStr } from "../../../utils/query";
 import { poolDB } from "../../../db/config";
 import { fieldProfileShort } from "../../user/profile/profileDB";
@@ -20,7 +20,7 @@ export async function getAdminAcctypeByIdFromDB(
 
 		return acctype;
 	} catch (error) {
-		console.log("getAdminAcctypeByIdFromDB", error);
+		console.log(`${getTimedateNow()} getAdminAcctypeByIdFromDB: `, error);
 		return ACCTYPE.user;
 	}
 }
@@ -35,7 +35,7 @@ export async function setAdminAcctypeByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("getAdminAcctypeByIdFromDB", error);
+		console.log(`${getTimedateNow()} getAdminAcctypeByIdFromDB: `, error);
 		return 0;
 	}
 }
@@ -54,7 +54,7 @@ export async function getAdminStatVisitByIdFromDB(
 
 		return answerDB.rows;
 	} catch (error) {
-		console.log("getAdminStatVisitByIdFromDB", error);
+		console.log(`${getTimedateNow()} getAdminStatVisitByIdFromDB: `, error);
 		return [];
 	}
 }
@@ -70,7 +70,7 @@ export async function getAdminBannedByIdFromDB(
 
 		return banned;
 	} catch (error) {
-		console.log("getAdminBannedByIdFromDB", error);
+		console.log(`${getTimedateNow()} getAdminBannedByIdFromDB: `, error);
 		return { timecode: 0, whobanned: "", discription: "" };
 	}
 }
@@ -85,7 +85,7 @@ export async function setAdminBannedByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setAdminBannedByIdToDB", error);
+		console.log(`${getTimedateNow()} setAdminBannedByIdToDB: `, error);
 		return 0;
 	}
 }
@@ -152,7 +152,7 @@ export async function getAdminProfiles(
 
 		return profiles;
 	} catch (error) {
-		console.log("getAdminProfiles", error);
+		console.log(`${getTimedateNow()} getAdminProfiles `, error);
 		return [];
 	}
 }

@@ -1,5 +1,6 @@
 import { poolDB } from "../../../db/config";
 import { getUniQueryFromDB } from "../../../db/uniquery";
+import { getTimedateNow } from "../../../utils/datetime";
 import { IJWT, IProfileRegistration } from "./iauth";
 
 export async function getIdByEmailFromDB(email: string): Promise<string> {
@@ -8,7 +9,7 @@ export async function getIdByEmailFromDB(email: string): Promise<string> {
 			await getUniQueryFromDB(`users`, [`userid`], [`email = '${email}'`])
 		)[0].userid;
 	} catch (error) {
-		console.log("getIdByEmailFromDB:", error);
+		console.log(`${getTimedateNow()} getIdByEmailFromDB: `, error);
 		return "";
 	}
 }
@@ -23,7 +24,7 @@ export async function getPasswordByIdFromDB(ourId: string): Promise<string> {
 			)
 		)[0].password;
 	} catch (error) {
-		console.log("getPasswordByIdFromDB:", error);
+		console.log(`${getTimedateNow()} getPasswordByIdFromDB: `, error);
 		return "";
 	}
 }
@@ -39,7 +40,7 @@ export async function setPasswordByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setPasswordByIdToDB:", error);
+		console.log(`${getTimedateNow()} `, "setPasswordByIdToDB:", error);
 		return "";
 	}
 }
@@ -54,7 +55,7 @@ export async function getJWTFromDB(ourId: string): Promise<IJWT[]> {
 
 		return undefined;
 	} catch (error) {
-		console.log("getJWTFromDB:", error);
+		console.log(`${getTimedateNow()} getJWTFromDB: `, error);
 		return undefined;
 	}
 }
@@ -70,7 +71,7 @@ export async function setJWTToDB(ourId: string, jwts: IJWT[]): Promise<number> {
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setJWTToDB:", error);
+		console.log(`${getTimedateNow()} setJWTToDB: `, error);
 		return 0;
 	}
 }
@@ -130,7 +131,7 @@ export async function createProfileToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("createProfileToDB", error);
+		console.log(`${getTimedateNow()} createProfileToDB: `, error);
 		return 0;
 	}
 }

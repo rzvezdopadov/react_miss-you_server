@@ -1,4 +1,5 @@
 import { poolDB } from "../../../db/config";
+import { getTimedateNow } from "../../../utils/datetime";
 
 export async function getFavoriteUsersByIdFromDB(
 	userId: string
@@ -9,7 +10,7 @@ export async function getFavoriteUsersByIdFromDB(
 
 		return answerDB.rows[0].favoriteusers;
 	} catch (error) {
-		console.log("getFavoriteUsersByIdFromDB", error);
+		console.log(`${getTimedateNow()} getFavoriteUsersByIdFromDB: `, error);
 		return [];
 	}
 }
@@ -25,7 +26,7 @@ export async function setFavoriteUsersByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setFavoriteUsersByIdToDB", error);
+		console.log(`${getTimedateNow()} setFavoriteUsersByIdToDB: `, error);
 		return 0;
 	}
 }

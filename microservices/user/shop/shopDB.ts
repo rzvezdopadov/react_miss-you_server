@@ -1,5 +1,6 @@
 import { poolDB } from "../../../db/config";
 import { getUniQueryFromDB } from "../../../db/uniquery";
+import { getTimedateNow } from "../../../utils/datetime";
 import { SHOP_TARIFFS } from "./ishop";
 import { ITariff, PAID_PROPERTY } from "./paid/ipaid";
 
@@ -13,7 +14,7 @@ export async function getTariffsShopFromDB(
 
 		return answerDB;
 	} catch (error) {
-		console.log("getTariffsShopFromDB:", error);
+		console.log(`${getTimedateNow()} getTariffsShopFromDB: `, error);
 		return undefined;
 	}
 }
@@ -31,7 +32,7 @@ export async function setTariffsShopToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setTariffsShopToDB:", error);
+		console.log(`${getTimedateNow()} setTariffsShopToDB: `, error);
 		return 0;
 	}
 }

@@ -1,5 +1,6 @@
 import { poolDB } from "../../../../db/config";
 import { getUniQueryFromDB } from "../../../../db/uniquery";
+import { getTimedateNow } from "../../../../utils/datetime";
 import { IPaid, ITariff, PAID_PROPERTY } from "./ipaid";
 
 export async function getPaidByIdFromDB(ourId: string): Promise<IPaid> {
@@ -10,7 +11,7 @@ export async function getPaidByIdFromDB(ourId: string): Promise<IPaid> {
 
 		return answerDB;
 	} catch (error) {
-		console.log("getPaidByIdFromDB", error);
+		console.log(`${getTimedateNow()} getPaidByIdFromDB: `, error);
 		return undefined;
 	}
 }
@@ -26,7 +27,7 @@ export async function setPaidByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setPaidByIdToDB", error);
+		console.log(`${getTimedateNow()} setPaidByIdToDB: `, error);
 		return 0;
 	}
 }
@@ -59,8 +60,7 @@ export async function insertPaidTariffToDB(
 
 		return paid.length;
 	} catch (error) {
-		console.log("insertPaidByIdToDB", error);
-
+		console.log(`${getTimedateNow()} insertPaidByIdToDB: `, error);
 		return 0;
 	}
 }

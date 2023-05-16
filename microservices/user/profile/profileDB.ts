@@ -5,7 +5,11 @@ import {
 	IProfileShortBase,
 	IProfileShortForDialog,
 } from "./iprofile";
-import { getTimecodeNow, getYearFromAge } from "../../../utils/datetime";
+import {
+	getTimecodeNow,
+	getTimedateNow,
+	getYearFromAge,
+} from "../../../utils/datetime";
 import { conditionStr } from "../../../utils/query";
 import { poolDB } from "../../../db/config";
 import { ACCTYPE } from "../../role/role";
@@ -30,7 +34,7 @@ export async function getProfileByIdFromDB(userid: string): Promise<IProfile> {
 
 		return answerDB.rows[0];
 	} catch (error) {
-		console.log("getProfileByIdFromDB", error);
+		console.log(`${getTimedateNow()} getProfileByIdFromDB: `, error);
 		return undefined;
 	}
 }
@@ -98,7 +102,7 @@ async function createCondForSearchProfiles(
 
 		return queryStr + queryStrFinal;
 	} catch (error) {
-		console.error("createCondForSearchProfile", error);
+		console.log(`${getTimedateNow()} createCondForSearchProfile: `, error);
 		return queryStrFinal;
 	}
 }
@@ -155,7 +159,7 @@ export async function getProfilesShortFromDB(
 
 		return profiles;
 	} catch (error) {
-		console.log("getProfilesShortFromDB", error);
+		console.log(`${getTimedateNow()} getProfilesShortFromDB: `, error);
 		return [];
 	}
 }
@@ -216,7 +220,10 @@ export async function getProfilesShortForLikesFromDB(
 
 		return profiles;
 	} catch (error) {
-		console.log("getProfilesShortForLikesFromDB", error);
+		console.log(
+			`${getTimedateNow()} getProfilesShortForLikesFromDB: `,
+			error
+		);
 		return [];
 	}
 }
@@ -278,7 +285,10 @@ export async function getProfilesShortForFavoriteUsersFromDB(
 
 		return profiles;
 	} catch (error) {
-		console.log("getProfilesShortForFavoriteUsersFromDB", error);
+		console.log(
+			`${getTimedateNow()} getProfilesShortForFavoriteUsersFromDB: `,
+			error
+		);
 		return [];
 	}
 }
@@ -308,7 +318,7 @@ export async function getProfilesForDialogsFromDB(
 
 		return answerDB.rows;
 	} catch (error) {
-		console.log("getProfilesForDialogsFromDB", error);
+		console.log(`${getTimedateNow()} getProfilesForDialogsFromDB: `, error);
 		return [];
 	}
 }
@@ -352,7 +362,7 @@ export async function setProfileByIdToDB(
 			profile.idontlikecharacter,
 		]);
 	} catch (error) {
-		console.log("setProfileByIdToDB", error);
+		console.log(`${getTimedateNow()} setProfileByIdToDB: `, error);
 		return undefined;
 	}
 
@@ -360,7 +370,7 @@ export async function setProfileByIdToDB(
 		const newProfile = await getProfileByIdFromDB(ourId);
 		return newProfile;
 	} catch (error) {
-		console.log("setProfileByIdToDB get:", error);
+		console.log(`${getTimedateNow()} setProfileByIdToDB get: `, error);
 		return undefined;
 	}
 }
@@ -376,7 +386,7 @@ export async function getProfileCashByIdFromDB(
 
 		return cash;
 	} catch (error) {
-		console.log("getProfileCashByIdFromDB", error);
+		console.log(`${getTimedateNow()} getProfileCashByIdFromDB: `, error);
 		return 0;
 	}
 }
@@ -391,7 +401,7 @@ export async function setProfileCashByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setProfileCashByIdToDB", error);
+		console.log(`${getTimedateNow()} setProfileCashByIdToDB: `, error);
 		return 0;
 	}
 }
@@ -407,7 +417,7 @@ export async function getProfileRatingByIdFromDB(
 
 		return rating;
 	} catch (error) {
-		console.log("getProfileRatingByIdFromDB", error);
+		console.log(`${getTimedateNow()} getProfileRatingByIdFromDB: `, error);
 		return 0;
 	}
 }
@@ -422,7 +432,7 @@ export async function setProfileRatingByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setProfileRatingByIdToDB", error);
+		console.log(`${getTimedateNow()} setProfileRatingByIdToDB: `, error);
 		return 0;
 	}
 }
@@ -438,7 +448,10 @@ export async function getProfileStickerpacksByIdFromDB(
 
 		return stickerpacks;
 	} catch (error) {
-		console.log("getProfileStickerpacksByIdFromDB", error);
+		console.log(
+			`${getTimedateNow()} getProfileStickerpacksByIdFromDB: `,
+			error
+		);
 		return [];
 	}
 }
@@ -453,7 +466,10 @@ export async function setProfileStickerpacksByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setProfileStickerpacksByIdToDB", error);
+		console.log(
+			`${getTimedateNow()} setProfileStickerpacksByIdToDB: `,
+			error
+		);
 		return 0;
 	}
 }
@@ -469,7 +485,10 @@ export async function getProfileDeleteAccByIdFromDB(
 
 		return deleteacc;
 	} catch (error) {
-		console.log("getProfileDeleteAccByIdFromDB", error);
+		console.log(
+			`${getTimedateNow()} getProfileDeleteAccByIdFromDB: `,
+			error
+		);
 		return 0;
 	}
 }
@@ -484,7 +503,7 @@ export async function setProfileDeleteAccByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setProfileDeleteAccByIdToDB", error);
+		console.log(`${getTimedateNow()} setProfileDeleteAccByIdToDB: `, error);
 		return 0;
 	}
 }

@@ -1,4 +1,5 @@
 import { poolDB } from "../../../db/config";
+import { getTimedateNow } from "../../../utils/datetime";
 import { IPhotos } from "./iimages";
 
 export async function getPhotosByIdFromDB(ourId: string): Promise<IPhotos> {
@@ -8,7 +9,7 @@ export async function getPhotosByIdFromDB(ourId: string): Promise<IPhotos> {
 
 		return answerDB.rows[0];
 	} catch (error) {
-		console.log("getPhotosByIdFromDB", error);
+		console.log(`${getTimedateNow()} getPhotosByIdFromDB: `, error);
 		return undefined;
 	}
 }
@@ -28,7 +29,7 @@ export async function setPhotosByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setPhotosByIdToDB", error);
+		console.log(`${getTimedateNow()} setPhotosByIdToDB: `, error);
 		return 0;
 	}
 }

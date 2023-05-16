@@ -1,4 +1,5 @@
 import { poolDB } from "../../../db/config";
+import { getTimedateNow } from "../../../utils/datetime";
 
 export async function getLikesByIdFromDB(userId: string): Promise<string[]> {
 	try {
@@ -7,7 +8,7 @@ export async function getLikesByIdFromDB(userId: string): Promise<string[]> {
 
 		return answerDB.rows[0].likes;
 	} catch (error) {
-		console.log("getProfileByIdFromDB", error);
+		console.log(`${getTimedateNow()} getLikesByIdFromDB: `, error);
 		return [];
 	}
 }
@@ -23,7 +24,7 @@ export async function setLikesByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setLikesByIdFromDB", error);
+		console.log(`${getTimedateNow()} setLikesByIdToDB: `, error);
 		return 0;
 	}
 }

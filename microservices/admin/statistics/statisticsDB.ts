@@ -1,5 +1,5 @@
 import { poolDB } from "../../../db/config";
-import { getTimecodeNow } from "../../../utils/datetime";
+import { getTimecodeNow, getTimedateNow } from "../../../utils/datetime";
 import { IStatisticsVisit } from "./istatistics";
 
 export async function setVisitByIdToDB(
@@ -15,7 +15,7 @@ export async function setVisitByIdToDB(
 
 		return answerDB.rowCount;
 	} catch (error) {
-		console.log("setVisitByIdToDB", error);
+		console.log(`${getTimedateNow()} setVisitByIdToDB: `, error);
 
 		return 0;
 	}
@@ -33,8 +33,7 @@ export async function getVisitByIdFromDB(
 
 		return answerDB.rows[0];
 	} catch (error) {
-		console.log("getVisitByIdFromDB", error);
-
+		console.log(`${getTimedateNow()} getVisitByIdFromDB: `, error);
 		return undefined;
 	}
 }
@@ -49,7 +48,7 @@ export async function setTimecodeToDB(ourId: string): Promise<number> {
 
 		return timecode;
 	} catch (error) {
-		console.log("setTimecodeToDB:", error);
+		console.log(`${getTimedateNow()} setTimecodeToDB: `, error);
 		return 0;
 	}
 }

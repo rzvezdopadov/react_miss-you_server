@@ -1,5 +1,5 @@
 import { poolDB } from "../../../db/config";
-import { getTimecodeNow } from "../../../utils/datetime";
+import { getTimecodeNow, getTimedateNow } from "../../../utils/datetime";
 import { COMPLAINTSTATUS, COMPLAINTTYPE, IComplaintBase } from "./icomplaints";
 
 export async function getComplaintByIdFromDB(
@@ -19,7 +19,7 @@ export async function getComplaintByIdFromDB(
 
 		return answerDB.rows[0];
 	} catch (error) {
-		console.log("getComplaintByIdFromDB", error);
+		console.log(`${getTimedateNow()} getComplaintByIdFromDB: `, error);
 		return undefined;
 	}
 }
@@ -71,7 +71,7 @@ export async function setComplaintByIdToDB(
 			return answerDB.rowCount;
 		}
 	} catch (error) {
-		console.log("setComplaintByIdToDB", error);
+		console.log(`${getTimedateNow()} setComplaintByIdToDB: `, error);
 		return 0;
 	}
 }
@@ -90,7 +90,7 @@ export async function getComplaintsByIdFromDB(
 
 		return answerDB.rows;
 	} catch (error) {
-		console.log("getComplaintsByIdFromDB", error);
+		console.log(`${getTimedateNow()} getComplaintsByIdFromDB: `, error);
 		return [];
 	}
 }
