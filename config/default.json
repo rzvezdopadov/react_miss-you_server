@@ -7,6 +7,8 @@
     "saltpass": 4,
     "httpPort": 5000,
     "httpsPort": 5443,
+    "httpPortAdmin": 4000,
+    "httpsPortAdmin": 4443,
     "socketPort": 8000,
     "emailUser": "service.miss.you@gmail.com",
     "emailPass": "5615615113",
