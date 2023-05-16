@@ -35,11 +35,11 @@ import { ACCTYPE } from "../../role/role";
 import {
 	data_gender,
 	data_genderVapor,
-	data_location,
 	data_growth,
 	data_age,
 } from "../../user/profile/profileData";
 import { normalizeString } from "../../../utils/normalize";
+import { townsData } from "../towns/townsData";
 
 const bcrypt = require("bcryptjs");
 const config = require("config");
@@ -72,7 +72,7 @@ export async function queryRegistration(req, res) {
 		)
 			return answerStatus400(res, "Неверно задано поле 'Кого ищу?'!");
 
-		if (!data_location.includes(registration.location))
+		if (!townsData.includes(registration.location))
 			return answerStatus400(res, "Неверно задано поле 'Локация'!");
 
 		if (

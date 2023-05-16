@@ -9,7 +9,6 @@ import {
 	data_growth,
 	data_iDontLikeСharacter,
 	data_iLikeСharacter,
-	data_location,
 	data_maritalStatus,
 	data_profit,
 	data_religion,
@@ -35,6 +34,7 @@ import {
 	interests,
 } from "./usersData";
 import { ACCTYPE } from "../../role/role";
+import { townsData } from "../../all/towns/townsData";
 
 const config = require("config");
 const bcrypt = require("bcryptjs");
@@ -66,7 +66,7 @@ const fakeUsersGenerate = async (
 			registrationdate: timecodeNow,
 			timecode: timecodeNow,
 			name: "Служба поддержки",
-			location: data_location[0],
+			location: townsData[0],
 			likes: [],
 			favoriteusers: [],
 			bannedusers: [],
@@ -98,7 +98,7 @@ const fakeUsersGenerate = async (
 			rating: 1000000,
 			cash: 1000000,
 			filters: {
-				location: data_location[0],
+				location: townsData[0],
 				agestart: data_age[0],
 				ageend: data_age[data_age.length - 1],
 				growthstart: data_growth[0],
