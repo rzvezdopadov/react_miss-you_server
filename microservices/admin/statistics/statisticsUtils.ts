@@ -21,7 +21,11 @@ export async function setVisitById(
 			};
 
 			statistics.visit.push(statVisit);
-		} else if (type === SOCKET_TYPE_OC.closed) {
+		} else if (
+			statistics &&
+			statistics.visit &&
+			type === SOCKET_TYPE_OC.closed
+		) {
 			const visitPos = statistics.visit.findIndex(
 				(visit) => visit.key === key
 			);

@@ -33,7 +33,7 @@ export const testToken = async (jwt: string) => {
 
 		const token = await getJWTFromDB(userId);
 
-		if (!token.length) return false;
+		if (!token || !token.length) return false;
 
 		for (let i = 0; i < token.length; i++) {
 			if (token[i].token === jwt) {
