@@ -1,4 +1,5 @@
 export function normalizeString(str: string): string {
+	if (!str) return "";
 	if (typeof str !== "string") return "";
 
 	str = str.replace(/[' ']/g, "");
