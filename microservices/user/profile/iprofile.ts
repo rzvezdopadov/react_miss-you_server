@@ -26,8 +26,10 @@ export interface IProfile {
 	timecode: number;
 	name: string;
 	location: string;
+	phone: string;
 	likes: string[];
 	favoriteusers: string[];
+	privateselections: string[];
 	bannedusers: string[];
 	presents: IPresent[];
 	achivments: IAchivment[];
@@ -60,6 +62,7 @@ export interface IProfile {
 	acctype: ACCTYPE;
 	paid: IPaid;
 	deleteacc: number;
+	referral: string;
 }
 
 export interface IProfileShortBase {

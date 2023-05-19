@@ -17,7 +17,9 @@ export interface IProfileRegistration extends IProfile {
 	registrationdate: number;
 	visit: IStatVisit[];
 	banned: IAdminBanned;
-	referral: string;
+	temppasscode: string;
+	verifiacc: number;
+	verifiacccode: string;
 }
 
 export interface IRegistration {
