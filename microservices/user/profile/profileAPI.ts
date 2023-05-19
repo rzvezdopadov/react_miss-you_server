@@ -108,7 +108,7 @@ export async function queryGetProfile(req, res) {
 
 			profile.cash = 0;
 			profile.favoriteusers = [];
-
+			profile.privateselections = [];
 			let bannedusers = [];
 			if (profile.bannedusers.includes(jwtDecode.userId))
 				bannedusers.push(jwtDecode.userId);
@@ -116,6 +116,7 @@ export async function queryGetProfile(req, res) {
 			profile.achivments = [];
 			profile.presents = [];
 			profile.paid = undefined;
+			profile.referral = "";
 			profile.deleteacc = 0;
 		} else {
 			profile.paid = testPaidOnOverflow(profile.paid);

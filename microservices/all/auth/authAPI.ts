@@ -25,6 +25,7 @@ import {
 import { isBannedUser } from "../../../utils/banned";
 import {
 	getTimecodeNow,
+	TIMECODE_DAY,
 	TIMECODE_MONTH,
 	TIMECODE_WEEK,
 } from "../../../utils/datetime";
@@ -106,8 +107,10 @@ export async function queryRegistration(req, res) {
 			timecode: timecode,
 			name: registration.name,
 			location: registration.location,
+			phone: "",
 			likes: [],
 			favoriteusers: [],
+			privateselections: [],
 			bannedusers: [],
 			presents: [],
 			achivments: [],
@@ -163,10 +166,13 @@ export async function queryRegistration(req, res) {
 			paid: {
 				messageswrite: {
 					enabled: true,
-					timecode: timecode + TIMECODE_MONTH,
+					timecode: timecode + 3 * TIMECODE_MONTH,
 				},
 				messagesread: { enabled: false, timecode: 0 },
-				longfilters: { enabled: false, timecode: 0 },
+				longfilters: {
+					enabled: true,
+					timecode: timecode + 2 * TIMECODE_MONTH,
+				},
 				filtersvapors: { enabled: false, timecode: 0 },
 				longfiltersvapors: { enabled: false, timecode: 0 },
 				filtersfavoriteusers: { enabled: false, timecode: 0 },
@@ -188,16 +194,20 @@ export async function queryRegistration(req, res) {
 				historymessages300: { enabled: false, timecode: 0 },
 			},
 			stickerpacks: [],
-			referral: registration.referral,
+			referral: registration.referral ? registration.referral : "",
 			deleteacc: 0,
+			temppasscode: "",
+			verifiacc: getTimecodeNow() + TIMECODE_DAY,
+			verifiacccode: getRandomString(30),
 		};
 
 		const isReg = await createProfileToDB(profile);
 
 		if (isReg)
-			return res
-				.status(201)
-				.json({ message: "Пользователь успешно создан!" });
+			return res.status(201).json({
+				message:
+					"Пользователь успешно создан! Активируйте аккаунт через свой Email!",
+			});
 
 		return answerStatus400(res, "Возникла ошибка при регистрации!");
 	} catch (error) {

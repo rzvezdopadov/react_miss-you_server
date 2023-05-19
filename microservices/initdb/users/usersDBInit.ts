@@ -20,10 +20,15 @@ import { poolDB } from "../../../db/config";
 import {
 	TIMECODE_DAY,
 	TIMECODE_MONTH,
+	TIMECODE_YEAR,
 	getTimecodeNow,
 } from "../../../utils/datetime";
 import { getSignZodiac } from "../../../utils/signzodiac";
-import { getRandomInteger, getUniqueIntegerArr } from "../../../utils/random";
+import {
+	getRandomInteger,
+	getRandomString,
+	getUniqueIntegerArr,
+} from "../../../utils/random";
 import {
 	fakeNamesMan,
 	fakeNamesWoman,
@@ -67,8 +72,10 @@ const fakeUsersGenerate = async (
 			timecode: timecodeNow,
 			name: "Служба поддержки",
 			location: townsData[0],
+			phone: "",
 			likes: [],
 			favoriteusers: [],
+			privateselections: [],
 			bannedusers: [],
 			presents: [],
 			achivments: [],
@@ -146,6 +153,9 @@ const fakeUsersGenerate = async (
 			stickerpacks: [],
 			referral: "",
 			deleteacc: 0,
+			temppasscode: "",
+			verifiacc: getTimecodeNow() + TIMECODE_YEAR * 50,
+			verifiacccode: getRandomString(30),
 		};
 
 		fakePerson.signzodiac = getSignZodiac(
@@ -324,8 +334,8 @@ const fakeQueryStringUsersGenerate = async (
 				"INSERT INTO users (" +
 				"email, password, jwt, " +
 				"userid, coordinates, registrationdate, " +
-				"timecode, name, location, likes, " +
-				"favoriteusers, bannedusers, presents, achivments, " +
+				"timecode, name, location, phone, likes, " +
+				"favoriteusers, privateselections, bannedusers, presents, achivments, " +
 				"birthday, monthofbirth, yearofbirth, " +
 				"growth, weight, " +
 				"gender, gendervapor, " +
@@ -341,14 +351,15 @@ const fakeQueryStringUsersGenerate = async (
 				"stickerpacks, " +
 				"rating, cash, acctype, " +
 				"banned, " +
-				"visit, paid, referral, deleteacc" +
+				"visit, paid, referral, deleteacc, temppasscode, " +
+				"verifiacc, verifiacccode" +
 				") VALUES (" +
 				`'${fakeUser.email}', '${fakeUser.password}', ARRAY [] :: JSON [], ` +
 				`'${fakeUser.userid}', ARRAY [] :: JSON[], ${fakeUser.registrationdate}, ` +
-				`${fakeUser.timecode}, '${fakeUser.name}', '${fakeUser.location}', ` +
+				`${fakeUser.timecode}, '${fakeUser.name}', '${fakeUser.location}', '${fakeUser.phone}', ` +
 				`${arrQueryStr(fakeUser.likes)}, ${arrQueryStr(
 					fakeUser.favoriteusers
-				)}, ${arrQueryStr(
+				)}, ${arrQueryStr(fakeUser.privateselections)}, ${arrQueryStr(
 					fakeUser.bannedusers
 				)}, ARRAY [] :: JSON [], ARRAY [] :: JSON [], ` +
 				`${fakeUser.birthday}, ${fakeUser.monthofbirth}, ${fakeUser.yearofbirth}, ` +
@@ -371,8 +382,9 @@ const fakeQueryStringUsersGenerate = async (
 				`ARRAY [] :: JSON [], '${JSON.stringify(
 					fakeUser.paid
 				)}' :: JSON, ` +
-				`'${fakeUser.referral}', ${fakeUser.deleteacc}` +
-				")";
+				`'${fakeUser.referral}', ${fakeUser.deleteacc}, '${fakeUser.temppasscode}', ` +
+				`${fakeUser.verifiacc}, '${fakeUser.verifiacccode}'` +
+				`)`;
 
 			return strQuery;
 		});
@@ -397,8 +409,10 @@ export async function initDBUsers(): Promise<boolean> {
                 timecode BIGINT,
                 name TEXT,
                 location TEXT,
+				phone TEXT,
                 likes TEXT[],
 				favoriteusers TEXT[],
+				privateselections TEXT[],
 				bannedusers TEXT[],
 				presents JSON[], 
 				achivments JSON[], 
@@ -433,7 +447,10 @@ export async function initDBUsers(): Promise<boolean> {
                 visit JSON[],
                 paid JSON,
 				referral TEXT,
-				deleteacc BIGINT
+				deleteacc BIGINT,
+				temppasscode TEXT,
+				verifiacc BIGINT,
+				verifiacccode TEXT
             );
         `;
 

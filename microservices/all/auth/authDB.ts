@@ -5,9 +5,15 @@ import { IJWT, IProfileRegistration } from "./iauth";
 
 export async function getIdByEmailFromDB(email: string): Promise<string> {
 	try {
-		return (
-			await getUniQueryFromDB(`users`, [`userid`], [`email = '${email}'`])
-		)[0].userid;
+		const answer = await getUniQueryFromDB(
+			`users`,
+			[`userid`],
+			[`email = '${email}'`]
+		);
+
+		if (answer[0] && answer[0].userid) return answer[0].userid;
+
+		return "";
 	} catch (error) {
 		console.log(`${getTimedateNow()} getIdByEmailFromDB: `, error);
 		return "";
@@ -86,7 +92,8 @@ export async function createProfileToDB(
 			"INSERT INTO users (" +
 			"email, password, jwt, " +
 			"userid, coordinates, registrationdate, " +
-			"timecode, name, location, likes, " +
+			"timecode, name, location, phone, likes, " +
+			"favoriteusers, privateselections, bannedusers, presents, achivments," +
 			"birthday, monthofbirth, yearofbirth, " +
 			"growth, weight, " +
 			"gender, gendervapor, " +
@@ -102,11 +109,13 @@ export async function createProfileToDB(
 			"stickerpacks, " +
 			"rating, cash, acctype, " +
 			"banned, " +
-			"visit, paid, deleteacc" +
+			"visit, paid, referral, deleteacc, temppasscode, " +
+			"verifiacc, verifiacccode" +
 			") VALUES (" +
 			`'${profile.email}', '${profile.password}', ARRAY [] :: JSON [], ` +
-			`'${profile.userid}', ARRAY [] :: JSON[], ${profile.registrationdate}, ` +
-			`${profile.timecode}, '${profile.name}', '${profile.location}', ARRAY [] :: TEXT [], ` +
+			`'${profile.userid}', ARRAY [] :: JSON [], ${profile.registrationdate}, ` +
+			`${profile.timecode}, '${profile.name}', '${profile.location}', '${profile.phone}', ARRAY [] :: TEXT [], ` +
+			`ARRAY [] :: TEXT [], ARRAY [] :: TEXT [], ARRAY [] :: TEXT [], ARRAY [] :: JSON [], ARRAY [] :: JSON [], ` +
 			`${profile.birthday}, ${profile.monthofbirth}, ${profile.yearofbirth}, ` +
 			`${profile.growth}, ${profile.weight}, ` +
 			`${profile.gender}, ${profile.gendervapor}, ` +
@@ -122,10 +131,10 @@ export async function createProfileToDB(
 			`ARRAY [] :: TEXT [], ` +
 			`${profile.rating}, ${profile.cash}, '${profile.acctype}', ` +
 			`'${JSON.stringify(profile.banned)}' :: JSON, ` +
-			`ARRAY [] :: JSON [], '${JSON.stringify(profile.paid)}' :: JSON, ${
-				profile.deleteacc
-			}`;
-		(")");
+			`ARRAY [] :: JSON [], '${JSON.stringify(profile.paid)}' :: JSON, ` +
+			`'${profile.referral}', ${profile.deleteacc}, '${profile.temppasscode}', ` +
+			`${profile.verifiacc}, '${profile.verifiacccode}'` +
+			")";
 
 		answerDB = await poolDB.query(queryStr);
 
@@ -133,5 +142,42 @@ export async function createProfileToDB(
 	} catch (error) {
 		console.log(`${getTimedateNow()} createProfileToDB: `, error);
 		return 0;
+	}
+}
+
+export async function getIdByTemppasscodeDB(
+	temppasscode: string
+): Promise<string> {
+	try {
+		const answerDB = await getUniQueryFromDB(
+			`users`,
+			[`id`],
+			[`temppasscode = '${temppasscode}'`]
+		);
+
+		if (answerDB[0] && answerDB[0].id) {
+			return answerDB[0].id;
+		}
+
+		return "";
+	} catch (error) {
+		console.log(`${getTimedateNow()} getIdByTemppasscodeDB: `, error);
+		return "";
+	}
+}
+
+export async function setTemppasscodeByIdToDB(
+	ourId: string,
+	temppasscode: string
+): Promise<string> {
+	try {
+		const answerDB = await poolDB.query(
+			`UPDATE users SET temppasscode = '${temppasscode}' WHERE userid = '${ourId}'`
+		);
+
+		return answerDB.rowCount;
+	} catch (error) {
+		console.log(`${getTimedateNow()} `, "setTemppasscodeByIdToDB:", error);
+		return "";
 	}
 }
