@@ -4,9 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "tsc && nodemon server/app.js",
+    "start": "tsc && nodemon --watch './**/*.ts' --exec ts-node app.ts",
     "build": "tsc",
-    "server": "tsc && node server/app.js",
+    "production": "tsc && node server/app.js",
     "test": "jest --watchAll"
   },
   "jest": {
@@ -42,7 +42,6 @@
     "jest": "^29.3.1",
     "jsonwebtoken": "^8.5.1",
     "nodemailer": "^6.9.0",
-    "nodemon": "^2.0.19",
     "pg": "^8.8.0",
     "react-scripts": "^5.0.1",
     "socket.io": "^4.5.4",
@@ -53,6 +52,8 @@
     "@types/express": "^4.17.13",
     "@types/jest": "^29.2.5",
     "@types/node": "^18.7.1",
-    "ts-jest": "^29.0.3"
+    "nodemon": "^2.0.22",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1"
   }
 }
