@@ -211,7 +211,13 @@ export async function queryAdminGetProfile(req, res) {
 		const QueryGetProfiles: IQueryGetProfile = req.query;
 		const userid = normalizeString(QueryGetProfiles.userid);
 
-		const profile = await getProfileByIdFromDB(userid);
+		let userIdNew = userid;
+
+		if (userIdNew === "0") {
+			userIdNew = jwtDecode.userId;
+		}
+
+		const profile = await getProfileByIdFromDB(userIdNew);
 
 		return res.status(200).json(profile);
 	} catch (error) {
