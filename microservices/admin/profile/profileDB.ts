@@ -88,7 +88,7 @@ export async function setBannedByIdToDB(
 	}
 }
 
-export async function getProfilesFromDB(
+export async function getProfilesShortFromDB(
 	QueryGetProfiles: IQueryGetAdminProfiles
 ): Promise<IProfile[]> {
 	const startPos = Number(QueryGetProfiles.startcount);

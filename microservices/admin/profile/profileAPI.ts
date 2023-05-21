@@ -3,7 +3,7 @@ import {
 	IQueryGetProfile,
 } from "../../user/profile/iprofile";
 import {
-	getProfilesFromDB,
+	getProfilesShortFromDB,
 	getStatVisitByIdFromDB,
 	setAcctypeByIdToDB,
 	setBannedByIdToDB,
@@ -66,7 +66,7 @@ export async function queryGetProfilesShort(req, res) {
 			getAdminProfilesVal.filters = filtersParse;
 		}
 
-		const profiles = await getProfilesFromDB(getAdminProfilesVal);
+		const profiles = await getProfilesShortFromDB(getAdminProfilesVal);
 
 		const newProfiles: IProfileShortOutput[] = [];
 
