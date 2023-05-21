@@ -1,10 +1,12 @@
-import { IQueryGetProfile } from "../../user/profile/iprofile";
 import {
-	getAdminAcctypeByIdFromDB,
-	getAdminProfiles,
-	getAdminStatVisitByIdFromDB,
-	setAdminAcctypeByIdToDB,
-	setAdminBannedByIdToDB,
+	IProfileShortOutput,
+	IQueryGetProfile,
+} from "../../user/profile/iprofile";
+import {
+	getProfilesFromDB,
+	getStatVisitByIdFromDB,
+	setAcctypeByIdToDB,
+	setBannedByIdToDB,
 } from "./profileDB";
 import {
 	getProfileByIdFromDB,
@@ -13,7 +15,13 @@ import {
 	setProfileCashByIdToDB,
 	setProfileRatingByIdToDB,
 } from "../../user/profile/profileDB";
-import { getTimecodeNow } from "../../../utils/datetime";
+import {
+	TIMECODE_DAY,
+	TIMECODE_HOUR,
+	TIMECODE_MINUTE,
+	TIMECODE_MONTH,
+	getTimecodeNow,
+} from "../../../utils/datetime";
 import {
 	IQueryDeleteAdminPhoto,
 	IQueryGetAdminProfiles,
@@ -22,7 +30,6 @@ import {
 import {
 	answerStatus200,
 	answerStatus400,
-	answerStatusAccessDenied,
 	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../../utils/answerstatus";
@@ -32,7 +39,7 @@ import { deletePhoto } from "../../all/images/imagesUtils";
 import { normalizeNumber, normalizeString } from "../../../utils/normalize";
 import { isCandidateType } from "../../all/auth/authUtils";
 
-export async function queryAdminGetProfiles(req, res) {
+export async function queryGetProfilesShort(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
 		jwt = normalizeString(jwt);
@@ -59,7 +66,26 @@ export async function queryAdminGetProfiles(req, res) {
 			getAdminProfilesVal.filters = filtersParse;
 		}
 
-		const profiles = await getAdminProfiles(getAdminProfilesVal);
+		const profiles = await getProfilesFromDB(getAdminProfilesVal);
+
+		const newProfiles: IProfileShortOutput[] = [];
+
+		profiles.forEach((profile) => {
+			const newProfile: IProfileShortOutput = {
+				userid: profile.userid,
+				timecode: profile.timecode,
+				name: profile.name,
+				birthday: profile.birthday,
+				monthofbirth: profile.monthofbirth,
+				yearofbirth: profile.yearofbirth,
+				gender: profile.gender,
+				photolink: profile.photolink[profile.photomain],
+				interests: profile.interests,
+				rating: profile.rating,
+			};
+
+			newProfiles.push(newProfile);
+		});
 
 		return res.status(200).json(profiles);
 	} catch (error) {
@@ -67,7 +93,7 @@ export async function queryAdminGetProfiles(req, res) {
 	}
 }
 
-export async function queryAdminGetVisit(req, res) {
+export async function queryGetVisit(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
 		jwt = normalizeString(jwt);
@@ -82,7 +108,7 @@ export async function queryAdminGetVisit(req, res) {
 		let { userid } = req.body;
 		userid = normalizeString(userid);
 
-		const statVisit = await getAdminStatVisitByIdFromDB(userid);
+		const statVisit = await getStatVisitByIdFromDB(userid);
 
 		return res.status(200).json(statVisit);
 	} catch (error) {
@@ -90,7 +116,7 @@ export async function queryAdminGetVisit(req, res) {
 	}
 }
 
-export async function queryAdminSetAcctype(req, res) {
+export async function querySetAcctype(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
 		jwt = normalizeString(jwt);
@@ -106,7 +132,7 @@ export async function queryAdminSetAcctype(req, res) {
 			req.body;
 		userid = normalizeString(userid);
 
-		const acctypeResult = await setAdminAcctypeByIdToDB(userid, acctype);
+		const acctypeResult = await setAcctypeByIdToDB(userid, acctype);
 		if (!acctypeResult) answerStatus400(res, "Данные не были записанны!");
 
 		return answerStatus200(res, "Успешно выполненно!");
@@ -115,7 +141,7 @@ export async function queryAdminSetAcctype(req, res) {
 	}
 }
 
-export async function queryAdminSetRaiting(req, res) {
+export async function querySetRaiting(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
 		jwt = normalizeString(jwt);
@@ -156,7 +182,7 @@ export async function queryAdminSetRaiting(req, res) {
 	}
 }
 
-export async function queryAdminSetCash(req, res) {
+export async function querySetCash(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
 		jwt = normalizeString(jwt);
@@ -196,7 +222,7 @@ export async function queryAdminSetCash(req, res) {
 	}
 }
 
-export async function queryAdminGetProfile(req, res) {
+export async function queryGetProfile(req, res) {
 	try {
 		let { jwt } = req.cookies;
 		jwt = normalizeString(jwt);
@@ -225,7 +251,7 @@ export async function queryAdminGetProfile(req, res) {
 	}
 }
 
-export async function queryAdminSetBanned(req, res) {
+export async function querySetBanned(req, res) {
 	try {
 		let { jwt }: { jwt: string } = req.cookies;
 		jwt = normalizeString(jwt);
@@ -259,11 +285,11 @@ export async function queryAdminSetBanned(req, res) {
 
 		const timecodeBanned =
 			getTimecodeNow() +
-			month * 12 * 24 * 60 * 1000 +
-			hour * 24 * 60 * 1000 +
-			minute * 60 * 1000;
+			month * TIMECODE_MONTH +
+			hour * TIMECODE_HOUR +
+			minute * TIMECODE_MINUTE;
 
-		const answerDB = await setAdminBannedByIdToDB(userid, {
+		const answerDB = await setBannedByIdToDB(userid, {
 			timecode: timecodeBanned,
 			whobanned: ACCTYPE.admin,
 			discription: discription,
@@ -282,7 +308,7 @@ export async function queryAdminSetBanned(req, res) {
 	}
 }
 
-export async function queryAdminDeletePhoto(req, res) {
+export async function queryDeletePhoto(req, res) {
 	try {
 		let { jwt } = req.cookies;
 		jwt = normalizeString(jwt);

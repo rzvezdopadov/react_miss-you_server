@@ -10,9 +10,7 @@ import { poolDB } from "../../../db/config";
 import { fieldProfileShort } from "../../user/profile/profileDB";
 import { ACCTYPE } from "../../role/role";
 
-export async function getAdminAcctypeByIdFromDB(
-	userId: string
-): Promise<ACCTYPE> {
+export async function getAcctypeByIdFromDB(userId: string): Promise<ACCTYPE> {
 	try {
 		const queryStr = `SELECT acctype FROM users WHERE userid = '${userId}'`;
 		const answerDB = await poolDB.query(queryStr);
@@ -25,7 +23,7 @@ export async function getAdminAcctypeByIdFromDB(
 	}
 }
 
-export async function setAdminAcctypeByIdToDB(
+export async function setAcctypeByIdToDB(
 	userId: string,
 	acctype: ACCTYPE
 ): Promise<number> {
@@ -40,7 +38,7 @@ export async function setAdminAcctypeByIdToDB(
 	}
 }
 
-export async function getAdminStatVisitByIdFromDB(
+export async function getStatVisitByIdFromDB(
 	userId?: string
 ): Promise<IAdminStatVisit[]> {
 	try {
@@ -59,7 +57,7 @@ export async function getAdminStatVisitByIdFromDB(
 	}
 }
 
-export async function getAdminBannedByIdFromDB(
+export async function getBannedByIdFromDB(
 	userId: string
 ): Promise<IAdminBanned> {
 	try {
@@ -75,7 +73,7 @@ export async function getAdminBannedByIdFromDB(
 	}
 }
 
-export async function setAdminBannedByIdToDB(
+export async function setBannedByIdToDB(
 	userId: string,
 	banned: IAdminBanned
 ): Promise<number> {
@@ -90,7 +88,7 @@ export async function setAdminBannedByIdToDB(
 	}
 }
 
-export async function getAdminProfiles(
+export async function getProfilesFromDB(
 	QueryGetProfiles: IQueryGetAdminProfiles
 ): Promise<IProfile[]> {
 	const startPos = Number(QueryGetProfiles.startcount);
@@ -152,7 +150,7 @@ export async function getAdminProfiles(
 
 		return profiles;
 	} catch (error) {
-		console.log(`${getTimedateNow()} getAdminProfiles `, error);
+		console.log(`${getTimedateNow()} getAdminProfilesFromDB: `, error);
 		return [];
 	}
 }
