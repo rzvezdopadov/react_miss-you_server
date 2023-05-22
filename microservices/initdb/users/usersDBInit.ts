@@ -83,12 +83,13 @@ const fakeUsersGenerate = async (
 			monthofbirth: 9,
 			yearofbirth: 1990,
 			growth: 186,
-			weight: 90,
+			weight: 0,
 			gender: 0,
 			gendervapor: 2,
 			photomain: 0,
 			photolink: [],
 			signzodiac: 0,
+			goaldate: 0,
 			education: 0,
 			fieldofactivity: 0,
 			maritalstatus: 0,
@@ -112,6 +113,7 @@ const fakeUsersGenerate = async (
 				growthend: data_growth[data_growth.length - 1],
 				weight: 0,
 				signzodiac: 0,
+				goaldate: 0,
 				gendervapor: 2,
 				education: 0,
 				fieldofactivity: 0,
@@ -340,7 +342,7 @@ const fakeQueryStringUsersGenerate = async (
 				"growth, weight, " +
 				"gender, gendervapor, " +
 				"photomain, photolink, " +
-				"signzodiac, education, " +
+				"signzodiac, goaldate, education, " +
 				"fieldofactivity, maritalstatus, " +
 				"children, religion, " +
 				"smoke, alcohol, " +
@@ -366,7 +368,7 @@ const fakeQueryStringUsersGenerate = async (
 				`${fakeUser.growth}, ${fakeUser.weight}, ` +
 				`${fakeUser.gender}, ${fakeUser.gendervapor}, ` +
 				`${fakeUser.photomain}, ${arrQueryStr(fakeUser.photolink)}, ` +
-				`${fakeUser.signzodiac}, ${fakeUser.education}, ` +
+				`${fakeUser.signzodiac}, ${fakeUser.goaldate}, ${fakeUser.education}, ` +
 				`${fakeUser.fieldofactivity}, ${fakeUser.maritalstatus}, ` +
 				`${fakeUser.children}, ${fakeUser.religion}, ` +
 				`${fakeUser.smoke}, ${fakeUser.alcohol}, ` +
@@ -426,6 +428,7 @@ export async function initDBUsers(): Promise<boolean> {
                 photomain INT,
                 photolink TEXT[],
                 signzodiac INT,
+				goaldate INT,
                 education INT,
                 fieldofactivity INT,
                 maritalstatus INT,
