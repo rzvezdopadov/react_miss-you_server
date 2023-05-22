@@ -1,5 +1,5 @@
 import { answerStatusAccessDenied } from "../../../utils/answerstatus";
-import { getAdminAcctypeByIdFromDB } from "../../admin/profile/profileDB";
+import { getAcctypeByIdFromDB } from "../../admin/profile/profileDB";
 import { ACCTYPE } from "../../role/role";
 
 export async function isCandidateType(
@@ -8,7 +8,7 @@ export async function isCandidateType(
 	acctype: ACCTYPE
 ): Promise<boolean> {
 	try {
-		const candidate = await getAdminAcctypeByIdFromDB(userId);
+		const candidate = await getAcctypeByIdFromDB(userId);
 
 		if (candidate !== acctype) {
 			answerStatusAccessDenied(res);
