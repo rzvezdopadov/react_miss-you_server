@@ -3,20 +3,19 @@ import {
 	IQueryGetProfile,
 } from "../../user/profile/iprofile";
 import {
+	getProfileByIdFromDB,
 	getProfilesShortFromDB,
 	getStatVisitByIdFromDB,
 	setAcctypeByIdToDB,
 	setBannedByIdToDB,
 } from "./profileDB";
 import {
-	getProfileByIdFromDB,
 	getProfileCashByIdFromDB,
 	getProfileRatingByIdFromDB,
 	setProfileCashByIdToDB,
 	setProfileRatingByIdToDB,
 } from "../../user/profile/profileDB";
 import {
-	TIMECODE_DAY,
 	TIMECODE_HOUR,
 	TIMECODE_MINUTE,
 	TIMECODE_MONTH,
@@ -87,7 +86,7 @@ export async function queryGetProfilesShort(req, res) {
 			newProfiles.push(newProfile);
 		});
 
-		return res.status(200).json(profiles);
+		return res.status(200).json(newProfiles);
 	} catch (error) {
 		return answerStatusQTDB(res, error);
 	}
