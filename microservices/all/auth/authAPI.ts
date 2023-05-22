@@ -127,6 +127,7 @@ export async function queryRegistration(req, res) {
 				registration.birthday,
 				registration.monthofbirth
 			),
+			goaldate: 0,
 			education: 0,
 			fieldofactivity: 0,
 			maritalstatus: 0,
@@ -149,6 +150,7 @@ export async function queryRegistration(req, res) {
 				growthend: data_growth[data_growth.length - 1],
 				weight: 0,
 				signzodiac: 0,
+				goaldate: 0,
 				gendervapor: registration.gendervapor,
 				education: 0,
 				fieldofactivity: 0,
