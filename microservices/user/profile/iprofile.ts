@@ -43,6 +43,7 @@ export interface IProfile {
 	photomain: number;
 	photolink: string[];
 	signzodiac: number;
+	goaldate: number;
 	education: number;
 	fieldofactivity: number;
 	maritalstatus: number;
@@ -100,6 +101,7 @@ export interface IFilterUsers {
 	growthend: number;
 	weight: number;
 	signzodiac: number;
+	goaldate: number;
 	gendervapor: number;
 	education: number;
 	fieldofactivity: number;
