@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "tsc && nodemon --watch './**/*.ts' --exec ts-node app.ts",
+    "start": "nodemon --watch ./**/*.ts --exec ts-node app.ts",
     "build": "tsc",
     "production": "tsc && node server/app.js",
     "test": "jest --watchAll"
