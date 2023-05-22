@@ -1,5 +1,8 @@
 import { getTimecodeNow } from "../../utils/datetime";
-import { setAdminBannedByIdToDB } from "../admin/profile/profileDB";
+import {
+	getAcctypeByIdFromDB,
+	setBannedByIdToDB,
+} from "../admin/profile/profileDB";
 import { getBannedUsersByIdFromDB } from "../user/bannedusers/bannedusersDB";
 import { setBannedUsersById } from "../user/bannedusers/bannedusersUtils";
 import { IQueryBannedUser } from "../user/bannedusers/ibannedusers";
@@ -22,6 +25,7 @@ import { IQueryFavoriteUser } from "../user/favoriteusers/ifavoriteusers";
 import { getPaidByIdFromDB } from "../user/shop/paid/paidDB";
 import { IComplaintBase } from "../all/complaints/icomplaints";
 import { setComplaint } from "../all/complaints/complaintsUtils";
+import { ACCTYPE } from "../role/role";
 
 const sockets: ISocketUsers[] = [];
 
@@ -74,49 +78,66 @@ export async function socketMessageHandler(
 
 		if (!(ourId && socketPayload.userid)) return;
 
-		const testBotSpam = botPhraseSpam(socketPayload.message);
-		if (testBotSpam.enabled) {
-			setAdminBannedByIdToDB(ourId, {
-				timecode: testBotSpam.timecode,
-				whobanned: testBotSpam.whobanned,
-				discription: testBotSpam.discription,
-			});
-			socketIO.to(socketId).emit("delete_jwt");
+		const acctype = await getAcctypeByIdFromDB(ourId);
 
-			return;
-		}
-		const testBotCensure = botPhraseCensure(socketPayload.message);
-		if (testBotCensure.enabled) {
-			setAdminBannedByIdToDB(ourId, {
-				timecode: testBotCensure.timecode,
-				whobanned: testBotCensure.whobanned,
-				discription: testBotCensure.discription,
-			});
-			socketIO.to(socketId).emit("delete_jwt");
+		if (acctype !== ACCTYPE.admin) {
+			const testBotSpam = botPhraseSpam(socketPayload.message);
+			if (testBotSpam.enabled) {
+				setBannedByIdToDB(ourId, {
+					timecode: testBotSpam.timecode,
+					whobanned: testBotSpam.whobanned,
+					discription: testBotSpam.discription,
+				});
+				socketIO.to(socketId).emit("delete_jwt");
 
-			return;
-		}
+				return;
+			}
 
-		const paid = await getPaidByIdFromDB(ourId);
-		if (paid.messageswrite.timecode < getTimecodeNow()) {
-			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
-				message:
-					"У вас закончилась возможность писать сообщения, приобретите данную опцию в магазине!",
-			});
+			const testBotCensure = botPhraseCensure(socketPayload.message);
+			if (testBotCensure.enabled) {
+				setBannedByIdToDB(ourId, {
+					timecode: testBotCensure.timecode,
+					whobanned: testBotCensure.whobanned,
+					discription: testBotCensure.discription,
+				});
+				socketIO.to(socketId).emit("delete_jwt");
 
-			return;
-		}
+				return;
+			}
 
-		const bannedusers = await getBannedUsersByIdFromDB(
-			socketPayload.userid
-		);
-		if (bannedusers.includes(ourId)) {
-			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
-				message:
-					"Вы не можете написать данному пользователю, вы у него в бан листе!",
-			});
+			const paid = await getPaidByIdFromDB(ourId);
+			if (paid.messageswrite.timecode < getTimecodeNow()) {
+				sendToAllSocketsById(
+					socketIO,
+					sockets,
+					[ourId],
+					"modalmessage",
+					{
+						message:
+							"У вас закончилась возможность писать сообщения, приобретите данную опцию в магазине!",
+					}
+				);
 
-			return;
+				return;
+			}
+
+			const bannedusers = await getBannedUsersByIdFromDB(
+				socketPayload.userid
+			);
+			if (bannedusers.includes(ourId)) {
+				sendToAllSocketsById(
+					socketIO,
+					sockets,
+					[ourId],
+					"modalmessage",
+					{
+						message:
+							"Вы не можете написать данному пользователю, вы у него в бан листе!",
+					}
+				);
+
+				return;
+			}
 		}
 
 		if (ourId === socketPayload.userid) return;
@@ -161,26 +182,42 @@ export async function socketStickerHandler(
 
 		if (ourId === socketPayload.userid) return;
 
-		const paid = await getPaidByIdFromDB(ourId);
-		if (paid.messageswrite.timecode < getTimecodeNow()) {
-			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
-				message:
-					"У вас закончилась возможность писать сообщения, приобретите данную опцию в магазине!",
-			});
+		const acctype = await getAcctypeByIdFromDB(ourId);
 
-			return;
-		}
+		if (acctype !== ACCTYPE.admin) {
+			const paid = await getPaidByIdFromDB(ourId);
+			if (paid.messageswrite.timecode < getTimecodeNow()) {
+				sendToAllSocketsById(
+					socketIO,
+					sockets,
+					[ourId],
+					"modalmessage",
+					{
+						message:
+							"У вас закончилась возможность писать сообщения, приобретите данную опцию в магазине!",
+					}
+				);
 
-		const bannedusers = await getBannedUsersByIdFromDB(
-			socketPayload.userid
-		);
-		if (bannedusers.includes(ourId)) {
-			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
-				message:
-					"Вы не можете написать данному пользователю, вы у него в бан листе!",
-			});
+				return;
+			}
 
-			return;
+			const bannedusers = await getBannedUsersByIdFromDB(
+				socketPayload.userid
+			);
+			if (bannedusers.includes(ourId)) {
+				sendToAllSocketsById(
+					socketIO,
+					sockets,
+					[ourId],
+					"modalmessage",
+					{
+						message:
+							"Вы не можете написать данному пользователю, вы у него в бан листе!",
+					}
+				);
+
+				return;
+			}
 		}
 
 		const dialog = await setDialog(
