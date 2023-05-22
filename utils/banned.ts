@@ -1,8 +1,8 @@
-import { getAdminBannedByIdFromDB } from "../microservices/admin/profile/profileDB";
+import { getBannedByIdFromDB } from "../microservices/admin/profile/profileDB";
 import { getTimecodeNow } from "./datetime";
 
 export async function isBannedUser(ourId: string): Promise<string> {
-	const isBanned = await getAdminBannedByIdFromDB(ourId);
+	const isBanned = await getBannedByIdFromDB(ourId);
 
 	if (isBanned.timecode && isBanned.timecode > getTimecodeNow()) {
 		const date = new Date(Number(isBanned.timecode));
