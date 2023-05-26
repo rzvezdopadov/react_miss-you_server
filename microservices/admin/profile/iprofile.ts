@@ -88,7 +88,7 @@ export interface IAdminProfile {
 	rating: number;
 	cash: number;
 	acctype: ACCTYPE;
-	visit: IStatVisit;
+	visit: IStatVisit[];
 	paid: IPaid;
 	referral: string;
 	deleteacc: number;
