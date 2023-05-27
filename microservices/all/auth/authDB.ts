@@ -92,7 +92,7 @@ export async function createProfileToDB(
 			"INSERT INTO users (" +
 			"email, password, jwt, " +
 			"userid, coordinates, registrationdate, " +
-			"timecode, name, location, phone, likes, " +
+			"timecode, name, location, phone, guests, likes, " +
 			"favoriteusers, privateselections, bannedusers, presents, achivments," +
 			"birthday, monthofbirth, yearofbirth, " +
 			"growth, weight, " +
@@ -114,7 +114,7 @@ export async function createProfileToDB(
 			") VALUES (" +
 			`'${profile.email}', '${profile.password}', ARRAY [] :: JSON [], ` +
 			`'${profile.userid}', ARRAY [] :: JSON [], ${profile.registrationdate}, ` +
-			`${profile.timecode}, '${profile.name}', '${profile.location}', '${profile.phone}', ARRAY [] :: TEXT [], ` +
+			`${profile.timecode}, '${profile.name}', '${profile.location}', '${profile.phone}', ARRAY [] :: TEXT [], ARRAY [] :: TEXT [], ` +
 			`ARRAY [] :: TEXT [], ARRAY [] :: TEXT [], ARRAY [] :: TEXT [], ARRAY [] :: JSON [], ARRAY [] :: JSON [], ` +
 			`${profile.birthday}, ${profile.monthofbirth}, ${profile.yearofbirth}, ` +
 			`${profile.growth}, ${profile.weight}, ` +

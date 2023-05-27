@@ -107,6 +107,7 @@ export async function queryGetProfile(req, res) {
 			}
 
 			profile.cash = 0;
+			profile.guests = [];
 			profile.favoriteusers = [];
 			profile.privateselections = [];
 			let bannedusers = [];

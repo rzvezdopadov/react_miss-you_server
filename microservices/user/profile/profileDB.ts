@@ -17,7 +17,7 @@ import { getPaidByIdFromDB } from "../shop/paid/paidDB";
 
 const fieldProfile =
 	"userid, timecode, name, location, " +
-	"likes, favoriteusers, bannedusers, presents, achivments, " +
+	"guests, likes, favoriteusers, bannedusers, presents, achivments, " +
 	"birthday, monthofbirth, yearofbirth, growth, weight, " +
 	"gender, gendervapor, photomain, photolink, signzodiac, " +
 	"education, fieldofactivity, maritalstatus, children, religion, " +

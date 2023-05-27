@@ -73,6 +73,7 @@ const fakeUsersGenerate = async (
 			name: "Служба поддержки",
 			location: townsData[0],
 			phone: "",
+			guests: [],
 			likes: [],
 			favoriteusers: [],
 			privateselections: [],
@@ -336,7 +337,7 @@ const fakeQueryStringUsersGenerate = async (
 				"INSERT INTO users (" +
 				"email, password, jwt, " +
 				"userid, coordinates, registrationdate, " +
-				"timecode, name, location, phone, likes, " +
+				"timecode, name, location, phone, guests, likes, " +
 				"favoriteusers, privateselections, bannedusers, presents, achivments, " +
 				"birthday, monthofbirth, yearofbirth, " +
 				"growth, weight, " +
@@ -359,9 +360,11 @@ const fakeQueryStringUsersGenerate = async (
 				`'${fakeUser.email}', '${fakeUser.password}', ARRAY [] :: JSON [], ` +
 				`'${fakeUser.userid}', ARRAY [] :: JSON[], ${fakeUser.registrationdate}, ` +
 				`${fakeUser.timecode}, '${fakeUser.name}', '${fakeUser.location}', '${fakeUser.phone}', ` +
-				`${arrQueryStr(fakeUser.likes)}, ${arrQueryStr(
-					fakeUser.favoriteusers
-				)}, ${arrQueryStr(fakeUser.privateselections)}, ${arrQueryStr(
+				`${arrQueryStr(fakeUser.guests)}, ${arrQueryStr(
+					fakeUser.likes
+				)}, ${arrQueryStr(fakeUser.favoriteusers)}, ${arrQueryStr(
+					fakeUser.privateselections
+				)}, ${arrQueryStr(
 					fakeUser.bannedusers
 				)}, ARRAY [] :: JSON [], ARRAY [] :: JSON [], ` +
 				`${fakeUser.birthday}, ${fakeUser.monthofbirth}, ${fakeUser.yearofbirth}, ` +
@@ -412,6 +415,7 @@ export async function initDBUsers(): Promise<boolean> {
                 name TEXT,
                 location TEXT,
 				phone TEXT,
+				guests TEXT[],
                 likes TEXT[],
 				favoriteusers TEXT[],
 				privateselections TEXT[],

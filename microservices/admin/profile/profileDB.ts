@@ -80,7 +80,7 @@ export async function getProfilesShortFromDB(
 
 const fieldProfile =
 	"userid, email, coordinates, registrationdate, timecode, name, location, " +
-	"phone, likes, favoriteusers, privateselections, bannedusers, presents, achivments, " +
+	"phone, guests, likes, favoriteusers, privateselections, bannedusers, presents, achivments, " +
 	"birthday, monthofbirth, yearofbirth, growth, weight, gender, gendervapor, " +
 	"photomain, photolink, signzodiac, goaldate, education, fieldofactivity, maritalstatus, " +
 	"children, religion, smoke, alcohol, discription, profit, interests, filters, " +

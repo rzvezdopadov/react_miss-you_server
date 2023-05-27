@@ -27,6 +27,7 @@ export interface IProfile {
 	name: string;
 	location: string;
 	phone: string;
+	guests: string[];
 	likes: string[];
 	favoriteusers: string[];
 	privateselections: string[];

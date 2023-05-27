@@ -108,6 +108,7 @@ export async function queryRegistration(req, res) {
 			name: registration.name,
 			location: registration.location,
 			phone: "",
+			guests: [],
 			likes: [],
 			favoriteusers: [],
 			privateselections: [],
