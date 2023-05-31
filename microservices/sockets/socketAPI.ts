@@ -7,8 +7,9 @@ import { getBannedUsersByIdFromDB } from "../user/bannedusers/bannedusersDB";
 import { setBannedUsersById } from "../user/bannedusers/bannedusersUtils";
 import { IQueryBannedUser } from "../user/bannedusers/ibannedusers";
 import { botPhraseCensure, botPhraseSpam } from "../admin/bots/botsUtils";
-import { setDialog } from "../all/dialogs/dialogsUtils";
+import { setMessage } from "../all/dialogs/dialogsUtils";
 import {
+	IQueryMessage,
 	IQuerySendMessage,
 	IQuerySendSticker,
 	MESSAGETYPE,
@@ -81,7 +82,7 @@ export async function socketMessageHandler(
 		const acctype = await getAcctypeByIdFromDB(ourId);
 
 		if (acctype !== ACCTYPE.admin) {
-			const testBotSpam = botPhraseSpam(socketPayload.message);
+			const testBotSpam = botPhraseSpam(socketPayload.msg);
 			if (testBotSpam.enabled) {
 				setBannedByIdToDB(ourId, {
 					timecode: testBotSpam.timecode,
@@ -93,7 +94,7 @@ export async function socketMessageHandler(
 				return;
 			}
 
-			const testBotCensure = botPhraseCensure(socketPayload.message);
+			const testBotCensure = botPhraseCensure(socketPayload.msg);
 			if (testBotCensure.enabled) {
 				setBannedByIdToDB(ourId, {
 					timecode: testBotCensure.timecode,
@@ -142,20 +143,22 @@ export async function socketMessageHandler(
 
 		if (ourId === socketPayload.userid) return;
 
-		const dialog = await setDialog(
-			ourId,
-			socketPayload.userid,
-			MESSAGETYPE.message,
-			socketPayload.message,
-			"",
-			0
-		);
+		const message: IQueryMessage = {
+			id1: ourId,
+			id2: socketPayload.userid,
+			type: MESSAGETYPE.message,
+			msg: socketPayload.msg,
+			spkid: "",
+			spos: 0,
+		};
+
+		const newMessage = await setMessage(message);
 
 		const data = {
 			command: "add",
-			userid1: ourId,
-			userid2: socketPayload.userid,
-			message: dialog.messages[0],
+			id1: ourId,
+			id2: socketPayload.userid,
+			message: newMessage,
 		};
 
 		sendToAllSocketsById(
@@ -220,20 +223,22 @@ export async function socketStickerHandler(
 			}
 		}
 
-		const dialog = await setDialog(
-			ourId,
-			socketPayload.userid,
-			MESSAGETYPE.sticker,
-			"",
-			socketPayload.stickerpackid,
-			socketPayload.stickerpos
-		);
+		const message: IQueryMessage = {
+			id1: ourId,
+			id2: socketPayload.userid,
+			type: MESSAGETYPE.message,
+			msg: "",
+			spkid: socketPayload.spkid,
+			spos: socketPayload.spos,
+		};
+
+		const newMessage = await setMessage(message);
 
 		const data = {
 			command: "add",
 			userid1: ourId,
 			userid2: socketPayload.userid,
-			message: dialog.messages[0],
+			message: newMessage,
 		};
 
 		sendToAllSocketsById(

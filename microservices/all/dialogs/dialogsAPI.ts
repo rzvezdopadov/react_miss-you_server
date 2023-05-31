@@ -1,68 +1,35 @@
-import { getDialog, getDialogs, setDialog } from "./dialogsUtils";
+import { getDialog, getDialogs } from "./dialogsUtils";
 import { testToken } from "../auth/token";
-import { MESSAGETYPE } from "./idialogs";
+import { IGetMessages } from "./idialogs";
 import {
 	answerStatus400,
 	answerStatusFailJWT,
 	answerStatusQTDB,
 } from "../../../utils/answerstatus";
-import { normalizeString } from "../../../utils/normalize";
-
-export async function querySetMessage(req, res) {
-	try {
-		let { userid, message } = req.body;
-		const userId = normalizeString(userid);
-		message = normalizeString(message);
-
-		let { jwt } = req.cookies;
-		jwt = normalizeString(jwt);
-
-		const jwtDecode = await testToken(jwt);
-
-		if (!jwtDecode) return answerStatusFailJWT(res);
-
-		if (!userId)
-			return answerStatus400(
-				res,
-				"Чтобы отправить сообщение, выберите пользователя!"
-			);
-
-		const newDialog = await setDialog(
-			jwtDecode.userId,
-			userId,
-			MESSAGETYPE.message,
-			message,
-			"",
-			0
-		);
-
-		if (newDialog.messages.length) {
-			return res.status(200).json(newDialog);
-		} else {
-			return answerStatus400(res, "Ошибка отправки сообщения!");
-		}
-	} catch (error) {
-		return answerStatusQTDB(res, error);
-	}
-}
+import { normalizeNumber, normalizeString } from "../../../utils/normalize";
 
 export async function queryGetDialog(req, res) {
 	try {
 		let { jwt } = req.cookies;
 		jwt = normalizeString(jwt);
 
-		let { userid } = req.query;
-		const userId = normalizeString(userid);
-
 		const jwtDecode = await testToken(jwt);
-
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		if (!userId) return answerStatus400(res, "Нужно выбрать пользователя!");
+		let QueryGetMessages: IGetMessages = req.query;
+		QueryGetMessages.ourid = jwtDecode.userId;
+		QueryGetMessages.userid = normalizeString(QueryGetMessages.userid);
+		QueryGetMessages.startcount = normalizeNumber(
+			QueryGetMessages.startcount
+		);
+		QueryGetMessages.amount = normalizeNumber(QueryGetMessages.amount);
 
-		const dialog = await getDialog(jwtDecode.userId, userId);
+		if (!QueryGetMessages.userid)
+			return answerStatus400(res, "Нужно выбрать пользователя!");
 
-		if (dialog.userid) {
+		const dialog = await getDialog(QueryGetMessages);
+
+		if (dialog && dialog.userid) {
 			return res.status(200).json(dialog);
 		} else {
 			return answerStatus400(res, "Ошибка отправки сообщения!");

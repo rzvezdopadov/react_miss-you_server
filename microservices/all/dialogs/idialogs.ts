@@ -3,45 +3,67 @@ export enum MESSAGETYPE {
 	sticker,
 }
 
-export interface IMessage {
+export interface IGetMessages {
+	ourid: string;
 	userid: string;
-	timecode: number;
+	startcount: number;
+	amount: number;
+}
+
+export interface IQueryMessage {
+	id1: string;
+	id2: string;
 	type: MESSAGETYPE;
-	userid1del: boolean;
-	userid2del: boolean;
-	userid1rd: boolean;
-	userid2rd: boolean;
-	message: string;
-	stickerpackid: string;
-	stickerpos: number;
+	msg: string;
+	spkid: string;
+	spos: number;
+}
+
+export interface IMessageOutput {
+	timecode: number;
+	id1: string;
+	id2: string;
+	id1rd: boolean;
+	id2rd: boolean;
+	dck: string;
+	type: MESSAGETYPE;
+	msg: string;
+	spkid: string;
+	spos: number;
+}
+
+export interface IMessageBase {
+	timecode: number;
+	id1: string;
+	id2: string;
+	id1del: boolean;
+	id2del: boolean;
+	id1rd: boolean;
+	id2rd: boolean;
+	dck: string;
+	type: MESSAGETYPE;
+	msg: string;
+	spkid: string;
+	spos: number;
 }
 
 export interface IQuerySendMessage {
 	userid: string;
-	message: string;
+	msg: string;
 }
 
 export interface IQuerySendSticker {
 	userid: string;
-	stickerpackid: string;
-	stickerpos: number;
-}
-
-export interface IDialogBase {
-	userid1: string;
-	userid2: string;
-	timecode: number;
-	dck: string;
-	messages: IMessage[];
+	spkid: string;
+	spos: number;
 }
 
 export interface IDialogOutput {
-	timecode: number;
 	userid: string;
 	name: string;
 	birthday: number;
 	monthofbirth: number;
 	yearofbirth: number;
 	photolink: string;
-	messages: IMessage[];
+	msgs: IMessageOutput[];
 }

@@ -9,8 +9,9 @@ const hour = 60 * minute;
 
 const timeBlockBotPhraseSpam = 6 * hour;
 
-export function botPhraseSpam(message: string): IBotRequest {
-	const newMessage = message.toLowerCase();
+export function botPhraseSpam(msg: string): IBotRequest {
+	const newMsg = String(msg);
+	const newMessage = newMsg.toLowerCase();
 
 	for (let i = 0; i < botDictionarySpam.length; i++) {
 		if (newMessage.includes(botDictionarySpam[i]))
@@ -27,8 +28,9 @@ export function botPhraseSpam(message: string): IBotRequest {
 
 const timeBlockBotPhraseCensure = 6 * hour;
 
-export function botPhraseCensure(message: string): IBotRequest {
-	const newMessage = message.toLowerCase();
+export function botPhraseCensure(msg: string): IBotRequest {
+	const newMsg = String(msg);
+	const newMessage = newMsg.toLowerCase();
 
 	for (let i = 0; i < botDictionaryCensure.length; i++) {
 		if (newMessage.includes(botDictionaryCensure[i]))

@@ -1,4 +1,4 @@
-import { IMessage } from "../dialogs/idialogs";
+import { MESSAGETYPE } from "../dialogs/idialogs";
 
 export enum COMPLAINTTYPE {
 	message = "message",
@@ -11,6 +11,15 @@ export enum COMPLAINTSTATUS {
 	close = "close",
 }
 
+export interface IComplMessage {
+	timecode: number;
+	type: MESSAGETYPE;
+	userid: string;
+	message: string;
+	stpid: string;
+	spos: number;
+}
+
 export interface IComplaintBase {
 	userfrom: string;
 	userto: string;
@@ -21,7 +30,7 @@ export interface IComplaintBase {
 	dck: string;
 	cash: number;
 	status: COMPLAINTSTATUS;
-	complmessage: IMessage;
+	complmessage: IComplMessage;
 }
 
 export interface IQuerySendComplaintMessage {
@@ -29,7 +38,7 @@ export interface IQuerySendComplaintMessage {
 	userto: string;
 	subject: string;
 	message: string;
-	complaintmessage: IMessage;
+	complmessage: IComplMessage;
 }
 
 export interface IQuerySendComplaintMessage {
@@ -38,5 +47,5 @@ export interface IQuerySendComplaintMessage {
 	subject: string;
 	stickerpackid: string;
 	stickerpos: number;
-	complaintmessage: IMessage;
+	complmessage: IComplMessage;
 }

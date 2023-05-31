@@ -106,19 +106,21 @@ export async function queryGetProfile(req, res) {
 				profile.likes = [jwtDecode.userId];
 			}
 
-			profile.cash = 0;
-			profile.guests = [];
-			profile.favoriteusers = [];
-			profile.privateselections = [];
+			profile.cash = undefined;
+			profile.guests = undefined;
+			profile.favoriteusers = undefined;
+			profile.privateselections = undefined;
 			let bannedusers = [];
 			if (profile.bannedusers.includes(jwtDecode.userId))
 				bannedusers.push(jwtDecode.userId);
 			profile.bannedusers = bannedusers;
 			profile.achivments = [];
 			profile.presents = [];
+			profile.stickerpacks = undefined;
 			profile.paid = undefined;
-			profile.referral = "";
-			profile.deleteacc = 0;
+			profile.filters = undefined;
+			profile.referral = undefined;
+			profile.deleteacc = undefined;
 		} else {
 			profile.paid = testPaidOnOverflow(profile.paid);
 		}
