@@ -3,6 +3,12 @@ export enum MESSAGETYPE {
 	sticker,
 }
 
+export interface IQueryGetMessages {
+	userid: string;
+	startcount: number;
+	amount: number;
+}
+
 export interface IGetMessages {
 	ourid: string;
 	userid: string;
