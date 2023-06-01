@@ -1,6 +1,6 @@
 import { getDialog, getDialogs } from "./dialogsUtils";
 import { testToken } from "../auth/token";
-import { IGetMessages } from "./idialogs";
+import { IGetMessages, IQueryGetMessages } from "./idialogs";
 import {
 	answerStatus400,
 	answerStatusFailJWT,
@@ -16,18 +16,18 @@ export async function queryGetDialog(req, res) {
 		const jwtDecode = await testToken(jwt);
 		if (!jwtDecode) return answerStatusFailJWT(res);
 
-		let QueryGetMessages: IGetMessages = req.query;
-		QueryGetMessages.ourid = jwtDecode.userId;
-		QueryGetMessages.userid = normalizeString(QueryGetMessages.userid);
-		QueryGetMessages.startcount = normalizeNumber(
-			QueryGetMessages.startcount
-		);
-		QueryGetMessages.amount = normalizeNumber(QueryGetMessages.amount);
+		const QueryGetMessages: IQueryGetMessages = req.query;
+		const GetMessages: IGetMessages = {
+			ourid: jwtDecode.userId,
+			userid: normalizeString(QueryGetMessages.userid),
+			startcount: normalizeNumber(QueryGetMessages.startcount),
+			amount: normalizeNumber(QueryGetMessages.amount),
+		};
 
-		if (!QueryGetMessages.userid)
+		if (!GetMessages.userid)
 			return answerStatus400(res, "Нужно выбрать пользователя!");
 
-		const dialog = await getDialog(QueryGetMessages);
+		const dialog = await getDialog(GetMessages);
 
 		if (dialog && dialog.userid) {
 			return res.status(200).json(dialog);
