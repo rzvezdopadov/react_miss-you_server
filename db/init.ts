@@ -2,6 +2,7 @@ import { initDBComplaints } from "../microservices/initdb/complaints/complaintsD
 import { initDBMessages } from "../microservices/initdb/messages/messagesDBInit";
 import { initDBShop } from "../microservices/initdb/shop/shopDBInit";
 import { initDBStickerpacks } from "../microservices/initdb/shop/stickerpacks/stickerpacksDBInit";
+import { initDBVisit } from "../microservices/initdb/statistics/visit";
 import { initDBTransactions } from "../microservices/initdb/transactions/transactionsDBInit";
 import { initDBUsers } from "../microservices/initdb/users/usersDBInit";
 
@@ -11,6 +12,7 @@ export async function initDB(): Promise<boolean> {
 		await initDBMessages();
 		await initDBStickerpacks();
 		await initDBUsers();
+		await initDBVisit();
 		await initDBComplaints();
 		await initDBTransactions();
 
