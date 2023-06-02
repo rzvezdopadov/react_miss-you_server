@@ -9,11 +9,6 @@ import { ACCTYPE } from "../../role/role";
 import { IStatVisit } from "../statistics/istatistics";
 import { IPaid } from "../../user/shop/paid/ipaid";
 
-export interface IAdminStatVisit {
-	userid: string;
-	visit: IStatVisit[];
-}
-
 export interface IAdminBanned {
 	timecode: number;
 	whobanned: string;
