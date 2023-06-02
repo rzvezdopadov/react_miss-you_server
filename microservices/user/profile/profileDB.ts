@@ -14,6 +14,7 @@ import { conditionStr } from "../../../utils/query";
 import { poolDB } from "../../../db/config";
 import { ACCTYPE } from "../../role/role";
 import { getPaidByIdFromDB } from "../shop/paid/paidDB";
+import { lazyloadingusercount } from "../../../utils/globalconst";
 
 const fieldProfile =
 	"userid, timecode, name, location, " +
@@ -46,8 +47,14 @@ async function createCondForSearchProfiles(
 	filters: IFilterUsers,
 	userid: string,
 	enabled: boolean,
-	longenabled: boolean
+	longenabled: boolean,
+	startcount: number,
+	amount: number
 ): Promise<string> {
+	let newAmount = Number(amount);
+	if (newAmount > lazyloadingusercount) newAmount = lazyloadingusercount;
+
+	const orderBy = ` ORDER BY rating DESC OFFSET ${startcount} LIMIT ${newAmount}`;
 	let queryStr = "(";
 	let queryStrFinal = `(userid <> '${userid}') AND `;
 	queryStrFinal += `(acctype = '${ACCTYPE.user}'))`;
@@ -100,19 +107,19 @@ async function createCondForSearchProfiles(
 			queryStr += conditionStr("profit", filters.profit);
 		}
 
-		return queryStr + queryStrFinal;
+		return queryStr + queryStrFinal + orderBy;
 	} catch (error) {
 		console.log(`${getTimedateNow()} createCondForSearchProfile: `, error);
-		return queryStrFinal;
+		return queryStrFinal + orderBy;
 	}
 }
 
 export async function getProfilesShortFromDB(
 	QueryGetProfiles: IGetProfiles
 ): Promise<IProfileShortBase[]> {
-	const startPos = Number(QueryGetProfiles.startcount);
-	const endPos = startPos + Number(QueryGetProfiles.amount);
-	const { filters, users, userid } = QueryGetProfiles;
+	const startcount = Number(QueryGetProfiles.startcount);
+	const amount = Number(QueryGetProfiles.amount);
+	const { filters, users } = QueryGetProfiles;
 
 	try {
 		let answerDB = { rows: [] };
@@ -127,10 +134,10 @@ export async function getProfilesShortFromDB(
 				filters,
 				QueryGetProfiles.userid,
 				true,
-				paid.longfilters.timecode > timecode
+				paid.longfilters.timecode > timecode,
+				startcount,
+				amount
 			);
-
-			queryStr += " ORDER BY rating DESC";
 
 			answerDB = await poolDB.query(queryStr);
 		} else if (users) {
@@ -143,19 +150,12 @@ export async function getProfilesShortFromDB(
 			}
 
 			queryStr = queryStr.slice(0, -3);
-
 			queryStr += " ORDER BY rating DESC";
 
 			answerDB = await poolDB.query(queryStr);
 		}
 
 		let profiles: IProfile[] = answerDB.rows;
-
-		if (profiles.length > 1) {
-			if (startPos - endPos) {
-				profiles = profiles.slice(startPos, endPos);
-			}
-		}
 
 		return profiles;
 	} catch (error) {
@@ -167,8 +167,8 @@ export async function getProfilesShortFromDB(
 export async function getProfilesShortForLikesFromDB(
 	QueryGetProfiles: IGetProfiles
 ): Promise<IProfile[]> {
-	const startPos = Number(QueryGetProfiles.startcount);
-	const endPos = startPos + Number(QueryGetProfiles.amount);
+	const startcount = Number(QueryGetProfiles.startcount);
+	const amount = Number(QueryGetProfiles.amount);
 
 	try {
 		let answerDB: { rows: IProfile[] } = { rows: [] };
@@ -203,22 +203,14 @@ export async function getProfilesShortForLikesFromDB(
 			QueryGetProfiles.filters,
 			QueryGetProfiles.userid,
 			paid.filtersvapors.timecode > timecode,
-			paid.longfiltersvapors.timecode > timecode
+			paid.longfiltersvapors.timecode > timecode,
+			startcount,
+			amount
 		);
-
-		queryStr += " ORDER BY rating DESC";
 
 		answerDB = await poolDB.query(queryStr);
 
-		let profiles = answerDB.rows;
-
-		if (profiles.length > 1) {
-			if (startPos - endPos) {
-				profiles = profiles.slice(startPos, endPos);
-			}
-		}
-
-		return profiles;
+		return answerDB.rows;
 	} catch (error) {
 		console.log(
 			`${getTimedateNow()} getProfilesShortForLikesFromDB: `,
@@ -231,8 +223,8 @@ export async function getProfilesShortForLikesFromDB(
 export async function getProfilesShortForFavoriteUsersFromDB(
 	QueryGetProfiles: IGetProfiles
 ): Promise<IProfile[]> {
-	const startPos = Number(QueryGetProfiles.startcount);
-	const endPos = startPos + Number(QueryGetProfiles.amount);
+	const startcount = Number(QueryGetProfiles.startcount);
+	const amount = Number(QueryGetProfiles.amount);
 
 	try {
 		let answerDB: { rows: IProfile[] } = { rows: [] };
@@ -268,22 +260,14 @@ export async function getProfilesShortForFavoriteUsersFromDB(
 			QueryGetProfiles.filters,
 			QueryGetProfiles.userid,
 			paid.filtersfavoriteusers.timecode > timecode,
-			paid.longfiltersfavoriteusers.timecode > timecode
+			paid.longfiltersfavoriteusers.timecode > timecode,
+			startcount,
+			amount
 		);
-
-		queryStr += " ORDER BY rating DESC";
 
 		answerDB = await poolDB.query(queryStr);
 
-		let profiles = answerDB.rows;
-
-		if (profiles.length > 1) {
-			if (startPos - endPos) {
-				profiles = profiles.slice(startPos, endPos);
-			}
-		}
-
-		return profiles;
+		return answerDB.rows;
 	} catch (error) {
 		console.log(
 			`${getTimedateNow()} getProfilesShortForFavoriteUsersFromDB: `,
