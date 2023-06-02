@@ -108,16 +108,9 @@ export async function socketMessageHandler(
 
 			const paid = await getPaidByIdFromDB(ourId);
 			if (paid.messageswrite.timecode < getTimecodeNow()) {
-				sendToAllSocketsById(
-					socketIO,
-					sockets,
-					[ourId],
-					"modalmessage",
-					{
-						message:
-							"У вас закончилась возможность писать сообщения, приобретите данную опцию в магазине!",
-					}
-				);
+				sendToAllSocketsById(socketIO, sockets, [ourId], "modalmsg", {
+					msg: "У вас закончилась возможность писать сообщения, приобретите данную опцию в магазине!",
+				});
 
 				return;
 			}
@@ -126,16 +119,9 @@ export async function socketMessageHandler(
 				socketPayload.userid
 			);
 			if (bannedusers.includes(ourId)) {
-				sendToAllSocketsById(
-					socketIO,
-					sockets,
-					[ourId],
-					"modalmessage",
-					{
-						message:
-							"Вы не можете написать данному пользователю, вы у него в бан листе!",
-					}
-				);
+				sendToAllSocketsById(socketIO, sockets, [ourId], "modalmsg", {
+					msg: "Вы не можете написать данному пользователю, вы у него в бан листе!",
+				});
 
 				return;
 			}
@@ -156,16 +142,14 @@ export async function socketMessageHandler(
 
 		const data = {
 			command: "add",
-			id1: ourId,
-			id2: socketPayload.userid,
-			message: newMessage,
+			msg: newMessage,
 		};
 
 		sendToAllSocketsById(
 			socketIO,
 			sockets,
 			[ourId, socketPayload.userid],
-			"message",
+			"msg",
 			data
 		);
 	} catch (error) {
@@ -190,16 +174,9 @@ export async function socketStickerHandler(
 		if (acctype !== ACCTYPE.admin) {
 			const paid = await getPaidByIdFromDB(ourId);
 			if (paid.messageswrite.timecode < getTimecodeNow()) {
-				sendToAllSocketsById(
-					socketIO,
-					sockets,
-					[ourId],
-					"modalmessage",
-					{
-						message:
-							"У вас закончилась возможность писать сообщения, приобретите данную опцию в магазине!",
-					}
-				);
+				sendToAllSocketsById(socketIO, sockets, [ourId], "modalmsg", {
+					msg: "У вас закончилась возможность писать сообщения, приобретите данную опцию в магазине!",
+				});
 
 				return;
 			}
@@ -208,16 +185,9 @@ export async function socketStickerHandler(
 				socketPayload.userid
 			);
 			if (bannedusers.includes(ourId)) {
-				sendToAllSocketsById(
-					socketIO,
-					sockets,
-					[ourId],
-					"modalmessage",
-					{
-						message:
-							"Вы не можете написать данному пользователю, вы у него в бан листе!",
-					}
-				);
+				sendToAllSocketsById(socketIO, sockets, [ourId], "modalmsg", {
+					msg: "Вы не можете написать данному пользователю, вы у него в бан листе!",
+				});
 
 				return;
 			}
@@ -236,16 +206,14 @@ export async function socketStickerHandler(
 
 		const data = {
 			command: "add",
-			userid1: ourId,
-			userid2: socketPayload.userid,
-			message: newMessage,
+			msg: newMessage,
 		};
 
 		sendToAllSocketsById(
 			socketIO,
 			sockets,
 			[ourId, socketPayload.userid],
-			"message",
+			"msg",
 			data
 		);
 	} catch (error) {
@@ -265,9 +233,8 @@ export async function socketComplaintProfileHandler(
 		if (ourId === socketPayload.userto) return;
 
 		if (!socketPayload.subject || !socketPayload.discription) {
-			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
-				message:
-					"Тема и описание должно быть обязательно указанно в жалобе!",
+			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmsg", {
+				msg: "Тема и описание должно быть обязательно указанно в жалобе!",
 			});
 			return;
 		}
@@ -277,15 +244,14 @@ export async function socketComplaintProfileHandler(
 		const complaint = await setComplaint(socketPayload);
 
 		if (!complaint) {
-			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
-				message:
-					"К сожалению жалоба не отправленна, возможно запрос неверный!",
+			sendToAllSocketsById(socketIO, sockets, [ourId], "modalmsg", {
+				msg: "К сожалению жалоба не отправленна, возможно запрос неверный!",
 			});
 			return;
 		}
 
-		sendToAllSocketsById(socketIO, sockets, [ourId], "modalmessage", {
-			message: "Жалоба успешно отправленна!",
+		sendToAllSocketsById(socketIO, sockets, [ourId], "modalmsg", {
+			msg: "Жалоба успешно отправленна!",
 		});
 	} catch (error) {
 		console.log("socketComplaintProfileMessageHandler", error);
