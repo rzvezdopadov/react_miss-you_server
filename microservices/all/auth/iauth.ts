@@ -1,5 +1,4 @@
 import { IAdminBanned } from "../../admin/profile/iprofile";
-import { IStatVisit } from "../../admin/statistics/istatistics";
 import { IProfile, ICoordinates } from "../../user/profile/iprofile";
 
 export interface IJWT {
@@ -15,7 +14,6 @@ export interface IProfileRegistration extends IProfile {
 	jwt: IJWT[];
 	coordinates: ICoordinates[];
 	registrationdate: number;
-	visit: IStatVisit[];
 	banned: IAdminBanned;
 	temppasscode: string;
 	verifiacc: number;
