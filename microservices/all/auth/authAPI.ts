@@ -164,7 +164,6 @@ export async function queryRegistration(req, res) {
 				interests: [],
 			},
 			acctype: ACCTYPE.user,
-			visit: [],
 			banned: { timecode: 0, whobanned: "", discription: "" },
 			paid: {
 				messageswrite: {

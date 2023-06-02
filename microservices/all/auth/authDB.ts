@@ -109,7 +109,7 @@ export async function createProfileToDB(
 			"stickerpacks, " +
 			"rating, cash, acctype, " +
 			"banned, " +
-			"visit, paid, referral, deleteacc, temppasscode, " +
+			"paid, referral, deleteacc, temppasscode, " +
 			"verifiacc, verifiacccode" +
 			") VALUES (" +
 			`'${profile.email}', '${profile.password}', ARRAY [] :: JSON [], ` +
@@ -131,7 +131,7 @@ export async function createProfileToDB(
 			`ARRAY [] :: TEXT [], ` +
 			`${profile.rating}, ${profile.cash}, '${profile.acctype}', ` +
 			`'${JSON.stringify(profile.banned)}' :: JSON, ` +
-			`ARRAY [] :: JSON [], '${JSON.stringify(profile.paid)}' :: JSON, ` +
+			`'${JSON.stringify(profile.paid)}' :: JSON, ` +
 			`'${profile.referral}', ${profile.deleteacc}, '${profile.temppasscode}', ` +
 			`${profile.verifiacc}, '${profile.verifiacccode}'` +
 			")";

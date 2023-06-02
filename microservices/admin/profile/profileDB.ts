@@ -1,7 +1,6 @@
 import {
 	IAdminBanned,
 	IAdminProfile,
-	IAdminStatVisit,
 	IQueryGetAdminProfiles,
 } from "./iprofile";
 import { IProfile } from "../../user/profile/iprofile";
@@ -10,6 +9,7 @@ import { conditionStr } from "../../../utils/query";
 import { poolDB } from "../../../db/config";
 import { fieldProfileShort } from "../../user/profile/profileDB";
 import { ACCTYPE } from "../../role/role";
+import { IStatVisit } from "../statistics/istatistics";
 
 export async function getProfilesShortFromDB(
 	QueryGetProfiles: IQueryGetAdminProfiles
@@ -85,7 +85,7 @@ const fieldProfile =
 	"photomain, photolink, signzodiac, goaldate, education, fieldofactivity, maritalstatus, " +
 	"children, religion, smoke, alcohol, discription, profit, interests, filters, " +
 	"ilikeCharacter, idontlikeCharacter, stickerpacks, rating, cash, acctype, " +
-	"visit, paid, referral, deleteacc";
+	"paid, referral, deleteacc";
 
 export async function getProfileByIdFromDB(
 	userid: string
@@ -133,12 +133,12 @@ export async function setAcctypeByIdToDB(
 
 export async function getStatVisitByIdFromDB(
 	userId?: string
-): Promise<IAdminStatVisit[]> {
+): Promise<IStatVisit[]> {
 	try {
-		let queryStr = `SELECT userid, visit FROM users WHERE userid = '${userId}'`;
+		let queryStr = `SELECT userid, key, tco, tcc FROM visit WHERE userid = '${userId}'`;
 
 		if (!userId) {
-			queryStr = `SELECT userid, visit FROM users`;
+			queryStr = `SELECT userid, key, tco, tcc FROM visit`;
 		}
 
 		const answerDB = await poolDB.query(queryStr);

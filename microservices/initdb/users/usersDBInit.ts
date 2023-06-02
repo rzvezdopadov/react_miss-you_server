@@ -127,7 +127,6 @@ const fakeUsersGenerate = async (
 				interests: [],
 			},
 			acctype: ACCTYPE.admin,
-			visit: [],
 			banned: { timecode: 0, whobanned: "", discription: "" },
 			paid: {
 				messageswrite: { enabled: false, timecode: 0 },
@@ -354,7 +353,7 @@ const fakeQueryStringUsersGenerate = async (
 				"stickerpacks, " +
 				"rating, cash, acctype, " +
 				"banned, " +
-				"visit, paid, referral, deleteacc, temppasscode, " +
+				"paid, referral, deleteacc, temppasscode, " +
 				"verifiacc, verifiacccode" +
 				") VALUES (" +
 				`'${fakeUser.email}', '${fakeUser.password}', ARRAY [] :: JSON [], ` +
@@ -384,9 +383,7 @@ const fakeQueryStringUsersGenerate = async (
 				`ARRAY [] :: TEXT [], ` +
 				`${fakeUser.rating}, ${fakeUser.cash}, '${fakeUser.acctype}', ` +
 				`'${JSON.stringify(fakeUser.banned)}' :: JSON, ` +
-				`ARRAY [] :: JSON [], '${JSON.stringify(
-					fakeUser.paid
-				)}' :: JSON, ` +
+				`'${JSON.stringify(fakeUser.paid)}' :: JSON, ` +
 				`'${fakeUser.referral}', ${fakeUser.deleteacc}, '${fakeUser.temppasscode}', ` +
 				`${fakeUser.verifiacc}, '${fakeUser.verifiacccode}'` +
 				`)`;
@@ -451,7 +448,6 @@ export async function initDBUsers(): Promise<boolean> {
                 cash INT,
                 acctype TEXT,
                 banned JSON, 
-                visit JSON[],
                 paid JSON,
 				referral TEXT,
 				deleteacc BIGINT,
