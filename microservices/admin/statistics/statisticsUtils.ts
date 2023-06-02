@@ -11,31 +11,18 @@ export async function setVisitById(
 	const timecode = getTimecodeNow();
 
 	try {
-		const statistics = await getVisitByIdFromDB(userId);
+		const statVisit: IStatVisit = {
+			userid: userId,
+			key: key,
+			tco: timecode,
+			tcc: 0,
+		};
 
-		if (type === SOCKET_TYPE_OC.open) {
-			const statVisit: IStatVisit = {
-				key: key,
-				tco: timecode,
-				tcc: 0,
-			};
-
-			statistics.visit.push(statVisit);
-		} else if (
-			statistics &&
-			statistics.visit &&
-			type === SOCKET_TYPE_OC.closed
-		) {
-			const visitPos = statistics.visit.findIndex(
-				(visit) => visit.key === key
-			);
-
-			if (visitPos === -1) return 0;
-
-			statistics.visit[visitPos].tcc = timecode;
+		if (type === SOCKET_TYPE_OC.closed) {
+			statVisit.tcc = timecode;
 		}
 
-		const answerDB = await setVisitByIdToDB(statistics);
+		const answerDB = await setVisitByIdToDB(statVisit);
 
 		return answerDB;
 	} catch (error) {
