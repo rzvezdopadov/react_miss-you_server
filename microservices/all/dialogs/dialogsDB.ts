@@ -13,7 +13,7 @@ export async function getMessagesByIdFromDB(
 			`SELECT timecode, id1, id2, dck, type, msg, spkid, spos FROM messages WHERE ` +
 			`((id1 = '${getMessages.ourid}' AND id2 = '${getMessages.userid}') OR ` +
 			`(id1 = '${getMessages.userid}' AND id2 = '${getMessages.ourid}')) ` +
-			`ORDER BY timecode DESC ` +
+			`ORDER BY timecode ASC ` +
 			`LIMIT ${getMessages.amount} OFFSET ${getMessages.startcount}`;
 
 		answerDB = await poolDB.query(queryStr);
@@ -53,8 +53,6 @@ export async function setMessageByIdToDB(
 			`'${dck}', ${message.type}, '${message.msg}', ` +
 			`'${message.spkid}', ${message.spos}` +
 			`)`;
-
-		console.log(queryStr);
 
 		answerDB = await poolDB.query(queryStr);
 
