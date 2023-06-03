@@ -21,7 +21,7 @@ export const socketHandler = (socketIO, socket) => {
 		socketGetJWTHandler(socketIO, socket, socketId)
 	);
 
-	socket.on("message", (socket) => {
+	socket.on("msg", (socket) => {
 		socketMessageHandler(socketIO, socket, socketId);
 	});
 
