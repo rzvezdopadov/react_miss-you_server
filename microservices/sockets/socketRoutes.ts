@@ -1,6 +1,7 @@
 import {
 	socketClosedHandler,
 	socketComplaintProfileHandler,
+	socketDialogHandler,
 	socketGetJWTHandler,
 	socketMessageHandler,
 	socketPingHandler,
@@ -27,6 +28,10 @@ export const socketHandler = (socketIO, socket) => {
 
 	socket.on("sticker", (socket) =>
 		socketStickerHandler(socketIO, socket, socketId)
+	);
+
+	socket.on("dialog", (socket) =>
+		socketDialogHandler(socketIO, socket, socketId)
 	);
 
 	socket.on("set_like", (socket) =>

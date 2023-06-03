@@ -7,8 +7,10 @@ import { getBannedUsersByIdFromDB } from "../user/bannedusers/bannedusersDB";
 import { setBannedUsersById } from "../user/bannedusers/bannedusersUtils";
 import { IQueryBannedUser } from "../user/bannedusers/ibannedusers";
 import { botPhraseCensure, botPhraseSpam } from "../admin/bots/botsUtils";
-import { setMessage } from "../all/dialogs/dialogsUtils";
+import { getDialog, setMessage } from "../all/dialogs/dialogsUtils";
 import {
+	IGetMessages,
+	IQueryGetMessages,
 	IQueryMessage,
 	IQuerySendMessage,
 	IQuerySendSticker,
@@ -27,6 +29,7 @@ import { getPaidByIdFromDB } from "../user/shop/paid/paidDB";
 import { IComplaintBase } from "../all/complaints/icomplaints";
 import { setComplaint } from "../all/complaints/complaintsUtils";
 import { ACCTYPE } from "../role/role";
+import { normalizeNumber, normalizeString } from "../../utils/normalize";
 
 const sockets: ISocketUsers[] = [];
 
@@ -218,6 +221,29 @@ export async function socketStickerHandler(
 		);
 	} catch (error) {
 		console.log("socketStickerHandler", error);
+	}
+}
+
+export async function socketDialogHandler(
+	socketIO: any,
+	socketPayload: IQueryGetMessages,
+	socketId: string
+) {
+	try {
+		const ourId = getUserIdFromSocketTable(sockets, socketId);
+
+		const GetMessages: IGetMessages = {
+			ourid: ourId,
+			userid: normalizeString(socketPayload.userid),
+			startcount: normalizeNumber(socketPayload.startcount),
+			amount: normalizeNumber(socketPayload.amount),
+		};
+
+		const dialog = await getDialog(GetMessages);
+
+		socketIO.to(socketId).emit("dialog", dialog);
+	} catch (error) {
+		console.log("socketDialogHandler", error);
 	}
 }
 
