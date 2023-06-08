@@ -3,7 +3,9 @@ import {
 	answerStatusQTDB,
 	answerStatus400,
 } from "../../../../utils/answerstatus";
+import { getTimecodeNow } from "../../../../utils/datetime";
 import { normalizeString } from "../../../../utils/normalize";
+import { getRandomString } from "../../../../utils/random";
 import { testToken } from "../../../all/auth/token";
 import {
 	getProfileStickerpacksByIdFromDB,
@@ -12,6 +14,9 @@ import {
 	setProfileCashByIdToDB,
 	getProfileByIdFromDB,
 } from "../../profile/profileDB";
+import { SHOP_TARIFFS } from "../ishop";
+import { ITransUserFrom, ITransaction } from "../transactions/itransactions";
+import { setTransactionToDB } from "../transactions/transactionsDB";
 import { getAllStickerpacks } from "./stickerpacksDB";
 import { getWaySticker } from "./stickerpacksUtils";
 
@@ -120,6 +125,19 @@ export async function queryAddStickerpack(req, res) {
 				);
 
 			await setProfileCashByIdToDB(jwtDecode.userId, cash);
+
+			const trans: ITransaction = {
+				userid: jwtDecode.userId,
+				timecode: getTimecodeNow(),
+				userfrom: ITransUserFrom.system,
+				idtrans: getRandomString(20),
+				nametariff: SHOP_TARIFFS.stickerpack,
+				idtariff: stickerpacks[stickerpackIndex].idstickerpack,
+				cash: -1 * priceStickerpack,
+				discription: `Покупка стикерпака "${stickerpacks[stickerpackIndex].name}"`,
+			};
+
+			await setTransactionToDB(trans);
 		}
 
 		const profile = await getProfileByIdFromDB(jwtDecode.userId);

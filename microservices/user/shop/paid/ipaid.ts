@@ -29,6 +29,7 @@ export interface IPaid {
 }
 
 export enum PAID_PROPERTY {
+	payment = `payment`,
 	messageswrite = `messageswrite`,
 	messagesread = `messagesread`,
 	longfilters = `longfilters`,

@@ -7,8 +7,13 @@ export async function initDBTransactions(): Promise<boolean> {
                 id serial PRIMARY KEY,
                 userid TEXT,
                 timecode BIGINT,
-                transaction JSON
-            );
+				userfrom TEXT, 
+				idtrans TEXT,
+                nametariff TEXT,
+				idtariff TEXT,
+				cash INT,
+				discription TEXT
+            )
         `;
 
 		await poolDB.query(queryStr);

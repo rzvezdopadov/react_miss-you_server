@@ -3,12 +3,16 @@ import {
 	answerStatusQTDB,
 } from "../../../../utils/answerstatus";
 import { getTimecodeNow, TIMECODE_DAY } from "../../../../utils/datetime";
+import { getRandomString } from "../../../../utils/random";
 import {
 	getProfileByIdFromDB,
 	getProfileCashByIdFromDB,
 	setProfileCashByIdToDB,
 } from "../../profile/profileDB";
 import { getTariffsShopFromDB } from "../shopDB";
+import { ITransUserFrom, ITransaction } from "../transactions/itransactions";
+import { setTransactionToDB } from "../transactions/transactionsDB";
+import { getPaidDiscription } from "../transactions/transactionsUtils";
 import { IPaid, ITariff, PAID_PROPERTY } from "./ipaid";
 import { getPaidByIdFromDB, setPaidByIdToDB } from "./paidDB";
 
@@ -103,6 +107,19 @@ export async function queryPaidNext(
 		const profile = await getProfileByIdFromDB(userId);
 
 		res.status(200).json(profile);
+
+		const trans: ITransaction = {
+			userid: userId,
+			timecode: timecode,
+			userfrom: ITransUserFrom.system,
+			idtrans: getRandomString(20),
+			nametariff: nameTariff,
+			idtariff: idTariff,
+			cash: -1 * tariff[posTariff].price,
+			discription: `Покупка опции ${getPaidDiscription(nameTariff)}`,
+		};
+
+		await setTransactionToDB(trans);
 
 		return true;
 	} catch (error) {

@@ -15,6 +15,11 @@ import {
 } from "../../../../utils/answerstatus";
 import { testToken } from "../../../all/auth/token";
 import { normalizeString } from "../../../../utils/normalize";
+import { ITransUserFrom, ITransaction } from "../transactions/itransactions";
+import { getTimecodeNow } from "../../../../utils/datetime";
+import { getRandomString } from "../../../../utils/random";
+import { getPaidDiscription } from "../transactions/transactionsUtils";
+import { setTransactionToDB } from "../transactions/transactionsDB";
 
 export async function queryGetRatingTariffs(req, res) {
 	try {
@@ -70,6 +75,21 @@ export async function queryBuyRating(req, res) {
 		await setProfileCashByIdToDB(jwtDecode.userId, cash);
 
 		const profile = await getProfileByIdFromDB(jwtDecode.userId);
+
+		const trans: ITransaction = {
+			userid: jwtDecode.userId,
+			timecode: getTimecodeNow(),
+			userfrom: ITransUserFrom.system,
+			idtrans: getRandomString(20),
+			nametariff: SHOP_TARIFFS.rating,
+			idtariff: idtariff,
+			cash: -1 * ratingtariffs[posTariff].price,
+			discription: `Покупка баллов ${getPaidDiscription(
+				SHOP_TARIFFS.rating
+			)} +${ratingtariffs[posTariff].amountRate}`,
+		};
+
+		await setTransactionToDB(trans);
 
 		return res.status(200).json(profile);
 	} catch (error) {

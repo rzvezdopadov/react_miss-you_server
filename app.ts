@@ -63,6 +63,10 @@ app.use(
 	"/",
 	require("./microservices/user/shop/stickerpacks/stickerpacksRoutes")
 );
+app.use(
+	"/",
+	require("./microservices/user/shop/transactions/transactionsRoutes")
+);
 app.use("/", require("./microservices/admin/profile/profileRoutes"));
 
 app.use("/", require("./api"));
