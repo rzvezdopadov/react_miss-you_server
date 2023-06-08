@@ -30,17 +30,17 @@ const linkAuthUser = [
 
 // Admin
 const linkAuthAdmin = [
-	"/aregistration",
-	"/alogin",
-	"/arecoverypass",
-	"/aabout",
-	"/apartners",
-	"/aagreement",
-	"/astatistics",
-	"/adialogs",
-	"/ausers",
-	"/asettings",
-	"/alogout",
+	"/registration",
+	"/login",
+	"/recoverypass",
+	"/about",
+	"/partners",
+	"/agreement",
+	"/statistics",
+	"/dialogs",
+	"/users",
+	"/settings",
+	"/logout",
 ];
 
 linkAuthUser.forEach((way) =>
