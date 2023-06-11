@@ -207,8 +207,7 @@ export async function queryRegistration(req, res) {
 
 		if (isReg)
 			return res.status(201).json({
-				message:
-					"Пользователь успешно создан! Активируйте аккаунт через свой Email!",
+				msg: "Пользователь успешно создан! Активируйте аккаунт через свой Email!",
 			});
 
 		return answerStatus400(res, "Возникла ошибка при регистрации!");

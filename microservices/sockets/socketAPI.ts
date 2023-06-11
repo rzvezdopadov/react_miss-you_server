@@ -199,7 +199,7 @@ export async function socketStickerHandler(
 		const message: IQueryMessage = {
 			id1: ourId,
 			id2: socketPayload.userid,
-			type: MESSAGETYPE.message,
+			type: MESSAGETYPE.sticker,
 			msg: "",
 			spkid: socketPayload.spkid,
 			spos: socketPayload.spos,
