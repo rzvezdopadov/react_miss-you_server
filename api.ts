@@ -21,6 +21,7 @@ const linkAuthUser = [
 	"/partners",
 	"/agreement",
 	"/vapors",
+	"/favoriteusers",
 	"/dialogs",
 	"/users",
 	"/settings",
